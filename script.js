@@ -151,8 +151,6 @@ const newGameButton =
   document.getElementById("newGameButton");
 
 
-/* ABILITY HUD */
-
 const playerSpecialOrb =
   document.getElementById("playerSpecialOrb");
 
@@ -187,17 +185,22 @@ const MAX_HEALTH =
   100;
 
 
-/* BASICS */
+/* BRENDAN */
 
 const BRENDAN_NORMAL_DAMAGE =
   5;
 
-const GRANDADDY_NORMAL_DAMAGE =
-  6;
-
-
 const BRENDAN_NORMAL_RANGE =
   138;
+
+const BRENDAN_NORMAL_RECOVERY =
+  800;
+
+
+/* GRANDADDY */
+
+const GRANDADDY_NORMAL_DAMAGE =
+  5.75;
 
 const GRANDADDY_NORMAL_RANGE =
   108;
@@ -208,13 +211,8 @@ const GRANDADDY_NORMAL_RANGE =
 const BIG_DRIVE_DAMAGE =
   10;
 
-
-/*
-Reduced from 11.5 to 11.
-*/
-
 const LADDER_DAMAGE =
-  11;
+  10.5;
 
 
 /* IPO = 17 TOTAL */
@@ -243,25 +241,18 @@ const METER_ON_DAMAGE =
 
 
 /* =====================================================
-   MATCH STATE
+   STATE
 ===================================================== */
 
 let selectedCharacter =
   "brendan";
 
-
 let selectedMap =
   "virginia";
-
 
 let cpuCharacter =
   "grandaddy";
 
-
-/*
-Best of 3.
-First to 2.
-*/
 
 let currentRound =
   1;
@@ -272,10 +263,6 @@ let playerRoundWins =
 let cpuRoundWins =
   0;
 
-
-/* =====================================================
-   ROUND STATE
-===================================================== */
 
 let playerHealth =
   MAX_HEALTH;
@@ -321,8 +308,6 @@ let actionLock =
   false;
 
 
-/* MOVEMENT */
-
 let playerJumping =
   false;
 
@@ -337,16 +322,12 @@ let cpuCrouching =
   false;
 
 
-/* DEFENSE */
-
 let playerBlocking =
   false;
 
 let cpuBlocking =
   false;
 
-
-/* STUN */
 
 let playerStunned =
   false;
@@ -362,16 +343,12 @@ let cpuHitStunned =
   false;
 
 
-/* ATTACK COOLDOWN */
-
 let playerAttackCooldown =
   false;
 
 let cpuAttackCooldown =
   false;
 
-
-/* SPECIAL */
 
 let specialCooldown =
   false;
@@ -387,31 +364,18 @@ let cpuSpecialReadyTime =
   0;
 
 
-/* COUNTER */
-
-let playerCounterWindow =
+let playerMoving =
   false;
 
-let cpuCounterWindow =
+let cpuMoving =
   false;
 
-
-/* CPU ADAPTATION */
 
 let playerNormalUsage =
   0;
 
 let playerSpecialUsage =
   0;
-
-
-/* WALK */
-
-let playerMoving =
-  false;
-
-let cpuMoving =
-  false;
 
 
 const keys = {};
@@ -550,15 +514,18 @@ function getCharacterHTML(
   character
 ) {
 
-  return character === "brendan"
-    ? brendanHTML()
-    : grandaddyHTML();
+  return character ===
+    "brendan"
+
+      ? brendanHTML()
+
+      : grandaddyHTML();
 
 }
 
 
 /* =====================================================
-   SCREENS
+   SCREEN
 ===================================================== */
 
 function showScreen(
@@ -606,7 +573,7 @@ startButton.addEventListener(
 
 
 /* =====================================================
-   FIGHTER SELECT
+   CHARACTER SELECT
 ===================================================== */
 
 fighterCards.forEach(
@@ -692,7 +659,9 @@ mapCards.forEach(
 
         mapSelectionText.textContent =
           "MAP: " +
-          MAP_NAMES[selectedMap];
+          MAP_NAMES[
+            selectedMap
+          ];
 
       }
     );
@@ -720,7 +689,7 @@ fightButton.addEventListener(
 
 
 /* =====================================================
-   LAYER HELPERS
+   HELPERS
 ===================================================== */
 
 function getMotionLayer(
@@ -964,26 +933,6 @@ function restoreStandingState(
       "winner-pose"
     );
 
-
-    model.style.animation =
-      "";
-
-
-    model.style.transform =
-      "";
-
-
-    model.style.translate =
-      "";
-
-
-    model.style.rotate =
-      "";
-
-
-    model.style.scale =
-      "";
-
   }
 
 
@@ -992,7 +941,8 @@ function restoreStandingState(
 
 
   if (
-    fighter === playerFighter
+    fighter ===
+    playerFighter
   ) {
 
     playerJumping =
@@ -1008,7 +958,8 @@ function restoreStandingState(
 
 
   if (
-    fighter === cpuFighter
+    fighter ===
+    cpuFighter
   ) {
 
     cpuJumping =
@@ -1054,7 +1005,7 @@ function applySelectedMap() {
 
 
 /* =====================================================
-   START MATCH
+   MATCH START
 ===================================================== */
 
 function startMatch() {
@@ -1065,10 +1016,8 @@ function startMatch() {
   playerRoundWins =
     0;
 
-
   cpuRoundWins =
     0;
-
 
   currentRound =
     1;
@@ -1077,7 +1026,6 @@ function startMatch() {
   gameOver =
     false;
 
-
   matchActive =
     true;
 
@@ -1085,7 +1033,9 @@ function startMatch() {
   cpuCharacter =
     selectedCharacter ===
     "brendan"
+
       ? "grandaddy"
+
       : "brendan";
 
 
@@ -1129,7 +1079,7 @@ function startMatch() {
 
 
 /* =====================================================
-   ROUND RESET / START
+   ROUND START
 ===================================================== */
 
 function startRound() {
@@ -1225,13 +1175,6 @@ function startRound() {
     0;
 
 
-  playerCounterWindow =
-    false;
-
-  cpuCounterWindow =
-    false;
-
-
   playerMoving =
     false;
 
@@ -1308,8 +1251,8 @@ function startRound() {
     () => {
 
       if (
-        thisRound !== roundId ||
-        gameOver
+        thisRound !==
+        roundId
       ) {
         return;
       }
@@ -1363,7 +1306,7 @@ function updateRoundHUD() {
 
 
 /* =====================================================
-   BATTLE INTRO
+   INTRO
 ===================================================== */
 
 function playBattleIntro(
@@ -1384,7 +1327,9 @@ function playBattleIntro(
 
 
   battleMapName.textContent =
-    MAP_NAMES[selectedMap];
+    MAP_NAMES[
+      selectedMap
+    ];
 
 
   battleIntroRound.textContent =
@@ -1398,7 +1343,8 @@ function playBattleIntro(
 
 
   battleIntroWord.textContent =
-    "";
+    "ROUND " +
+    currentRound;
 
 
   arena.classList.remove(
@@ -1414,32 +1360,8 @@ function playBattleIntro(
   );
 
 
-  /* ROUND NUMBER */
+  restartIntroWordAnimation();
 
-  setTimeout(
-    () => {
-
-      if (
-        thisRound !==
-        roundId
-      ) {
-        return;
-      }
-
-
-      battleIntroWord.textContent =
-        "ROUND " +
-        currentRound;
-
-
-      restartIntroWordAnimation();
-
-    },
-    250
-  );
-
-
-  /* READY */
 
   setTimeout(
     () => {
@@ -1464,11 +1386,9 @@ function playBattleIntro(
       restartIntroWordAnimation();
 
     },
-    1000
+    850
   );
 
-
-  /* BEGIN */
 
   setTimeout(
     () => {
@@ -1493,19 +1413,16 @@ function playBattleIntro(
       restartIntroWordAnimation();
 
     },
-    1800
+    1650
   );
 
-
-  /* ACTIVATE FIGHT */
 
   setTimeout(
     () => {
 
       if (
         thisRound !==
-        roundId ||
-        gameOver
+        roundId
       ) {
         return;
       }
@@ -1538,7 +1455,7 @@ function playBattleIntro(
       );
 
     },
-    2450
+    2250
   );
 
 }
@@ -1560,7 +1477,7 @@ function restartIntroWordAnimation() {
 
 
 /* =====================================================
-   ABILITY ICONS
+   RESTORED ICONS
 ===================================================== */
 
 function setAbilityIcons() {
@@ -1805,7 +1722,7 @@ function cpuCanAct() {
 
 
 /* =====================================================
-   POSITION
+   POSITIONS
 ===================================================== */
 
 function updatePositions() {
@@ -1938,7 +1855,9 @@ function movePlayer(
 
     playerX =
       amount > 0
+
         ? cpuX - 60
+
         : cpuX + 60;
 
   }
@@ -1984,7 +1903,9 @@ function cpuStep(
 
     cpuX =
       cpuX > playerX
+
         ? playerX + 60
+
         : playerX - 60;
 
   }
@@ -2095,11 +2016,6 @@ function jumpCPU() {
 
   cpuJumping =
     true;
-
-
-  cpuFighter.classList.remove(
-    "idle-breathing"
-  );
 
 
   cpuFighter.classList.add(
@@ -2448,34 +2364,37 @@ function updateHUD(
 
   ultimateButton.classList.toggle(
     "ultimate-ready",
-    playerUltimate >= 100
+    playerUltimate >=
+      100
   );
 
 
   playerHealthShell.classList.toggle(
     "low-health",
-    playerHealth <= 20
+    playerHealth <=
+      20
   );
 
 
   cpuHealthShell.classList.toggle(
     "low-health",
-    cpuHealth <= 20
+    cpuHealth <=
+      20
   );
 
 
   playerFighter.classList.toggle(
     "low-health-fighter",
-    playerHealth <= 20 &&
-    !gameOver &&
+    playerHealth <=
+      20 &&
     !roundOver
   );
 
 
   cpuFighter.classList.toggle(
     "low-health-fighter",
-    cpuHealth <= 20 &&
-    !gameOver &&
+    cpuHealth <=
+      20 &&
     !roundOver
   );
 
@@ -2516,10 +2435,16 @@ function createHitSpark(
   spark.className =
     "effect " +
     (
-      type === "ultimate"
+      type ===
+      "ultimate"
+
         ? "hit-spark-ultimate"
-        : type === "special"
+
+        : type ===
+          "special"
+
           ? "hit-spark-special"
+
           : "hit-spark-normal"
     );
 
@@ -2679,18 +2604,22 @@ function strongHitStop(
     60
 ) {
 
-  const visuals =
-    [
-      getVisualLayer(
-        playerFighter
-      ),
-      getVisualLayer(
-        cpuFighter
-      )
-    ];
+  const playerVisual =
+    getVisualLayer(
+      playerFighter
+    );
 
 
-  visuals.forEach(
+  const cpuVisual =
+    getVisualLayer(
+      cpuFighter
+    );
+
+
+  [
+    playerVisual,
+    cpuVisual
+  ].forEach(
     element => {
 
       if (element) {
@@ -2707,7 +2636,10 @@ function strongHitStop(
   setTimeout(
     () => {
 
-      visuals.forEach(
+      [
+        playerVisual,
+        cpuVisual
+      ].forEach(
         element => {
 
           if (element) {
@@ -2737,7 +2669,9 @@ function knockbackCPU(
 
   const direction =
     cpuX >= playerX
+
       ? 1
+
       : -1;
 
 
@@ -2760,7 +2694,9 @@ function knockbackPlayer(
 
   const direction =
     playerX <= cpuX
+
       ? -1
+
       : 1;
 
 
@@ -2818,48 +2754,6 @@ function cpuHitStun(
 
     },
     duration
-  );
-
-}
-
-
-/* =====================================================
-   COUNTERS
-===================================================== */
-
-function activatePlayerCounterWindow() {
-
-  playerCounterWindow =
-    true;
-
-
-  setTimeout(
-    () => {
-
-      playerCounterWindow =
-        false;
-
-    },
-    450
-  );
-
-}
-
-
-function activateCPUCounterWindow() {
-
-  cpuCounterWindow =
-    true;
-
-
-  setTimeout(
-    () => {
-
-      cpuCounterWindow =
-        false;
-
-    },
-    450
   );
 
 }
@@ -2941,9 +2835,6 @@ function damageCPU(
     createBlockEffect(
       cpuFighter
     );
-
-
-    activateCPUCounterWindow();
 
   }
 
@@ -3084,9 +2975,6 @@ function damagePlayer(
       playerFighter
     );
 
-
-    activatePlayerCounterWindow();
-
   }
 
   else {
@@ -3150,7 +3038,7 @@ function damagePlayer(
 
 
 /* =====================================================
-   HIT
+   HIT ANIMATION
 ===================================================== */
 
 function hitAnimation(
@@ -3185,7 +3073,7 @@ function hitAnimation(
 
 
 /* =====================================================
-   WEAPON
+   WEAPON SWING
 ===================================================== */
 
 function weaponSwing(
@@ -3269,47 +3157,57 @@ function playerAttack() {
 
   const duration =
     isBrendan
+
       ? 440
+
       : 330;
 
 
   const impactTime =
     isBrendan
+
       ? 275
+
       : 175;
 
 
-  /*
-  Brendan = 800 ms.
-  */
-
   const recovery =
     isBrendan
-      ? 800
+
+      ? BRENDAN_NORMAL_RECOVERY
+
       : 375;
 
 
   const range =
     isBrendan
+
       ? BRENDAN_NORMAL_RANGE
+
       : GRANDADDY_NORMAL_RANGE;
 
 
   const damage =
     isBrendan
+
       ? BRENDAN_NORMAL_DAMAGE
+
       : GRANDADDY_NORMAL_DAMAGE;
 
 
   const knockback =
     isBrendan
+
       ? 34
+
       : 20;
 
 
   const hitStun =
     isBrendan
+
       ? 185
+
       : 250;
 
 
@@ -3327,8 +3225,8 @@ function playerAttack() {
     () => {
 
       if (
-        gameOver ||
-        roundOver
+        roundOver ||
+        gameOver
       ) {
         return;
       }
@@ -3423,43 +3321,57 @@ function cpuNormalAttack() {
 
   const duration =
     isBrendan
+
       ? 440
+
       : 330;
 
 
   const impactTime =
     isBrendan
+
       ? 275
+
       : 175;
 
 
   const recovery =
     isBrendan
-      ? 800
+
+      ? BRENDAN_NORMAL_RECOVERY
+
       : 340;
 
 
   const range =
     isBrendan
+
       ? BRENDAN_NORMAL_RANGE
+
       : GRANDADDY_NORMAL_RANGE;
 
 
   const damage =
     isBrendan
+
       ? BRENDAN_NORMAL_DAMAGE
+
       : GRANDADDY_NORMAL_DAMAGE;
 
 
   const knockback =
     isBrendan
+
       ? 34
+
       : 20;
 
 
   const hitStun =
     isBrendan
+
       ? 185
+
       : 250;
 
 
@@ -3477,8 +3389,8 @@ function cpuNormalAttack() {
     () => {
 
       if (
-        gameOver ||
-        roundOver
+        roundOver ||
+        gameOver
       ) {
         return;
       }
@@ -3607,16 +3519,16 @@ function playerSpecial() {
   }
 
 
-  const thisMatch =
-    matchId;
+  const thisRound =
+    roundId;
 
 
   setTimeout(
     () => {
 
       if (
-        thisMatch !==
-        matchId
+        thisRound !==
+        roundId
       ) {
         return;
       }
@@ -3650,7 +3562,7 @@ function playerSpecial() {
 ===================================================== */
 
 function startCpuSpecialCooldown(
-  thisMatch
+  thisRound
 ) {
 
   cpuSpecialCooldown =
@@ -3666,8 +3578,8 @@ function startCpuSpecialCooldown(
     () => {
 
       if (
-        thisMatch ===
-        matchId
+        thisRound ===
+        roundId
       ) {
 
         cpuSpecialCooldown =
@@ -3695,8 +3607,8 @@ function bigDrive(
 ) {
 
   if (
-    gameOver ||
-    roundOver
+    roundOver ||
+    gameOver
   ) {
     return;
   }
@@ -3704,7 +3616,9 @@ function bigDrive(
 
   const fighter =
     playerOwned
+
       ? playerFighter
+
       : cpuFighter;
 
 
@@ -3744,8 +3658,8 @@ function bigDrive(
     () => {
 
       if (
-        gameOver ||
-        roundOver
+        roundOver ||
+        gameOver
       ) {
         return;
       }
@@ -3768,13 +3682,17 @@ function bigDrive(
 
       let x =
         playerOwned
+
           ? playerX + 82
+
           : cpuX + 5;
 
 
       const direction =
         playerOwned
+
           ? 1
+
           : -1;
 
 
@@ -3791,9 +3709,10 @@ function bigDrive(
           () => {
 
             if (
-              gameOver ||
               roundOver ||
-              thisRound !== roundId
+              gameOver ||
+              thisRound !==
+              roundId
             ) {
 
               clearInterval(
@@ -3842,16 +3761,20 @@ function bigDrive(
 
             const targetX =
               playerOwned
+
                 ? cpuX
+
                 : playerX;
 
 
             const targetAvoiding =
               playerOwned
+
                 ? (
                     cpuJumping ||
                     cpuCrouching
                   )
+
                 : (
                     playerJumping ||
                     playerCrouching
@@ -3871,10 +3794,15 @@ function bigDrive(
               ) {
 
                 createDodgeLabel(
+
                   playerOwned
+
                     ? cpuFighter
+
                     : playerFighter,
+
                   "DODGED!"
+
                 );
 
               }
@@ -3973,7 +3901,7 @@ function bigDrive(
 
 
 /* =====================================================
-   LADDER
+   RESTORED LADDER SPECIAL
 ===================================================== */
 
 function grandaddyLadder(
@@ -3981,8 +3909,8 @@ function grandaddyLadder(
 ) {
 
   if (
-    gameOver ||
-    roundOver
+    roundOver ||
+    gameOver
   ) {
     return;
   }
@@ -3990,13 +3918,17 @@ function grandaddyLadder(
 
   const grandaddy =
     playerOwned
+
       ? playerFighter
+
       : cpuFighter;
 
 
   const opponent =
     playerOwned
+
       ? cpuFighter
+
       : playerFighter;
 
 
@@ -4014,7 +3946,9 @@ function grandaddyLadder(
 
   const targetJumping =
     playerOwned
+
       ? cpuJumping
+
       : playerJumping;
 
 
@@ -4042,16 +3976,6 @@ function grandaddyLadder(
     true;
 
 
-  opponent.classList.remove(
-    "idle-breathing",
-    "walking",
-    "crouching",
-    "jumping",
-    "recovery-shake",
-    "hit-animation"
-  );
-
-
   if (
     grandaddyModel
   ) {
@@ -4077,13 +4001,17 @@ function grandaddyLadder(
     "effect ladder-effect";
 
 
+  /* RESTORED ORIGINAL LADDER */
+
   ladder.textContent =
     "🪜";
 
 
   const targetX =
     playerOwned
+
       ? cpuX
+
       : playerX;
 
 
@@ -4147,8 +4075,8 @@ function grandaddyLadder(
     () => {
 
       if (
-        gameOver ||
-        roundOver
+        roundOver ||
+        gameOver
       ) {
         return;
       }
@@ -4252,8 +4180,8 @@ function grandaddyLadder(
     () => {
 
       if (
-        gameOver ||
-        roundOver
+        roundOver ||
+        gameOver
       ) {
         return;
       }
@@ -4322,6 +4250,11 @@ function grandaddyLadder(
   );
 
 
+  /*
+  IMPORTANT:
+  FULL RESET AFTER LADDER
+  */
+
   setTimeout(
     () => {
 
@@ -4339,10 +4272,6 @@ function grandaddyLadder(
       }
 
 
-      /*
-      Full ladder recovery fix.
-      */
-
       restoreStandingState(
         opponent
       );
@@ -4358,8 +4287,8 @@ function grandaddyLadder(
             () => {
 
               if (
-                !gameOver &&
-                !roundOver
+                !roundOver &&
+                !gameOver
               ) {
 
                 roundText.textContent =
@@ -4381,14 +4310,14 @@ function grandaddyLadder(
       );
 
     },
-    1225
+    1235
   );
 
 }
 
 
 /* =====================================================
-   ULTIMATE
+   PLAYER ULTIMATE
 ===================================================== */
 
 function playerUltimateAttack() {
@@ -4472,7 +4401,7 @@ function playerUltimateAttack() {
 
 
 /* =====================================================
-   IPO
+   RESTORED IPO
 ===================================================== */
 
 function ipoUltimate(
@@ -4480,8 +4409,8 @@ function ipoUltimate(
 ) {
 
   if (
-    gameOver ||
-    roundOver
+    roundOver ||
+    gameOver
   ) {
     return;
   }
@@ -4516,8 +4445,8 @@ function ipoUltimate(
   ) {
 
     if (
-      gameOver ||
-      roundOver
+      roundOver ||
+      gameOver
     ) {
       return;
     }
@@ -4541,7 +4470,9 @@ function ipoUltimate(
 
     card.style.left =
       index === 1
+
         ? "55%"
+
         : "34%";
 
 
@@ -4568,14 +4499,18 @@ function ipoUltimate(
         {
           transform:
             index === 2
+
               ? "translateX(10px)"
+
               : "translateX(6px)"
         },
 
         {
           transform:
             index === 2
+
               ? "translateX(-10px)"
+
               : "translateX(-6px)"
         },
 
@@ -4590,7 +4525,9 @@ function ipoUltimate(
 
         duration:
           index === 2
+
             ? 260
+
             : 200
 
       }
@@ -4599,7 +4536,9 @@ function ipoUltimate(
 
     strongHitStop(
       index === 2
+
         ? 75
+
         : 45
     );
 
@@ -4620,7 +4559,9 @@ function ipoUltimate(
 
           knockback:
             index === 2
+
               ? 42
+
               : 10,
 
           hitStun:
@@ -4645,7 +4586,9 @@ function ipoUltimate(
 
           knockback:
             index === 2
+
               ? 42
+
               : 10,
 
           hitStun:
@@ -4709,8 +4652,8 @@ function ipoUltimate(
     () => {
 
       if (
-        !gameOver &&
-        !roundOver
+        !roundOver &&
+        !gameOver
       ) {
 
         roundText.textContent =
@@ -4733,7 +4676,7 @@ function ipoUltimate(
 
 
 /* =====================================================
-   BACK IN MY DAY
+   RESTORED BACK IN MY DAY
 ===================================================== */
 
 function backInMyDay(
@@ -4741,8 +4684,8 @@ function backInMyDay(
 ) {
 
   if (
-    gameOver ||
-    roundOver
+    roundOver ||
+    gameOver
   ) {
     return;
   }
@@ -4750,13 +4693,17 @@ function backInMyDay(
 
   const grandaddy =
     playerOwned
+
       ? playerFighter
+
       : cpuFighter;
 
 
   const brendan =
     playerOwned
+
       ? cpuFighter
+
       : playerFighter;
 
 
@@ -4796,15 +4743,11 @@ function backInMyDay(
 
 
   reaction.textContent =
-    "?!";
+    "😳 ?!";
 
 
   reaction.style.fontSize =
     "42px";
-
-
-  reaction.style.fontWeight =
-    "900";
 
 
   reaction.style.left =
@@ -4831,8 +4774,8 @@ function backInMyDay(
 
 
       if (
-        gameOver ||
-        roundOver
+        roundOver ||
+        gameOver
       ) {
         return;
       }
@@ -4896,8 +4839,8 @@ function backInMyDay(
     () => {
 
       if (
-        gameOver ||
-        roundOver
+        roundOver ||
+        gameOver
       ) {
         return;
       }
@@ -4966,7 +4909,7 @@ function backInMyDay(
 
 
 /* =====================================================
-   STUN VISUALS
+   RESTORED STUN VISUAL
 ===================================================== */
 
 function createStunVisual(
@@ -4993,12 +4936,12 @@ function createStunVisual(
 
 
   stars.textContent =
-    "* * *";
+    "⭐ 😵 ⭐";
 
 
   stars.style.left =
     x +
-    18 +
+    4 +
     "px";
 
 
@@ -5060,7 +5003,7 @@ function clearStunVisuals() {
 
 
 /* =====================================================
-   RELEASE
+   RELEASE VISUAL
 ===================================================== */
 
 function createReleaseVisual(
@@ -5090,7 +5033,8 @@ function createReleaseVisual(
   label.style.left =
     Math.max(
       5,
-      x - 20
+      x -
+      20
     ) +
     "px";
 
@@ -5140,35 +5084,7 @@ function setButtonsStunned(
 
 
 /* =====================================================
-   CPU ADAPTATION
-===================================================== */
-
-function playerIsSpammingSpecial() {
-
-  return (
-    playerSpecialUsage >= 3 &&
-    playerSpecialUsage >
-    playerNormalUsage *
-    0.6
-  );
-
-}
-
-
-function playerIsSpammingNormal() {
-
-  return (
-    playerNormalUsage >= 6 &&
-    playerNormalUsage >
-    playerSpecialUsage *
-    2
-  );
-
-}
-
-
-/* =====================================================
-   CPU
+   CPU AI
 ===================================================== */
 
 function cpuLoop(
@@ -5219,19 +5135,11 @@ function cpuLoop(
     Math.random();
 
 
-  const specialSpam =
-    playerIsSpammingSpecial();
-
-
-  const normalSpam =
-    playerIsSpammingNormal();
-
-
-  /* CPU ULTIMATE */
-
   if (
-    cpuUltimate >= 100 &&
-    roll < 0.34
+    cpuUltimate >=
+      100 &&
+    roll <
+      0.34
   ) {
 
     cpuUltimate =
@@ -5279,8 +5187,6 @@ function cpuLoop(
   }
 
 
-  /* CLOSE DISTANCE */
-
   else if (
     cpuCharacter ===
       "brendan" &&
@@ -5309,51 +5215,6 @@ function cpuLoop(
   }
 
 
-  /* SPECIAL SPAM RESPONSE */
-
-  else if (
-    specialSpam &&
-    roll <
-      0.16
-  ) {
-
-    if (
-      Math.random() <
-      0.5
-    ) {
-
-      jumpCPU();
-
-    }
-
-    else {
-
-      crouchCPU(
-        520
-      );
-
-    }
-
-  }
-
-
-  /* BASIC SPAM RESPONSE */
-
-  else if (
-    normalSpam &&
-    roll <
-      0.20
-  ) {
-
-    cpuBlock(
-      540
-    );
-
-  }
-
-
-  /* BRENDAN CPU */
-
   else if (
     cpuCharacter ===
     "brendan"
@@ -5376,7 +5237,7 @@ function cpuLoop(
     ) {
 
       startCpuSpecialCooldown(
-        thisMatch
+        thisRound
       );
 
 
@@ -5430,8 +5291,6 @@ function cpuLoop(
   }
 
 
-  /* GRANDADDY CPU */
-
   else {
 
     if (
@@ -5451,7 +5310,7 @@ function cpuLoop(
     ) {
 
       startCpuSpecialCooldown(
-        thisMatch
+        thisRound
       );
 
 
@@ -5523,7 +5382,7 @@ function cpuLoop(
 
 
 /* =====================================================
-   KO CHECK
+   KO
 ===================================================== */
 
 function checkKO() {
@@ -5563,7 +5422,7 @@ function checkKO() {
 
 
 /* =====================================================
-   FINISH ROUND
+   ROUND END
 ===================================================== */
 
 function finishRound(
@@ -5598,19 +5457,25 @@ function finishRound(
 
   const loser =
     playerWon
+
       ? cpuFighter
+
       : playerFighter;
 
 
   const winner =
     playerWon
+
       ? playerFighter
+
       : cpuFighter;
 
 
   const winnerCharacter =
     playerWon
+
       ? selectedCharacter
+
       : cpuCharacter;
 
 
@@ -5639,26 +5504,6 @@ function finishRound(
 
   restoreStandingState(
     winner
-  );
-
-
-  loser.classList.remove(
-    "idle-breathing",
-    "walking",
-    "jumping",
-    "crouching",
-    "recovery-shake",
-    "low-health-fighter"
-  );
-
-
-  winner.classList.remove(
-    "idle-breathing",
-    "walking",
-    "jumping",
-    "crouching",
-    "recovery-shake",
-    "low-health-fighter"
   );
 
 
@@ -5697,100 +5542,100 @@ function finishRound(
       }
 
 
-      winnerText.textContent =
-        winnerCharacter.toUpperCase() +
-        " WINS ROUND " +
-        currentRound;
+      setTimeout(
+        () => {
+
+          winnerText.textContent =
+            winnerCharacter.toUpperCase() +
+            " WINS ROUND " +
+            currentRound;
 
 
-      koOverlay.classList.remove(
-        "hidden"
-      );
+          koOverlay.classList.remove(
+            "hidden"
+          );
 
 
-      /*
-      MATCH WON
-      */
+          if (
+            playerRoundWins >=
+              2 ||
+            cpuRoundWins >=
+              2
+          ) {
 
-      if (
-        playerRoundWins >= 2 ||
-        cpuRoundWins >= 2
-      ) {
-
-        gameOver =
-          true;
+            gameOver =
+              true;
 
 
-        matchActive =
-          false;
+            matchActive =
+              false;
 
 
-        matchStatus.textContent =
-          winnerCharacter.toUpperCase() +
-          " WINS THE MATCH";
+            matchStatus.textContent =
+              winnerCharacter.toUpperCase() +
+              " WINS THE MATCH";
 
 
-        newGameButton.classList.remove(
-          "hidden"
-        );
-
-      }
-
-
-      /*
-      OTHERWISE NEXT ROUND
-      */
-
-      else {
-
-        matchStatus.textContent =
-          playerRoundWins +
-          " - " +
-          cpuRoundWins;
-
-
-        setTimeout(
-          () => {
-
-            if (
-              gameOver
-            ) {
-              return;
-            }
-
-
-            currentRound++;
-
-
-            effects.innerHTML =
-              "";
-
-
-            koOverlay.classList.add(
+            newGameButton.classList.remove(
               "hidden"
             );
 
+          }
 
-            restoreStandingState(
-              playerFighter
+          else {
+
+            matchStatus.textContent =
+              playerRoundWins +
+              " - " +
+              cpuRoundWins;
+
+
+            setTimeout(
+              () => {
+
+                if (
+                  gameOver
+                ) {
+                  return;
+                }
+
+
+                currentRound++;
+
+
+                effects.innerHTML =
+                  "";
+
+
+                koOverlay.classList.add(
+                  "hidden"
+                );
+
+
+                restoreStandingState(
+                  playerFighter
+                );
+
+
+                restoreStandingState(
+                  cpuFighter
+                );
+
+
+                startRound();
+
+              },
+              1900
             );
 
+          }
 
-            restoreStandingState(
-              cpuFighter
-            );
-
-
-            startRound();
-
-          },
-          1900
-        );
-
-      }
+        },
+        650
+      );
 
     },
-    150
+    100
   );
 
 }
@@ -5927,7 +5772,7 @@ newGameButton.addEventListener(
 
 
 /* =====================================================
-   TEXT
+   FIGHT TEXT
 ===================================================== */
 
 function showFightText(
@@ -6030,18 +5875,6 @@ blockButton.addEventListener(
 );
 
 
-blockButton.addEventListener(
-  "pointercancel",
-  () => {
-
-    setPlayerBlock(
-      false
-    );
-
-  }
-);
-
-
 /* =====================================================
    KEYBOARD
 ===================================================== */
@@ -6086,9 +5919,12 @@ document.addEventListener(
 
     if (
       (
-        key === "w" ||
-        key === "arrowup" ||
-        key === " "
+        key ===
+          "w" ||
+        key ===
+          "arrowup" ||
+        key ===
+          " "
       ) &&
       !event.repeat
     ) {
@@ -6099,8 +5935,10 @@ document.addEventListener(
 
 
     if (
-      key === "s" ||
-      key === "arrowdown"
+      key ===
+        "s" ||
+      key ===
+        "arrowdown"
     ) {
 
       crouchPlayer(
@@ -6111,7 +5949,8 @@ document.addEventListener(
 
 
     if (
-      key === "i" &&
+      key ===
+        "i" &&
       !event.repeat
     ) {
 
@@ -6123,7 +5962,8 @@ document.addEventListener(
 
 
     if (
-      key === "j" &&
+      key ===
+        "j" &&
       !event.repeat
     ) {
 
@@ -6133,7 +5973,8 @@ document.addEventListener(
 
 
     if (
-      key === "k" &&
+      key ===
+        "k" &&
       !event.repeat
     ) {
 
@@ -6143,7 +5984,8 @@ document.addEventListener(
 
 
     if (
-      key === "l" &&
+      key ===
+        "l" &&
       !event.repeat
     ) {
 
@@ -6168,8 +6010,10 @@ document.addEventListener(
 
 
     if (
-      key === "s" ||
-      key === "arrowdown"
+      key ===
+        "s" ||
+      key ===
+        "arrowdown"
     ) {
 
       crouchPlayer(
@@ -6180,7 +6024,8 @@ document.addEventListener(
 
 
     if (
-      key === "i"
+      key ===
+      "i"
     ) {
 
       setPlayerBlock(
