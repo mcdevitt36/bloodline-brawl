@@ -1,1 +1,501 @@
+<!DOCTYPE html>
+<html lang="en">
 
+<head>
+  <meta charset="UTF-8">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
+
+  <title>Bloodline Brawl</title>
+
+  <link
+    rel="stylesheet"
+    href="style.css"
+  >
+</head>
+
+<body>
+
+<div id="game">
+
+  <!-- =========================
+       TITLE SCREEN
+  ========================== -->
+
+  <section
+    id="titleScreen"
+    class="screen active title-screen"
+  >
+
+    <div class="presents">
+      PRESENTS
+    </div>
+
+    <h1 class="game-logo">
+      BLOODLINE
+      <span>BRAWL</span>
+    </h1>
+
+    <div class="tagline">
+      FAMILY FIGHTS GET PERSONAL
+    </div>
+
+
+    <div class="title-fighters">
+
+      <!-- BRENDAN -->
+
+      <div class="title-fighter">
+
+        <div class="pixel-person brendan-model">
+
+          <div class="brendan-hair"></div>
+
+          <div class="face">
+
+            <div class="eye eye-left"></div>
+            <div class="eye eye-right"></div>
+
+            <div class="mouth"></div>
+
+          </div>
+
+          <div class="brendan-shirt">
+
+            <div class="polo-collar collar-left"></div>
+            <div class="polo-collar collar-right"></div>
+
+            <div class="whale">
+              🐳
+            </div>
+
+          </div>
+
+          <div class="skin arm left-arm"></div>
+          <div class="skin arm right-arm"></div>
+
+          <div class="khaki leg left-leg"></div>
+          <div class="khaki leg right-leg"></div>
+
+          <div class="white-shoe left-shoe"></div>
+          <div class="white-shoe right-shoe"></div>
+
+          <div class="golf-club"></div>
+
+        </div>
+
+        <div class="title-name">
+          BRENDAN
+        </div>
+
+      </div>
+
+
+      <div class="vs">
+        VS
+      </div>
+
+
+      <!-- GRANDADDY -->
+
+      <div class="title-fighter">
+
+        <div class="pixel-person grandaddy-model">
+
+          <div class="grandaddy-hair"></div>
+
+          <div class="face grandaddy-face">
+
+            <div class="eye eye-left"></div>
+            <div class="eye eye-right"></div>
+
+            <div class="mouth grandaddy-mouth"></div>
+
+          </div>
+
+          <div class="glasses glasses-left"></div>
+          <div class="glasses glasses-right"></div>
+
+          <div class="glasses-bridge"></div>
+
+          <div class="orange-hat"></div>
+
+          <div class="orange-brim"></div>
+
+          <div class="hat-letter">
+            S
+          </div>
+
+          <div class="grandaddy-shirt"></div>
+
+          <div class="skin arm left-arm"></div>
+          <div class="skin arm right-arm"></div>
+
+          <div class="black-short leg left-leg"></div>
+          <div class="black-short leg right-leg"></div>
+
+          <div class="white-shoe left-shoe"></div>
+          <div class="white-shoe right-shoe"></div>
+
+          <div class="hammer"></div>
+
+        </div>
+
+        <div class="title-name">
+          GRANDADDY
+        </div>
+
+      </div>
+
+    </div>
+
+
+    <button
+      id="startButton"
+      class="big-button"
+    >
+      START
+    </button>
+
+  </section>
+
+
+  <!-- =========================
+       CHARACTER SELECT
+  ========================== -->
+
+  <section
+    id="selectScreen"
+    class="screen select-screen"
+  >
+
+    <h2>
+      SELECT YOUR FIGHTER
+    </h2>
+
+
+    <div class="fighter-select">
+
+      <!-- BRENDAN -->
+
+      <button
+        class="fighter-card selected"
+        data-character="brendan"
+      >
+
+        <div class="pixel-person brendan-model card-model">
+
+          <div class="brendan-hair"></div>
+
+          <div class="face">
+
+            <div class="eye eye-left"></div>
+            <div class="eye eye-right"></div>
+
+            <div class="mouth"></div>
+
+          </div>
+
+          <div class="brendan-shirt">
+
+            <div class="polo-collar collar-left"></div>
+            <div class="polo-collar collar-right"></div>
+
+            <div class="whale">
+              🐳
+            </div>
+
+          </div>
+
+          <div class="skin arm left-arm"></div>
+          <div class="skin arm right-arm"></div>
+
+          <div class="khaki leg left-leg"></div>
+          <div class="khaki leg right-leg"></div>
+
+          <div class="white-shoe left-shoe"></div>
+          <div class="white-shoe right-shoe"></div>
+
+          <div class="golf-club"></div>
+
+        </div>
+
+        <strong>
+          BRENDAN
+        </strong>
+
+        <small>
+          Golf Club • Slap Shot • IPO
+        </small>
+
+      </button>
+
+
+      <!-- GRANDADDY -->
+
+      <button
+        class="fighter-card"
+        data-character="grandaddy"
+      >
+
+        <div class="pixel-person grandaddy-model card-model">
+
+          <div class="grandaddy-hair"></div>
+
+          <div class="face grandaddy-face">
+
+            <div class="eye eye-left"></div>
+            <div class="eye eye-right"></div>
+
+            <div class="mouth grandaddy-mouth"></div>
+
+          </div>
+
+          <div class="glasses glasses-left"></div>
+          <div class="glasses glasses-right"></div>
+
+          <div class="glasses-bridge"></div>
+
+          <div class="orange-hat"></div>
+
+          <div class="orange-brim"></div>
+
+          <div class="hat-letter">
+            S
+          </div>
+
+          <div class="grandaddy-shirt"></div>
+
+          <div class="skin arm left-arm"></div>
+          <div class="skin arm right-arm"></div>
+
+          <div class="black-short leg left-leg"></div>
+          <div class="black-short leg right-leg"></div>
+
+          <div class="white-shoe left-shoe"></div>
+          <div class="white-shoe right-shoe"></div>
+
+          <div class="hammer"></div>
+
+        </div>
+
+        <strong>
+          GRANDADDY
+        </strong>
+
+        <small>
+          Hammer • Ladder • Back In My Day
+        </small>
+
+      </button>
+
+    </div>
+
+
+    <div id="selectionText">
+      PLAYER 1: BRENDAN
+    </div>
+
+
+    <button
+      id="fightButton"
+      class="big-button"
+    >
+      FIGHT
+    </button>
+
+  </section>
+
+
+  <!-- =========================
+       FIGHT SCREEN
+  ========================== -->
+
+  <section
+    id="fightScreen"
+    class="screen fight-screen"
+  >
+
+    <!-- HUD -->
+
+    <div class="hud">
+
+      <div class="hud-side">
+
+        <div
+          id="playerName"
+          class="hud-name"
+        >
+          BRENDAN
+        </div>
+
+        <div class="health-bar">
+
+          <div
+            id="playerHealth"
+            class="health-fill"
+          ></div>
+
+        </div>
+
+        <div class="ultimate-bar">
+
+          <div
+            id="playerUltimate"
+            class="ultimate-fill"
+          ></div>
+
+        </div>
+
+      </div>
+
+
+      <div
+        id="roundText"
+        class="round-text"
+      >
+        FIGHT!
+      </div>
+
+
+      <div class="hud-side right">
+
+        <div
+          id="cpuName"
+          class="hud-name"
+        >
+          GRANDADDY
+        </div>
+
+        <div class="health-bar">
+
+          <div
+            id="cpuHealth"
+            class="health-fill"
+          ></div>
+
+        </div>
+
+        <div class="ultimate-bar">
+
+          <div
+            id="cpuUltimate"
+            class="ultimate-fill"
+          ></div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+
+    <!-- ARENA -->
+
+    <div
+      id="arena"
+      class="arena"
+    >
+
+      <div class="cloud cloud-one"></div>
+      <div class="cloud cloud-two"></div>
+
+      <div class="fence"></div>
+
+      <div id="effects"></div>
+
+
+      <div
+        id="playerFighter"
+        class="fight-character"
+      ></div>
+
+
+      <div
+        id="cpuFighter"
+        class="fight-character"
+      ></div>
+
+
+      <!-- KO OVERLAY -->
+
+      <div
+        id="koOverlay"
+        class="ko-overlay hidden"
+      >
+
+        <div class="ko-text">
+          K.O.
+        </div>
+
+        <div
+          id="winnerText"
+          class="winner-text"
+        >
+          BRENDAN WINS!
+        </div>
+
+        <button
+          id="newGameButton"
+          class="new-game-button"
+        >
+          NEW GAME
+        </button>
+
+      </div>
+
+    </div>
+
+
+    <!-- CONTROLS -->
+
+    <div class="controls">
+
+      <div class="movement">
+
+        <button id="leftButton">
+          ◀
+        </button>
+
+        <button id="rightButton">
+          ▶
+        </button>
+
+        <button id="blockButton">
+          BLOCK
+        </button>
+
+      </div>
+
+
+      <div class="attacks">
+
+        <button id="attackButton">
+          ATTACK
+        </button>
+
+        <button id="specialButton">
+          SPECIAL
+        </button>
+
+        <button id="ultimateButton">
+          ULTIMATE
+        </button>
+
+      </div>
+
+    </div>
+
+  </section>
+
+</div>
+
+
+<script src="script.js"></script>
+
+</body>
+
+</html>
