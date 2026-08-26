@@ -21,14 +21,16 @@
 
 <div id="game">
 
-  <!-- =========================
-       TITLE SCREEN
-  ========================== -->
+  <!-- TITLE -->
 
   <section
     id="titleScreen"
-    class="screen active title-screen"
+    class="screen title-screen active"
   >
+
+    <div class="studio-name">
+      McD GAMES
+    </div>
 
     <div class="presents">
       PRESENTS
@@ -55,35 +57,28 @@
           <div class="brendan-hair"></div>
 
           <div class="face">
-
             <div class="eye eye-left"></div>
             <div class="eye eye-right"></div>
-
             <div class="mouth"></div>
-
           </div>
 
           <div class="brendan-shirt">
-
             <div class="polo-collar collar-left"></div>
             <div class="polo-collar collar-right"></div>
-
-            <div class="whale">
-              🐳
-            </div>
-
+            <div class="whale">🐳</div>
           </div>
 
           <div class="skin arm left-arm"></div>
-          <div class="skin arm right-arm"></div>
+
+          <div class="skin arm right-arm weapon-arm">
+            <div class="golf-club"></div>
+          </div>
 
           <div class="khaki leg left-leg"></div>
           <div class="khaki leg right-leg"></div>
 
           <div class="white-shoe left-shoe"></div>
           <div class="white-shoe right-shoe"></div>
-
-          <div class="golf-club"></div>
 
         </div>
 
@@ -108,39 +103,32 @@
           <div class="grandaddy-hair"></div>
 
           <div class="face grandaddy-face">
-
             <div class="eye eye-left"></div>
             <div class="eye eye-right"></div>
-
-            <div class="mouth grandaddy-mouth"></div>
-
+            <div class="mouth"></div>
           </div>
 
           <div class="glasses glasses-left"></div>
           <div class="glasses glasses-right"></div>
-
           <div class="glasses-bridge"></div>
 
           <div class="orange-hat"></div>
-
           <div class="orange-brim"></div>
-
-          <div class="hat-letter">
-            S
-          </div>
+          <div class="hat-letter">S</div>
 
           <div class="grandaddy-shirt"></div>
 
           <div class="skin arm left-arm"></div>
-          <div class="skin arm right-arm"></div>
 
-          <div class="black-short leg left-leg"></div>
-          <div class="black-short leg right-leg"></div>
+          <div class="skin arm right-arm weapon-arm">
+            <div class="hammer"></div>
+          </div>
+
+          <div class="black-pants leg left-leg"></div>
+          <div class="black-pants leg right-leg"></div>
 
           <div class="white-shoe left-shoe"></div>
           <div class="white-shoe right-shoe"></div>
-
-          <div class="hammer"></div>
 
         </div>
 
@@ -163,9 +151,7 @@
   </section>
 
 
-  <!-- =========================
-       CHARACTER SELECT
-  ========================== -->
+  <!-- CHARACTER SELECT -->
 
   <section
     id="selectScreen"
@@ -191,35 +177,28 @@
           <div class="brendan-hair"></div>
 
           <div class="face">
-
             <div class="eye eye-left"></div>
             <div class="eye eye-right"></div>
-
             <div class="mouth"></div>
-
           </div>
 
           <div class="brendan-shirt">
-
             <div class="polo-collar collar-left"></div>
             <div class="polo-collar collar-right"></div>
-
-            <div class="whale">
-              🐳
-            </div>
-
+            <div class="whale">🐳</div>
           </div>
 
           <div class="skin arm left-arm"></div>
-          <div class="skin arm right-arm"></div>
+
+          <div class="skin arm right-arm weapon-arm">
+            <div class="golf-club"></div>
+          </div>
 
           <div class="khaki leg left-leg"></div>
           <div class="khaki leg right-leg"></div>
 
           <div class="white-shoe left-shoe"></div>
           <div class="white-shoe right-shoe"></div>
-
-          <div class="golf-club"></div>
 
         </div>
 
@@ -228,7 +207,7 @@
         </strong>
 
         <small>
-          Golf Club • Slap Shot • IPO
+          Golf Club • Big Drive • IPO
         </small>
 
       </button>
@@ -246,39 +225,32 @@
           <div class="grandaddy-hair"></div>
 
           <div class="face grandaddy-face">
-
             <div class="eye eye-left"></div>
             <div class="eye eye-right"></div>
-
-            <div class="mouth grandaddy-mouth"></div>
-
+            <div class="mouth"></div>
           </div>
 
           <div class="glasses glasses-left"></div>
           <div class="glasses glasses-right"></div>
-
           <div class="glasses-bridge"></div>
 
           <div class="orange-hat"></div>
-
           <div class="orange-brim"></div>
-
-          <div class="hat-letter">
-            S
-          </div>
+          <div class="hat-letter">S</div>
 
           <div class="grandaddy-shirt"></div>
 
           <div class="skin arm left-arm"></div>
-          <div class="skin arm right-arm"></div>
 
-          <div class="black-short leg left-leg"></div>
-          <div class="black-short leg right-leg"></div>
+          <div class="skin arm right-arm weapon-arm">
+            <div class="hammer"></div>
+          </div>
+
+          <div class="black-pants leg left-leg"></div>
+          <div class="black-pants leg right-leg"></div>
 
           <div class="white-shoe left-shoe"></div>
           <div class="white-shoe right-shoe"></div>
-
-          <div class="hammer"></div>
 
         </div>
 
@@ -310,9 +282,7 @@
   </section>
 
 
-  <!-- =========================
-       FIGHT SCREEN
-  ========================== -->
+  <!-- FIGHT -->
 
   <section
     id="fightScreen"
@@ -328,11 +298,17 @@
         <div
           id="playerName"
           class="hud-name"
-        >
-          BRENDAN
-        </div>
+        ></div>
 
-        <div class="health-bar">
+        <div
+          id="playerHealthShell"
+          class="health-bar"
+        >
+
+          <div
+            id="playerDamageTrail"
+            class="damage-trail"
+          ></div>
 
           <div
             id="playerHealth"
@@ -342,12 +318,7 @@
         </div>
 
         <div class="ultimate-bar">
-
-          <div
-            id="playerUltimate"
-            class="ultimate-fill"
-          ></div>
-
+          <div id="playerUltimate"></div>
         </div>
 
       </div>
@@ -356,9 +327,7 @@
       <div
         id="roundText"
         class="round-text"
-      >
-        FIGHT!
-      </div>
+      ></div>
 
 
       <div class="hud-side right">
@@ -366,11 +335,17 @@
         <div
           id="cpuName"
           class="hud-name"
-        >
-          GRANDADDY
-        </div>
+        ></div>
 
-        <div class="health-bar">
+        <div
+          id="cpuHealthShell"
+          class="health-bar"
+        >
+
+          <div
+            id="cpuDamageTrail"
+            class="damage-trail"
+          ></div>
 
           <div
             id="cpuHealth"
@@ -380,12 +355,7 @@
         </div>
 
         <div class="ultimate-bar">
-
-          <div
-            id="cpuUltimate"
-            class="ultimate-fill"
-          ></div>
-
+          <div id="cpuUltimate"></div>
         </div>
 
       </div>
@@ -408,19 +378,109 @@
       <div id="effects"></div>
 
 
+      <!-- PLAYER -->
+
       <div
         id="playerFighter"
         class="fight-character"
-      ></div>
+      >
 
+        <div class="motion-layer">
+
+          <div class="visual-layer">
+
+            <div class="fighter-model-slot"></div>
+
+          </div>
+
+        </div>
+
+      </div>
+
+
+      <!-- CPU -->
 
       <div
         id="cpuFighter"
-        class="fight-character"
-      ></div>
+        class="fight-character cpu-facing"
+      >
+
+        <div class="motion-layer">
+
+          <div class="visual-layer">
+
+            <div class="fighter-model-slot"></div>
+
+          </div>
+
+        </div>
+
+      </div>
 
 
-      <!-- KO OVERLAY -->
+      <!-- PLAYER ABILITY HUD -->
+
+      <div class="arena-abilities player-abilities">
+
+        <div
+          id="playerSpecialOrb"
+          class="ability-orb special-orb"
+        >
+          <div
+            id="playerSpecialIcon"
+            class="ability-icon"
+          >
+            ⛳
+          </div>
+        </div>
+
+        <div
+          id="playerUltimateOrb"
+          class="ability-orb ultimate-orb"
+        >
+          <div
+            id="playerUltimateIcon"
+            class="ability-icon"
+          >
+            📈
+          </div>
+        </div>
+
+      </div>
+
+
+      <!-- CPU ABILITY HUD -->
+
+      <div class="arena-abilities cpu-abilities">
+
+        <div
+          id="cpuSpecialOrb"
+          class="ability-orb special-orb"
+        >
+          <div
+            id="cpuSpecialIcon"
+            class="ability-icon"
+          >
+            🪜
+          </div>
+        </div>
+
+        <div
+          id="cpuUltimateOrb"
+          class="ability-orb ultimate-orb"
+        >
+          <div
+            id="cpuUltimateIcon"
+            class="ability-icon"
+          >
+            💬
+          </div>
+        </div>
+
+      </div>
+
+
+      <!-- KO -->
 
       <div
         id="koOverlay"
@@ -434,9 +494,7 @@
         <div
           id="winnerText"
           class="winner-text"
-        >
-          BRENDAN WINS!
-        </div>
+        ></div>
 
         <button
           id="newGameButton"
@@ -452,37 +510,60 @@
 
     <!-- CONTROLS -->
 
-    <div class="controls">
+    <div class="control-panel">
 
-      <div class="movement">
+      <div class="keyboard-guide">
 
-        <button id="leftButton">
-          ◀
-        </button>
+        <span>
+          A / D or ← / →
+          <b>MOVE</b>
+        </span>
 
-        <button id="rightButton">
-          ▶
-        </button>
+        <span>
+          W / ↑ / SPACE
+          <b>JUMP</b>
+        </span>
 
-        <button id="blockButton">
-          BLOCK
-        </button>
+        <span>
+          S / ↓
+          <b>DUCK</b>
+        </span>
 
       </div>
 
 
-      <div class="attacks">
+      <div class="action-buttons">
 
-        <button id="attackButton">
+        <button
+          id="blockButton"
+          class="action-button block-button"
+        >
+          BLOCK
+          <small>I</small>
+        </button>
+
+        <button
+          id="attackButton"
+          class="action-button attack-button"
+        >
           ATTACK
+          <small>J</small>
         </button>
 
-        <button id="specialButton">
+        <button
+          id="specialButton"
+          class="action-button special-button"
+        >
           SPECIAL
+          <small>K</small>
         </button>
 
-        <button id="ultimateButton">
+        <button
+          id="ultimateButton"
+          class="action-button ultimate-button"
+        >
           ULTIMATE
+          <small>L</small>
         </button>
 
       </div>
@@ -492,7 +573,6 @@
   </section>
 
 </div>
-
 
 <script src="script.js"></script>
 
