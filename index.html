@@ -1,136 +1,413 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
+
   <title>Bloodline Brawl</title>
-  <link rel="stylesheet" href="style.css">
+
+  <link
+    rel="stylesheet"
+    href="style.css"
+  >
 </head>
+
+
 <body>
+
 <div id="game">
 
-  <section id="titleScreen" class="screen title-screen active">
+
+  <!-- =====================================================
+       TITLE SCREEN
+  ====================================================== -->
+
+  <section
+    id="titleScreen"
+    class="screen title-screen active"
+  >
+
     <div class="title-bg-lines"></div>
+
+
     <div class="title-content">
-      <div class="studio-name">McD GAMES</div>
-      <div class="presents">PRESENTS</div>
-      <h1 class="game-logo">BLOODLINE<span>BRAWL</span></h1>
-      <div class="tagline">FAMILY FIGHTS GET PERSONAL</div>
 
-      <div class="title-versus-panel">
-        <div class="title-fighter">
-          <div id="titleLeftCharacter" class="title-character-space"></div>
-          <div id="titleLeftName" class="title-name"></div>
-        </div>
-
-        <div class="title-vs">
-          <span class="vs-main">VS</span>
-        </div>
-
-        <div class="title-fighter">
-          <div id="titleRightCharacter" class="title-character-space"></div>
-          <div id="titleRightName" class="title-name"></div>
-        </div>
+      <div class="studio-name">
+        McD GAMES
       </div>
 
+      <div class="presents">
+        PRESENTS
+      </div>
+
+
+      <h1 class="game-logo">
+
+        BLOODLINE
+
+        <span>
+          BRAWL
+        </span>
+
+      </h1>
+
+
+      <div class="tagline">
+        FAMILY FIGHTS GET PERSONAL
+      </div>
+
+
+      <div class="title-versus-panel">
+
+
+        <div class="title-fighter">
+
+          <div
+            id="titleLeftCharacter"
+            class="title-character-space"
+          ></div>
+
+          <div
+            id="titleLeftName"
+            class="title-name"
+          ></div>
+
+        </div>
+
+
+        <div class="title-vs">
+
+          <span class="vs-main">
+            VS
+          </span>
+
+        </div>
+
+
+        <div class="title-fighter">
+
+          <div
+            id="titleRightCharacter"
+            class="title-character-space"
+          ></div>
+
+          <div
+            id="titleRightName"
+            class="title-name"
+          ></div>
+
+        </div>
+
+
+      </div>
+
+
       <div class="title-main-buttons">
-        <button id="startButton" class="big-button title-start-button">
+
+
+        <button
+          id="startButton"
+          class="big-button title-start-button"
+        >
           START
         </button>
 
-        <button id="martinChallengeButton" class="challenge-button">
+
+        <button
+          id="martinChallengeButton"
+          class="challenge-button"
+        >
           MARTIN'S CHALLENGE
         </button>
+
+
       </div>
+
     </div>
+
   </section>
 
 
-  <!-- CHARACTER SELECT -->
 
-  <section id="selectScreen" class="screen select-screen">
+  <!-- =====================================================
+       CHARACTER SELECT
+  ====================================================== -->
 
-    <div class="screen-kicker">STEP 1</div>
-    <div class="screen-heading">SELECT YOUR FIGHTER</div>
+  <section
+    id="selectScreen"
+    class="screen select-screen"
+  >
+
+    <div class="screen-kicker">
+      STEP 1
+    </div>
+
+
+    <div class="screen-heading">
+      SELECT YOUR FIGHTER
+    </div>
+
 
     <div class="fighter-select">
 
-      <button class="fighter-card selected" data-character="brendan">
-        <div class="card-model-holder" data-preview="brendan"></div>
-        <strong>BRENDAN</strong>
-        <small>Golf Club • Big Drive • IPO</small>
-      </button>
 
+      <!-- BRENDAN -->
 
-      <button class="fighter-card" data-character="grandaddy">
-        <div class="card-model-holder" data-preview="grandaddy"></div>
-        <strong>GRANDADDY</strong>
-        <small>Hammer • Ladder • Back In My Day</small>
-      </button>
+      <button
+        class="fighter-card selected"
+        data-character="brendan"
+      >
 
+        <div
+          class="card-model-holder"
+          data-preview="brendan"
+        ></div>
 
-      <button class="fighter-card" data-character="connor">
-        <div class="card-model-holder" data-preview="connor"></div>
-        <strong>CONNOR</strong>
+        <strong>
+          BRENDAN
+        </strong>
+
         <small>
-          Paintbrush • Paint Beast • Fried Chicken Feast
+          Golf Club • Big Drive • IPO
         </small>
+
       </button>
 
 
-      <button class="fighter-card" data-character="erin">
-        <div class="card-model-holder" data-preview="erin"></div>
-        <strong>ERIN</strong>
+
+      <!-- GRANDADDY -->
+
+      <button
+        class="fighter-card"
+        data-character="grandaddy"
+      >
+
+        <div
+          class="card-model-holder"
+          data-preview="grandaddy"
+        ></div>
+
+        <strong>
+          GRANDADDY
+        </strong>
+
+        <small>
+          Hammer • Ladder • Yap Alert
+        </small>
+
+      </button>
+
+
+
+      <!-- CONNOR -->
+
+      <button
+        class="fighter-card"
+        data-character="connor"
+      >
+
+        <div
+          class="card-model-holder"
+          data-preview="connor"
+        ></div>
+
+        <strong>
+          CONNOR
+        </strong>
+
+        <small>
+          Paintbrush • Paint Beast • Fried Chicken
+        </small>
+
+      </button>
+
+
+
+      <!-- ERIN -->
+
+      <button
+        class="fighter-card"
+        data-character="erin"
+      >
+
+        <div
+          class="card-model-holder"
+          data-preview="erin"
+        ></div>
+
+        <strong>
+          ERIN
+        </strong>
+
         <small>
           Hairbrush • Pimple Patch • Laundry Avalanche
         </small>
+
       </button>
 
 
-      <button class="fighter-card" data-character="shannan">
-        <div class="card-model-holder" data-preview="shannan"></div>
-        <strong>SHANNAN</strong>
+
+      <!-- SHANNAN -->
+
+      <button
+        class="fighter-card"
+        data-character="shannan"
+      >
+
+        <div
+          class="card-model-holder"
+          data-preview="shannan"
+        ></div>
+
+        <strong>
+          SHANNAN
+        </strong>
+
         <small>
-          Syringe • Brainrot • Flying Saucer
+          Syringe • Brainrot • Conspiracy
         </small>
+
       </button>
 
+
+
+      <!-- LIAM -->
+
+      <button
+        class="fighter-card"
+        data-character="liam"
+      >
+
+        <div
+          class="card-model-holder"
+          data-preview="liam"
+        ></div>
+
+        <strong>
+          LIAM
+        </strong>
+
+        <small>
+          Shoulder Check • Rugby Pass • Splash Zone
+        </small>
+
+      </button>
+
+
+
+      <!-- GRANDMOMMY -->
+
+      <button
+        class="fighter-card"
+        data-character="grandmommy"
+      >
+
+        <div
+          class="card-model-holder"
+          data-preview="grandmommy"
+        ></div>
+
+        <strong>
+          GRANDMOMMY
+        </strong>
+
+        <small>
+          Spatula • Don Get Over Here • Chair Yoga
+        </small>
+
+      </button>
+
+
+
+      <!-- SEAN -->
+
+      <button
+        class="fighter-card"
+        data-character="sean"
+      >
+
+        <div
+          class="card-model-holder"
+          data-preview="sean"
+        ></div>
+
+        <strong>
+          SEAN
+        </strong>
+
+        <small>
+          Baseball Bat • Flying Dishes • Zombie Deer
+        </small>
+
+      </button>
+
+
+
+      <!-- MARTIN -->
 
       <button
         id="martinCard"
         class="fighter-card martin-card locked"
         data-character="martin"
       >
+
         <div
           class="card-model-holder"
           data-preview="martin"
         ></div>
 
+
         <div class="lock-overlay">
-          <span class="lock-icon">LOCKED</span>
-          <small>BEAT MARTIN TO UNLOCK</small>
+
+          <span class="lock-icon">
+            LOCKED
+          </span>
+
+          <small>
+            BEAT MARTIN TO UNLOCK
+          </small>
+
         </div>
 
-        <strong>MARTIN</strong>
+
+        <strong>
+          MARTIN
+        </strong>
+
         <small>
           Paws • Dog Breath • Clyde Returns
         </small>
+
       </button>
 
+
     </div>
+
 
     <div id="selectionText">
       PLAYER: BRENDAN
     </div>
 
-    <button id="mapSelectButton" class="big-button">
+
+    <button
+      id="mapSelectButton"
+      class="big-button"
+    >
       CHOOSE MAP
     </button>
 
   </section>
 
 
-  <!-- MARTIN CHALLENGE -->
+
+  <!-- =====================================================
+       MARTIN CHALLENGE
+  ====================================================== -->
 
   <section
     id="challengeScreen"
@@ -141,11 +418,14 @@
       SPECIAL CHALLENGE
     </div>
 
+
     <div class="screen-heading">
       DEFEAT MARTIN
     </div>
 
+
     <div class="challenge-layout">
+
 
       <div class="challenge-boss-panel">
 
@@ -153,14 +433,17 @@
           BOSS
         </div>
 
+
         <div
           id="challengeMartinPreview"
           class="challenge-martin-preview"
         ></div>
 
+
         <div class="boss-name">
           MARTIN
         </div>
+
 
         <div class="boss-stats">
           115 HP • TOUGHER AI
@@ -169,11 +452,13 @@
       </div>
 
 
+
       <div class="challenge-picker">
 
         <div class="challenge-prompt">
           CHOOSE YOUR FIGHTER
         </div>
+
 
         <div
           id="challengeFighterGrid"
@@ -182,7 +467,9 @@
 
       </div>
 
+
     </div>
+
 
     <button
       id="challengeBackButton"
@@ -194,7 +481,10 @@
   </section>
 
 
-  <!-- MAP SELECT -->
+
+  <!-- =====================================================
+       MAP SELECT
+  ====================================================== -->
 
   <section
     id="mapScreen"
@@ -204,6 +494,7 @@
     <div class="screen-kicker">
       STEP 2
     </div>
+
 
     <div class="screen-heading">
       SELECT BATTLEFIELD
@@ -222,7 +513,9 @@
 
         <div class="map-preview virginia-preview">
 
+
           <div class="preview-sun"></div>
+
 
           <div class="virginia-estate-preview">
 
@@ -246,24 +539,29 @@
 
           </div>
 
+
           <div class="virginia-preview-hedge"></div>
+
 
           <div class="preview-tree tree-one"></div>
 
           <div class="preview-tree tree-two"></div>
 
+
         </div>
+
 
         <strong>
           SUBURBAN VIRGINIA
         </strong>
 
+
         <small>
-          Big lawns. Bigger houses.
-          Family business on the front lawn.
+          Big lawns. Bigger houses. Family business on the front lawn.
         </small>
 
       </button>
+
 
 
       <!-- WESTHAMPTON -->
@@ -275,30 +573,37 @@
 
         <div class="map-preview westhampton-preview">
 
+
           <div
             class="preview-sun beach-sun"
           ></div>
 
+
           <div class="preview-ocean"></div>
 
+
           <div class="preview-umbrella"></div>
+
 
           <div class="preview-icecream">
             ICE CREAM
           </div>
 
+
         </div>
+
 
         <strong>
           WESTHAMPTON BEACH
         </strong>
 
+
         <small>
-          Sun, sand, ice cream,
-          and absolutely nowhere to run.
+          Sun, sand, ice cream, and absolutely nowhere to run.
         </small>
 
       </button>
+
 
 
       <!-- NEW CANAAN -->
@@ -310,11 +615,13 @@
 
         <div class="map-preview newcanaan-preview">
 
+
           <div
             class="nc-preview-building nc-red"
           >
             MARKET
           </div>
+
 
           <div
             class="nc-preview-building nc-white"
@@ -322,26 +629,31 @@
             CAFE
           </div>
 
+
           <div
             class="nc-preview-building nc-brick"
           >
             SHOPS
           </div>
 
+
           <div class="preview-lamp"></div>
 
+
         </div>
+
 
         <strong>
           NEW CANAAN
         </strong>
 
+
         <small>
-          Small-town charm.
-          Big-time problems.
+          Small-town charm. Big-time problems.
         </small>
 
       </button>
+
 
 
       <!-- MADRID -->
@@ -353,32 +665,39 @@
 
         <div class="map-preview madrid-preview">
 
+
           <div class="madrid-preview-left"></div>
 
           <div class="madrid-preview-right"></div>
+
 
           <div
             class="madrid-preview-balcony balcony-one"
           ></div>
 
+
           <div
             class="madrid-preview-balcony balcony-two"
           ></div>
 
+
           <div class="preview-fountain"></div>
 
+
         </div>
+
 
         <strong>
           MADRID
         </strong>
 
+
         <small>
-          A sunlit Spanish plaza
-          built for a family showdown.
+          A sunlit Spanish plaza built for a family showdown.
         </small>
 
       </button>
+
 
     </div>
 
@@ -390,12 +709,14 @@
 
     <div class="map-screen-buttons">
 
+
       <button
         id="backToFighterButton"
         class="secondary-button"
       >
         BACK
       </button>
+
 
       <button
         id="fightButton"
@@ -404,29 +725,38 @@
         FIGHT
       </button>
 
+
     </div>
 
   </section>
 
 
-  <!-- FIGHT SCREEN -->
+
+  <!-- =====================================================
+       FIGHT SCREEN
+  ====================================================== -->
 
   <section
     id="fightScreen"
     class="screen fight-screen"
   >
 
+
+    <!-- HUD -->
+
     <div class="hud">
 
 
-      <!-- PLAYER HUD -->
+      <!-- PLAYER -->
 
       <div class="hud-side">
+
 
         <div
           id="playerName"
           class="hud-name"
         ></div>
+
 
         <div
           id="playerHealthShell"
@@ -438,6 +768,7 @@
             class="damage-trail"
           ></div>
 
+
           <div
             id="playerHealth"
             class="health-fill"
@@ -445,16 +776,23 @@
 
         </div>
 
+
         <div class="ultimate-bar">
-          <div id="playerUltimate"></div>
+
+          <div
+            id="playerUltimate"
+          ></div>
+
         </div>
 
       </div>
 
 
+
       <!-- ROUND -->
 
       <div class="center-hud">
+
 
         <div
           id="roundScore"
@@ -463,6 +801,7 @@
           0 - 0
         </div>
 
+
         <div
           id="roundLabel"
           class="round-label"
@@ -470,22 +809,27 @@
           ROUND 1
         </div>
 
+
         <div
           id="roundText"
           class="round-text"
         ></div>
 
+
       </div>
 
 
-      <!-- CPU HUD -->
+
+      <!-- CPU -->
 
       <div class="hud-side right">
+
 
         <div
           id="cpuName"
           class="hud-name"
         ></div>
+
 
         <div
           id="cpuHealthShell"
@@ -497,6 +841,7 @@
             class="damage-trail"
           ></div>
 
+
           <div
             id="cpuHealth"
             class="health-fill"
@@ -504,57 +849,80 @@
 
         </div>
 
+
         <div class="ultimate-bar">
-          <div id="cpuUltimate"></div>
+
+          <div
+            id="cpuUltimate"
+          ></div>
+
         </div>
 
       </div>
 
+
     </div>
 
 
-    <!-- ARENA -->
+
+    <!-- =====================================================
+         ARENA
+    ====================================================== -->
 
     <div
       id="arena"
       class="arena map-virginia"
     >
 
+
+      <!-- MAP DECOR -->
+
       <div class="map-decor">
+
 
         <div
           class="map-extra decor-one"
         ></div>
 
+
         <div
           class="map-extra decor-two"
         ></div>
+
 
         <div
           class="map-extra decor-three"
         ></div>
 
+
         <div
           class="map-extra decor-four"
         ></div>
 
+
       </div>
 
+
+
+      <!-- EFFECT LAYER -->
 
       <div id="effects"></div>
 
 
-      <!-- READY / BEGIN -->
+
+      <!-- READY BEGIN -->
 
       <div
         id="battleIntro"
         class="battle-intro hidden"
       >
 
+
         <div
           id="battleMapName"
           class="battle-map-name"
         ></div>
+
 
         <div
           id="battleIntroRound"
@@ -563,6 +931,7 @@
           ROUND 1
         </div>
 
+
         <div
           id="battleIntroWord"
           class="battle-intro-word"
@@ -570,10 +939,12 @@
           READY...
         </div>
 
+
       </div>
 
 
-      <!-- PLAYER -->
+
+      <!-- PLAYER FIGHTER -->
 
       <div
         id="playerFighter"
@@ -593,7 +964,8 @@
       </div>
 
 
-      <!-- CPU -->
+
+      <!-- CPU FIGHTER -->
 
       <div
         id="cpuFighter"
@@ -613,92 +985,157 @@
       </div>
 
 
-      <!-- PLAYER ABILITY ICONS -->
+
+      <!-- ===================================================
+           PLAYER ABILITY ICONS
+      ==================================================== -->
 
       <div
         class="arena-abilities player-abilities"
       >
 
-        <div
-          id="playerSpecialOrb"
-          class="ability-orb special-orb"
-        >
+
+        <div class="ability-unit">
+
 
           <div
-            id="playerSpecialIcon"
-            class="ability-icon"
-          ></div>
+            id="playerSpecialOrb"
+            class="ability-orb special-orb"
+          >
+
+            <div
+              id="playerSpecialIcon"
+              class="ability-icon"
+            ></div>
+
+          </div>
+
+
+          <span class="ability-label">
+            SPECIAL
+          </span>
+
 
         </div>
 
-        <div
-          id="playerUltimateOrb"
-          class="ability-orb ultimate-orb"
-        >
+
+
+        <div class="ability-unit">
+
 
           <div
-            id="playerUltimateIcon"
-            class="ability-icon"
-          ></div>
+            id="playerUltimateOrb"
+            class="ability-orb ultimate-orb"
+          >
+
+            <div
+              id="playerUltimateIcon"
+              class="ability-icon"
+            ></div>
+
+          </div>
+
+
+          <span class="ability-label">
+            ULTIMATE
+          </span>
+
 
         </div>
+
 
       </div>
 
 
-      <!-- CPU ABILITY ICONS -->
+
+      <!-- ===================================================
+           CPU ABILITY ICONS
+      ==================================================== -->
 
       <div
         class="arena-abilities cpu-abilities"
       >
 
-        <div
-          id="cpuSpecialOrb"
-          class="ability-orb special-orb"
-        >
+
+        <div class="ability-unit">
+
 
           <div
-            id="cpuSpecialIcon"
-            class="ability-icon"
-          ></div>
+            id="cpuSpecialOrb"
+            class="ability-orb special-orb"
+          >
+
+            <div
+              id="cpuSpecialIcon"
+              class="ability-icon"
+            ></div>
+
+          </div>
+
+
+          <span class="ability-label">
+            SPECIAL
+          </span>
+
 
         </div>
 
-        <div
-          id="cpuUltimateOrb"
-          class="ability-orb ultimate-orb"
-        >
+
+
+        <div class="ability-unit">
+
 
           <div
-            id="cpuUltimateIcon"
-            class="ability-icon"
-          ></div>
+            id="cpuUltimateOrb"
+            class="ability-orb ultimate-orb"
+          >
+
+            <div
+              id="cpuUltimateIcon"
+              class="ability-icon"
+            ></div>
+
+          </div>
+
+
+          <span class="ability-label">
+            ULTIMATE
+          </span>
+
 
         </div>
+
 
       </div>
 
 
-      <!-- KO -->
+
+      <!-- ===================================================
+           KO SCREEN
+      ==================================================== -->
 
       <div
         id="koOverlay"
         class="ko-overlay hidden"
       >
 
+
         <div class="ko-text">
           K.O.
         </div>
+
 
         <div
           id="winnerText"
           class="winner-text"
         ></div>
 
+
         <div
           id="matchStatus"
           class="match-status"
         ></div>
+
 
         <button
           id="newGameButton"
@@ -707,78 +1144,118 @@
           NEW GAME
         </button>
 
+
       </div>
+
 
     </div>
 
 
-    <!-- CONTROLS -->
+
+    <!-- =====================================================
+         CONTROLS
+    ====================================================== -->
 
     <div class="control-panel">
 
+
       <div class="keyboard-guide">
+
 
         <span>
           A / D or ← / →
           <b>MOVE</b>
         </span>
 
+
         <span>
           W / ↑ / SPACE
           <b>JUMP</b>
         </span>
+
 
         <span>
           S / ↓
           <b>DUCK</b>
         </span>
 
+
       </div>
 
 
+
       <div class="action-buttons">
+
 
         <button
           id="blockButton"
           class="action-button block-button"
         >
           BLOCK
-          <small>I</small>
+
+          <small>
+            I
+          </small>
+
         </button>
+
+
 
         <button
           id="attackButton"
           class="action-button attack-button"
         >
           ATTACK
-          <small>J</small>
+
+          <small>
+            J
+          </small>
+
         </button>
+
+
 
         <button
           id="specialButton"
           class="action-button special-button"
         >
           SPECIAL
-          <small>K</small>
+
+          <small>
+            K
+          </small>
+
         </button>
+
+
 
         <button
           id="ultimateButton"
           class="action-button ultimate-button"
         >
           ULTIMATE
-          <small>L</small>
+
+          <small>
+            L
+          </small>
+
         </button>
+
 
       </div>
 
+
     </div>
+
 
   </section>
 
+
 </div>
+
 
 <script src="script.js"></script>
 
 </body>
+
 </html>
