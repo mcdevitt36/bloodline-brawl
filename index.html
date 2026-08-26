@@ -1,39 +1,23 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
   <meta charset="UTF-8">
-
-  <meta
-    name="viewport"
-    content="width=device-width, initial-scale=1.0"
-  >
-
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Bloodline Brawl</title>
-
-  <link
-    rel="stylesheet"
-    href="style.css"
-  >
+  <link rel="stylesheet" href="style.css">
 </head>
-
 
 <body>
 
 <div id="game">
 
-
   <!-- =====================================================
        TITLE SCREEN
   ====================================================== -->
 
-  <section
-    id="titleScreen"
-    class="screen title-screen active"
-  >
+  <section id="titleScreen" class="screen title-screen active">
 
     <div class="title-bg-lines"></div>
-
 
     <div class="title-content">
 
@@ -41,96 +25,34 @@
         McD GAMES
       </div>
 
-
       <div class="presents">
         PRESENTS
       </div>
 
-
       <h1 class="game-logo">
-
         BLOODLINE
-
-        <span>
-          BRAWL
-        </span>
-
+        <span>BRAWL</span>
       </h1>
-
 
       <div class="tagline">
         FAMILY FIGHTS GET PERSONAL
       </div>
 
-
       <div class="title-versus-panel">
-
-
-        <!-- BRENDAN -->
 
         <div class="title-fighter">
 
-          <div class="title-character-space">
+          <div
+            id="titleLeftCharacter"
+            class="title-character-space"
+          ></div>
 
-            <div class="pixel-person brendan-model">
-
-              <div class="brendan-hair"></div>
-
-
-              <div class="face">
-
-                <div class="eye eye-left"></div>
-
-                <div class="eye eye-right"></div>
-
-                <div class="mouth"></div>
-
-              </div>
-
-
-              <div class="brendan-shirt">
-
-                <div class="polo-collar collar-left"></div>
-
-                <div class="polo-collar collar-right"></div>
-
-                <div class="whale-mark"></div>
-
-              </div>
-
-
-              <div class="skin arm left-arm"></div>
-
-
-              <div class="skin arm right-arm weapon-arm">
-
-                <div class="golf-club"></div>
-
-              </div>
-
-
-              <div class="khaki leg left-leg"></div>
-
-              <div class="khaki leg right-leg"></div>
-
-
-              <div class="white-shoe left-shoe"></div>
-
-              <div class="white-shoe right-shoe"></div>
-
-            </div>
-
-          </div>
-
-
-          <div class="title-name">
-            BRENDAN
-          </div>
+          <div
+            id="titleLeftName"
+            class="title-name"
+          ></div>
 
         </div>
-
-
-        <!-- CENTER VS -->
 
         <div class="title-vs">
 
@@ -140,81 +62,21 @@
 
         </div>
 
-
-        <!-- GRANDADDY -->
-
         <div class="title-fighter">
 
-          <div class="title-character-space">
+          <div
+            id="titleRightCharacter"
+            class="title-character-space"
+          ></div>
 
-            <div class="pixel-person grandaddy-model">
-
-              <div class="grandaddy-hair"></div>
-
-
-              <div class="face grandaddy-face">
-
-                <div class="eye eye-left"></div>
-
-                <div class="eye eye-right"></div>
-
-                <div class="mouth"></div>
-
-              </div>
-
-
-              <div class="glasses glasses-left"></div>
-
-              <div class="glasses glasses-right"></div>
-
-              <div class="glasses-bridge"></div>
-
-
-              <div class="orange-hat"></div>
-
-              <div class="orange-brim"></div>
-
-
-              <div class="hat-letter">
-                S
-              </div>
-
-
-              <div class="grandaddy-shirt"></div>
-
-
-              <div class="skin arm left-arm"></div>
-
-
-              <div class="skin arm right-arm weapon-arm">
-
-                <div class="hammer"></div>
-
-              </div>
-
-
-              <div class="black-pants leg left-leg"></div>
-
-              <div class="black-pants leg right-leg"></div>
-
-
-              <div class="white-shoe left-shoe"></div>
-
-              <div class="white-shoe right-shoe"></div>
-
-            </div>
-
-          </div>
-
-
-          <div class="title-name">
-            GRANDADDY
-          </div>
+          <div
+            id="titleRightName"
+            class="title-name"
+          ></div>
 
         </div>
 
       </div>
-
 
       <button
         id="startButton"
@@ -242,75 +104,25 @@
       STEP 1
     </div>
 
-
     <div class="screen-heading">
       SELECT YOUR FIGHTER
     </div>
 
-
     <div class="fighter-select">
-
-
-      <!-- BRENDAN -->
 
       <button
         class="fighter-card selected"
         data-character="brendan"
       >
 
-        <div class="pixel-person brendan-model card-model">
-
-          <div class="brendan-hair"></div>
-
-
-          <div class="face">
-
-            <div class="eye eye-left"></div>
-
-            <div class="eye eye-right"></div>
-
-            <div class="mouth"></div>
-
-          </div>
-
-
-          <div class="brendan-shirt">
-
-            <div class="polo-collar collar-left"></div>
-
-            <div class="polo-collar collar-right"></div>
-
-            <div class="whale-mark"></div>
-
-          </div>
-
-
-          <div class="skin arm left-arm"></div>
-
-
-          <div class="skin arm right-arm weapon-arm">
-
-            <div class="golf-club"></div>
-
-          </div>
-
-
-          <div class="khaki leg left-leg"></div>
-
-          <div class="khaki leg right-leg"></div>
-
-
-          <div class="white-shoe left-shoe"></div>
-
-          <div class="white-shoe right-shoe"></div>
-
-        </div>
-
+        <div
+          class="card-model-holder"
+          data-preview="brendan"
+        ></div>
 
         <strong>
           BRENDAN
         </strong>
-
 
         <small>
           Golf Club • Big Drive • IPO
@@ -319,75 +131,19 @@
       </button>
 
 
-      <!-- GRANDADDY -->
-
       <button
         class="fighter-card"
         data-character="grandaddy"
       >
 
-        <div class="pixel-person grandaddy-model card-model">
-
-          <div class="grandaddy-hair"></div>
-
-
-          <div class="face grandaddy-face">
-
-            <div class="eye eye-left"></div>
-
-            <div class="eye eye-right"></div>
-
-            <div class="mouth"></div>
-
-          </div>
-
-
-          <div class="glasses glasses-left"></div>
-
-          <div class="glasses glasses-right"></div>
-
-          <div class="glasses-bridge"></div>
-
-
-          <div class="orange-hat"></div>
-
-          <div class="orange-brim"></div>
-
-
-          <div class="hat-letter">
-            S
-          </div>
-
-
-          <div class="grandaddy-shirt"></div>
-
-
-          <div class="skin arm left-arm"></div>
-
-
-          <div class="skin arm right-arm weapon-arm">
-
-            <div class="hammer"></div>
-
-          </div>
-
-
-          <div class="black-pants leg left-leg"></div>
-
-          <div class="black-pants leg right-leg"></div>
-
-
-          <div class="white-shoe left-shoe"></div>
-
-          <div class="white-shoe right-shoe"></div>
-
-        </div>
-
+        <div
+          class="card-model-holder"
+          data-preview="grandaddy"
+        ></div>
 
         <strong>
           GRANDADDY
         </strong>
-
 
         <small>
           Hammer • Ladder • Back In My Day
@@ -395,13 +151,53 @@
 
       </button>
 
-    </div>
 
+      <button
+        class="fighter-card"
+        data-character="connor"
+      >
+
+        <div
+          class="card-model-holder"
+          data-preview="connor"
+        ></div>
+
+        <strong>
+          CONNOR
+        </strong>
+
+        <small>
+          Paintbrush • Paint Beast • Fried Chicken Feast
+        </small>
+
+      </button>
+
+
+      <button
+        class="fighter-card"
+        data-character="erin"
+      >
+
+        <div
+          class="card-model-holder"
+          data-preview="erin"
+        ></div>
+
+        <strong>
+          ERIN
+        </strong>
+
+        <small>
+          Hairbrush • Pimple Patch • Laundry Avalanche
+        </small>
+
+      </button>
+
+    </div>
 
     <div id="selectionText">
       PLAYER: BRENDAN
     </div>
-
 
     <button
       id="mapSelectButton"
@@ -427,11 +223,9 @@
       STEP 2
     </div>
 
-
     <div class="screen-heading">
       SELECT BATTLEFIELD
     </div>
-
 
     <div class="map-grid">
 
@@ -447,24 +241,30 @@
 
           <div class="preview-sun"></div>
 
-          <div class="preview-house house-one"></div>
+          <div class="virginia-estate-preview">
 
-          <div class="preview-house house-two"></div>
+            <div class="estate-preview-door"></div>
+
+            <div class="estate-preview-window ew1"></div>
+            <div class="estate-preview-window ew2"></div>
+            <div class="estate-preview-window ew3"></div>
+            <div class="estate-preview-window ew4"></div>
+
+          </div>
+
+          <div class="virginia-preview-hedge"></div>
 
           <div class="preview-tree tree-one"></div>
-
           <div class="preview-tree tree-two"></div>
 
         </div>
-
 
         <strong>
           SUBURBAN VIRGINIA
         </strong>
 
-
         <small>
-          Quiet streets. Big yards. Settle it in the suburbs.
+          Big lawns. Bigger houses. Family business on the front lawn.
         </small>
 
       </button>
@@ -486,16 +286,18 @@
 
           <div class="preview-umbrella"></div>
 
-        </div>
+          <div class="preview-icecream">
+            ICE CREAM
+          </div>
 
+        </div>
 
         <strong>
           WESTHAMPTON BEACH
         </strong>
 
-
         <small>
-          Sun, sand, and absolutely nowhere to run.
+          Sun, sand, ice cream, and absolutely nowhere to run.
         </small>
 
       </button>
@@ -511,23 +313,25 @@
 
         <div class="map-preview newcanaan-preview">
 
-          <div class="preview-shop shop-one">
+          <div class="nc-preview-building nc-red">
+            MARKET
+          </div>
+
+          <div class="nc-preview-building nc-white">
             CAFE
           </div>
 
-          <div class="preview-shop shop-two">
-            MARKET
+          <div class="nc-preview-building nc-brick">
+            SHOPS
           </div>
 
           <div class="preview-lamp"></div>
 
         </div>
 
-
         <strong>
           NEW CANAAN
         </strong>
-
 
         <small>
           Small-town charm. Big-time problems.
@@ -546,33 +350,33 @@
 
         <div class="map-preview madrid-preview">
 
-          <div class="preview-building madrid-building-left"></div>
+          <div class="madrid-preview-left"></div>
 
-          <div class="preview-building madrid-building-right"></div>
+          <div class="madrid-preview-right"></div>
+
+          <div class="madrid-preview-balcony balcony-one"></div>
+
+          <div class="madrid-preview-balcony balcony-two"></div>
 
           <div class="preview-fountain"></div>
 
         </div>
 
-
         <strong>
           MADRID
         </strong>
 
-
         <small>
-          The city is alive. Only one fighter walks away.
+          A sunlit Spanish plaza built for a family showdown.
         </small>
 
       </button>
 
     </div>
 
-
     <div id="mapSelectionText">
       MAP: SUBURBAN VIRGINIA
     </div>
-
 
     <div class="map-screen-buttons">
 
@@ -582,7 +386,6 @@
       >
         BACK
       </button>
-
 
       <button
         id="fightButton"
@@ -598,7 +401,7 @@
 
 
   <!-- =====================================================
-       FIGHT
+       FIGHT SCREEN
   ====================================================== -->
 
   <section
@@ -606,11 +409,7 @@
     class="screen fight-screen"
   >
 
-
-    <!-- HUD -->
-
     <div class="hud">
-
 
       <div class="hud-side">
 
@@ -618,7 +417,6 @@
           id="playerName"
           class="hud-name"
         ></div>
-
 
         <div
           id="playerHealthShell"
@@ -637,15 +435,11 @@
 
         </div>
 
-
         <div class="ultimate-bar">
-
           <div id="playerUltimate"></div>
-
         </div>
 
       </div>
-
 
 
       <div class="center-hud">
@@ -657,14 +451,12 @@
           0 - 0
         </div>
 
-
         <div
           id="roundLabel"
           class="round-label"
         >
           ROUND 1
         </div>
-
 
         <div
           id="roundText"
@@ -674,14 +466,12 @@
       </div>
 
 
-
       <div class="hud-side right">
 
         <div
           id="cpuName"
           class="hud-name"
         ></div>
-
 
         <div
           id="cpuHealthShell"
@@ -700,11 +490,8 @@
 
         </div>
 
-
         <div class="ultimate-bar">
-
           <div id="cpuUltimate"></div>
-
         </div>
 
       </div>
@@ -712,25 +499,22 @@
     </div>
 
 
-
-    <!-- ARENA -->
-
     <div
       id="arena"
       class="arena map-virginia"
     >
 
-      <div
-        id="mapDecor"
-        class="map-decor"
-      ></div>
+      <div class="map-decor">
 
+        <div class="map-extra decor-one"></div>
+        <div class="map-extra decor-two"></div>
+        <div class="map-extra decor-three"></div>
+        <div class="map-extra decor-four"></div>
+
+      </div>
 
       <div id="effects"></div>
 
-
-
-      <!-- INTRO -->
 
       <div
         id="battleIntro"
@@ -740,10 +524,7 @@
         <div
           id="battleMapName"
           class="battle-map-name"
-        >
-          SUBURBAN VIRGINIA
-        </div>
-
+        ></div>
 
         <div
           id="battleIntroRound"
@@ -751,7 +532,6 @@
         >
           ROUND 1
         </div>
-
 
         <div
           id="battleIntroWord"
@@ -762,9 +542,6 @@
 
       </div>
 
-
-
-      <!-- PLAYER -->
 
       <div
         id="playerFighter"
@@ -784,9 +561,6 @@
       </div>
 
 
-
-      <!-- CPU -->
-
       <div
         id="cpuFighter"
         class="fight-character cpu-facing"
@@ -805,9 +579,6 @@
       </div>
 
 
-
-      <!-- PLAYER ABILITY ORBS -->
-
       <div class="arena-abilities player-abilities">
 
         <div
@@ -818,12 +589,9 @@
           <div
             id="playerSpecialIcon"
             class="ability-icon"
-          >
-            ⛳
-          </div>
+          ></div>
 
         </div>
-
 
         <div
           id="playerUltimateOrb"
@@ -833,17 +601,12 @@
           <div
             id="playerUltimateIcon"
             class="ability-icon"
-          >
-            📈
-          </div>
+          ></div>
 
         </div>
 
       </div>
 
-
-
-      <!-- CPU ABILITY ORBS -->
 
       <div class="arena-abilities cpu-abilities">
 
@@ -855,12 +618,9 @@
           <div
             id="cpuSpecialIcon"
             class="ability-icon"
-          >
-            🪜
-          </div>
+          ></div>
 
         </div>
-
 
         <div
           id="cpuUltimateOrb"
@@ -870,17 +630,12 @@
           <div
             id="cpuUltimateIcon"
             class="ability-icon"
-          >
-            💬
-          </div>
+          ></div>
 
         </div>
 
       </div>
 
-
-
-      <!-- KO -->
 
       <div
         id="koOverlay"
@@ -891,18 +646,15 @@
           K.O.
         </div>
 
-
         <div
           id="winnerText"
           class="winner-text"
         ></div>
 
-
         <div
           id="matchStatus"
           class="match-status"
         ></div>
-
 
         <button
           id="newGameButton"
@@ -916,9 +668,6 @@
     </div>
 
 
-
-    <!-- CONTROLS -->
-
     <div class="control-panel">
 
       <div class="keyboard-guide">
@@ -928,12 +677,10 @@
           <b>MOVE</b>
         </span>
 
-
         <span>
           W / ↑ / SPACE
           <b>JUMP</b>
         </span>
-
 
         <span>
           S / ↓
@@ -941,7 +688,6 @@
         </span>
 
       </div>
-
 
       <div class="action-buttons">
 
@@ -953,7 +699,6 @@
           <small>I</small>
         </button>
 
-
         <button
           id="attackButton"
           class="action-button attack-button"
@@ -962,7 +707,6 @@
           <small>J</small>
         </button>
 
-
         <button
           id="specialButton"
           class="action-button special-button"
@@ -970,7 +714,6 @@
           SPECIAL
           <small>K</small>
         </button>
-
 
         <button
           id="ultimateButton"
@@ -988,9 +731,7 @@
 
 </div>
 
-
 <script src="script.js"></script>
 
 </body>
-
 </html>
