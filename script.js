@@ -1,533 +1,369 @@
-const $ =
-  id =>
-    document.getElementById(
-      id
-    );
-
+const $ = id => document.getElementById(id);
 
 /* =====================================================
    ELEMENTS
 ===================================================== */
+const titleScreen = $("titleScreen");
+const selectScreen = $("selectScreen");
+const challengeScreen = $("challengeScreen");
+const mapScreen = $("mapScreen");
+const fightScreen = $("fightScreen");
 
-const titleScreen =
-  $("titleScreen");
+const startButton = $("startButton");
+const martinChallengeButton = $("martinChallengeButton");
+const challengeBackButton = $("challengeBackButton");
+const challengeFighterGrid = $("challengeFighterGrid");
+const challengeMartinPreview = $("challengeMartinPreview");
+const mapSelectButton = $("mapSelectButton");
+const backToFighterButton = $("backToFighterButton");
+const fightButton = $("fightButton");
 
-const selectScreen =
-  $("selectScreen");
+const fighterCards = document.querySelectorAll(".fighter-card");
+const martinCard = $("martinCard");
+const mapCards = document.querySelectorAll(".map-card");
+const selectionText = $("selectionText");
+const mapSelectionText = $("mapSelectionText");
 
-const mapScreen =
-  $("mapScreen");
+const titleLeftCharacter = $("titleLeftCharacter");
+const titleRightCharacter = $("titleRightCharacter");
+const titleLeftName = $("titleLeftName");
+const titleRightName = $("titleRightName");
 
-const fightScreen =
-  $("fightScreen");
+const arena = $("arena");
+const effects = $("effects");
+const battleIntro = $("battleIntro");
+const battleMapName = $("battleMapName");
+const battleIntroRound = $("battleIntroRound");
+const battleIntroWord = $("battleIntroWord");
 
-
-const startButton =
-  $("startButton");
-
-const mapSelectButton =
-  $("mapSelectButton");
-
-const backToFighterButton =
-  $("backToFighterButton");
-
-const fightButton =
-  $("fightButton");
-
-
-const fighterCards =
-  document.querySelectorAll(
-    ".fighter-card"
-  );
-
-const mapCards =
-  document.querySelectorAll(
-    ".map-card"
-  );
-
-
-const selectionText =
-  $("selectionText");
-
-const mapSelectionText =
-  $("mapSelectionText");
-
-
-const titleLeftCharacter =
-  $("titleLeftCharacter");
-
-const titleRightCharacter =
-  $("titleRightCharacter");
-
-const titleLeftName =
-  $("titleLeftName");
-
-const titleRightName =
-  $("titleRightName");
-
-
-const arena =
-  $("arena");
-
-const effects =
-  $("effects");
-
-
-const battleIntro =
-  $("battleIntro");
-
-const battleMapName =
-  $("battleMapName");
-
-const battleIntroRound =
-  $("battleIntroRound");
-
-const battleIntroWord =
-  $("battleIntroWord");
-
-
-const playerFighter =
-  $("playerFighter");
-
-const cpuFighter =
-  $("cpuFighter");
-
-
+const playerFighter = $("playerFighter");
+const cpuFighter = $("cpuFighter");
 const playerModelSlot =
-  playerFighter.querySelector(
-    ".fighter-model-slot"
-  );
-
+  playerFighter.querySelector(".fighter-model-slot");
 const cpuModelSlot =
-  cpuFighter.querySelector(
-    ".fighter-model-slot"
-  );
+  cpuFighter.querySelector(".fighter-model-slot");
 
+const playerName = $("playerName");
+const cpuName = $("cpuName");
 
-const playerName =
-  $("playerName");
+const playerHealthBar = $("playerHealth");
+const cpuHealthBar = $("cpuHealth");
 
-const cpuName =
-  $("cpuName");
+const playerDamageTrail = $("playerDamageTrail");
+const cpuDamageTrail = $("cpuDamageTrail");
 
+const playerUltimateBar = $("playerUltimate");
+const cpuUltimateBar = $("cpuUltimate");
 
-const playerHealthBar =
-  $("playerHealth");
+const roundScore = $("roundScore");
+const roundLabel = $("roundLabel");
+const roundText = $("roundText");
 
-const cpuHealthBar =
-  $("cpuHealth");
+const blockButton = $("blockButton");
+const attackButton = $("attackButton");
+const specialButton = $("specialButton");
+const ultimateButton = $("ultimateButton");
 
+const koOverlay = $("koOverlay");
+const winnerText = $("winnerText");
+const matchStatus = $("matchStatus");
+const newGameButton = $("newGameButton");
 
-const playerDamageTrail =
-  $("playerDamageTrail");
+const playerSpecialOrb = $("playerSpecialOrb");
+const playerUltimateOrb = $("playerUltimateOrb");
+const cpuSpecialOrb = $("cpuSpecialOrb");
+const cpuUltimateOrb = $("cpuUltimateOrb");
 
-const cpuDamageTrail =
-  $("cpuDamageTrail");
-
-
-const playerUltimateBar =
-  $("playerUltimate");
-
-const cpuUltimateBar =
-  $("cpuUltimate");
-
-
-const roundScore =
-  $("roundScore");
-
-const roundLabel =
-  $("roundLabel");
-
-const roundText =
-  $("roundText");
-
-
-const blockButton =
-  $("blockButton");
-
-const attackButton =
-  $("attackButton");
-
-const specialButton =
-  $("specialButton");
-
-const ultimateButton =
-  $("ultimateButton");
-
-
-const koOverlay =
-  $("koOverlay");
-
-const winnerText =
-  $("winnerText");
-
-const matchStatus =
-  $("matchStatus");
-
-const newGameButton =
-  $("newGameButton");
-
-
-const playerSpecialOrb =
-  $("playerSpecialOrb");
-
-const playerUltimateOrb =
-  $("playerUltimateOrb");
-
-const cpuSpecialOrb =
-  $("cpuSpecialOrb");
-
-const cpuUltimateOrb =
-  $("cpuUltimateOrb");
-
-
-const playerSpecialIcon =
-  $("playerSpecialIcon");
-
-const playerUltimateIcon =
-  $("playerUltimateIcon");
-
-const cpuSpecialIcon =
-  $("cpuSpecialIcon");
-
-const cpuUltimateIcon =
-  $("cpuUltimateIcon");
+const playerSpecialIcon = $("playerSpecialIcon");
+const playerUltimateIcon = $("playerUltimateIcon");
+const cpuSpecialIcon = $("cpuSpecialIcon");
+const cpuUltimateIcon = $("cpuUltimateIcon");
 
 
 /* =====================================================
-   ROSTER
+   ROSTER / BALANCE
 ===================================================== */
 
-const CHARACTERS = [
+const BASE_ROSTER = [
   "brendan",
   "grandaddy",
   "connor",
-  "erin"
+  "erin",
+  "shannan"
 ];
 
-
-/* =====================================================
-   MAPS
-===================================================== */
+const ALL_ROSTER = [
+  ...BASE_ROSTER,
+  "martin"
+];
 
 const MAP_NAMES = {
-
-  virginia:
-    "SUBURBAN VIRGINIA",
-
-  westhampton:
-    "WESTHAMPTON BEACH",
-
-  newcanaan:
-    "NEW CANAAN",
-
-  madrid:
-    "MADRID"
-
+  virginia: "SUBURBAN VIRGINIA",
+  westhampton: "WESTHAMPTON BEACH",
+  newcanaan: "NEW CANAAN",
+  madrid: "MADRID"
 };
 
 
 /* =====================================================
-   BALANCE
+   HEALTH
 ===================================================== */
 
-const MAX_HEALTH =
-  100;
+const MAX_HEALTH = {
+  brendan: 100,
+  grandaddy: 100,
+  connor: 100,
+  erin: 100,
+  shannan: 100,
 
+  // Martin is deliberately tougher because he begins
+  // as the unlockable boss character.
+  martin: 115
+};
+
+
+/* =====================================================
+   BASIC ATTACKS
+===================================================== */
 
 const NORMAL = {
 
   brendan: {
+    damage: 5,
+    range: 138,
 
-    damage:
-      5,
+    // Brendan's golf spam was too strong in earlier builds.
+    // 800ms keeps the golf club from being spammed endlessly.
+    recovery: 800,
 
-    range:
-      138,
-
-    recovery:
-      800,
-
-    impact:
-      275,
-
-    animation:
-      440
-
+    impact: 275,
+    animation: 440
   },
-
 
   grandaddy: {
+    // Final hammer damage we decided on.
+    damage: 5.75,
 
-    damage:
-      5.75,
-
-    range:
-      108,
-
-    recovery:
-      375,
-
-    impact:
-      175,
-
-    animation:
-      330
-
+    range: 108,
+    recovery: 375,
+    impact: 175,
+    animation: 330
   },
-
 
   connor: {
-
-    damage:
-      5.5,
-
-    range:
-      122,
-
-    recovery:
-      530,
-
-    impact:
-      220,
-
-    animation:
-      390
-
+    damage: 5.5,
+    range: 122,
+    recovery: 530,
+    impact: 220,
+    animation: 390
   },
 
-
   erin: {
+    damage: 4.5,
+    range: 88,
+    recovery: 430,
+    impact: 165,
+    animation: 340
+  },
 
-    damage:
-      4.5,
+  shannan: {
+    damage: 5,
+    range: 96,
+    recovery: 455,
+    impact: 180,
+    animation: 340
+  },
 
-    range:
-      88,
-
-    recovery:
-      430,
-
-    impact:
-      165,
-
-    animation:
-      340
-
+  martin: {
+    damage: 4.75,
+    range: 82,
+    recovery: 410,
+    impact: 155,
+    animation: 300
   }
-
 };
 
 
-const BIG_DRIVE_DAMAGE =
-  10;
+/* =====================================================
+   SPECIAL / ULTIMATE BALANCE
+===================================================== */
 
+const BIG_DRIVE_DAMAGE = 10;
 
-const LADDER_DAMAGE =
-  10.5;
+// Grandaddy ladder damage
+const LADDER_DAMAGE = 10.5;
 
+// Connor Paint Beast
+const PAINT_BEAST_DAMAGE = 10;
 
-const PAINT_BEAST_DAMAGE =
-  10;
+// Erin Pimple Patch
+const PIMPLE_PATCH_STUN = 1500;
 
+// Shannan Brainrot gets same stun duration as Erin
+const BRAINROT_STUN = 1500;
 
-const PIMPLE_PATCH_STUN =
-  1500;
+// Martin Dog Breath
+const DOG_BREATH_STUN = 2000;
 
+// Shannan UFO
+const UFO_DAMAGE = 22;
 
+// Martin / Clyde ultimate
+const CLYDE_DAMAGE = 30;
+
+// Brendan IPO
 const IPO_HITS = [
   5,
   5,
   7
 ];
 
-
-/*
-Erin was 17 total.
-
-Now +5 stronger.
-
-4 + 5 + 13 = 22 total
-*/
-
+// Erin laundry ultimate
 const LAUNDRY_HITS = [
   4,
   5,
   13
 ];
 
+// Connor fried chicken restores 30 HP
+const CONNOR_HEAL = 30;
 
-const CONNOR_HEAL =
-  30;
+// Grandaddy ultimate stun
+const BACK_IN_MY_DAY_STUN = 3000;
 
+const SPECIAL_COOLDOWN = 5000;
 
-const BACK_IN_MY_DAY_STUN =
-  3000;
-
-
-const SPECIAL_COOLDOWN =
-  5000;
-
-
-const METER_ON_HIT =
-  14;
-
-
-const METER_ON_DAMAGE =
-  7;
+const METER_ON_HIT = 14;
+const METER_ON_DAMAGE = 7;
 
 
 /* =====================================================
    STATE
 ===================================================== */
 
-let selectedCharacter =
-  "brendan";
+let selectedCharacter = "brendan";
+let cpuCharacter = "grandaddy";
+let selectedMap = "virginia";
 
+let challengeMode = false;
+let challengeResult = null;
 
-let cpuCharacter =
-  "grandaddy";
+let currentRound = 1;
 
+let playerRoundWins = 0;
+let cpuRoundWins = 0;
 
-let selectedMap =
-  "virginia";
+let playerMaxHealth = 100;
+let cpuMaxHealth = 100;
 
+let playerHealth = 100;
+let cpuHealth = 100;
 
-let currentRound =
-  1;
+let playerUltimate = 0;
+let cpuUltimate = 0;
 
+let playerX = 40;
+let cpuX = 700;
 
-let playerRoundWins =
-  0;
+let matchId = 0;
+let roundId = 0;
 
+let matchActive = false;
+let fightStarted = false;
+let roundOver = false;
+let gameOver = false;
 
-let cpuRoundWins =
-  0;
+let actionLock = false;
 
+let playerJumping = false;
+let cpuJumping = false;
 
-let playerHealth =
-  100;
+let playerCrouching = false;
+let cpuCrouching = false;
 
+let playerBlocking = false;
+let cpuBlocking = false;
 
-let cpuHealth =
-  100;
+let playerStunned = false;
+let cpuStunned = false;
 
+let playerAttackCooldown = false;
+let cpuAttackCooldown = false;
 
-let playerUltimate =
-  0;
+let specialCooldown = false;
+let cpuSpecialCooldown = false;
 
-
-let cpuUltimate =
-  0;
-
-
-let playerX =
-  40;
-
-
-let cpuX =
-  700;
-
-
-let matchId =
-  0;
-
-
-let roundId =
-  0;
-
-
-let matchActive =
-  false;
-
-
-let fightStarted =
-  false;
-
-
-let roundOver =
-  false;
-
-
-let gameOver =
-  false;
-
-
-let actionLock =
-  false;
-
-
-let playerJumping =
-  false;
-
-
-let cpuJumping =
-  false;
-
-
-let playerCrouching =
-  false;
-
-
-let cpuCrouching =
-  false;
-
-
-let playerBlocking =
-  false;
-
-
-let cpuBlocking =
-  false;
-
-
-let playerStunned =
-  false;
-
-
-let cpuStunned =
-  false;
-
-
-let playerAttackCooldown =
-  false;
-
-
-let cpuAttackCooldown =
-  false;
-
-
-let specialCooldown =
-  false;
-
-
-let cpuSpecialCooldown =
-  false;
-
-
-let playerSpecialReadyTime =
-  0;
-
-
-let cpuSpecialReadyTime =
-  0;
-
+let playerSpecialReadyTime = 0;
+let cpuSpecialReadyTime = 0;
 
 const keys = {};
 
 
 /* =====================================================
-   CHARACTER HTML
+   MARTIN UNLOCK SYSTEM
 ===================================================== */
 
-function characterHTML(
-  character
-) {
+function isMartinUnlocked() {
 
-  if (
-    character ===
-    "brendan"
-  ) {
+  return (
+    localStorage.getItem("martinUnlocked") === "true"
+  );
+
+}
+
+
+function unlockMartin() {
+
+  localStorage.setItem(
+    "martinUnlocked",
+    "true"
+  );
+
+  updateMartinUI();
+
+}
+
+
+function unlockedRoster() {
+
+  return isMartinUnlocked()
+    ? ALL_ROSTER
+    : BASE_ROSTER;
+
+}
+
+
+function updateMartinUI() {
+
+  const unlocked = isMartinUnlocked();
+
+  martinCard.classList.toggle(
+    "locked",
+    !unlocked
+  );
+
+  martinChallengeButton.classList.toggle(
+    "unlocked",
+    unlocked
+  );
+
+  martinChallengeButton.textContent =
+    unlocked
+      ? "MARTIN UNLOCKED"
+      : "MARTIN'S CHALLENGE";
+
+}
+
+
+/* =====================================================
+   CHARACTER MODELS
+===================================================== */
+
+function characterHTML(c) {
+
+  /* ---------------- BRENDAN ---------------- */
+
+  if (c === "brendan") {
 
     return `
       <div class="pixel-person brendan-model">
@@ -535,19 +371,14 @@ function characterHTML(
         <div class="brendan-hair"></div>
 
         <div class="face">
-
           <div class="eye eye-left"></div>
-
           <div class="eye eye-right"></div>
-
           <div class="mouth"></div>
-
         </div>
 
         <div class="brendan-shirt">
 
           <div class="polo-collar collar-left"></div>
-
           <div class="polo-collar collar-right"></div>
 
           <div class="whale-mark"></div>
@@ -557,17 +388,13 @@ function characterHTML(
         <div class="skin arm left-arm"></div>
 
         <div class="skin arm right-arm weapon-arm">
-
           <div class="golf-club"></div>
-
         </div>
 
         <div class="khaki leg left-leg"></div>
-
         <div class="khaki leg right-leg"></div>
 
         <div class="white-shoe left-shoe"></div>
-
         <div class="white-shoe right-shoe"></div>
 
       </div>
@@ -576,10 +403,9 @@ function characterHTML(
   }
 
 
-  if (
-    character ===
-    "grandaddy"
-  ) {
+  /* ---------------- GRANDADDY ---------------- */
+
+  if (c === "grandaddy") {
 
     return `
       <div class="pixel-person grandaddy-model">
@@ -589,7 +415,6 @@ function characterHTML(
         <div class="face grandaddy-face">
 
           <div class="eye eye-left"></div>
-
           <div class="eye eye-right"></div>
 
           <div class="mouth"></div>
@@ -597,13 +422,10 @@ function characterHTML(
         </div>
 
         <div class="glasses glasses-left"></div>
-
         <div class="glasses glasses-right"></div>
-
         <div class="glasses-bridge"></div>
 
         <div class="orange-hat"></div>
-
         <div class="orange-brim"></div>
 
         <div class="hat-letter">
@@ -617,19 +439,15 @@ function characterHTML(
         <div class="skin arm right-arm weapon-arm">
 
           <div class="hammer">
-
             <div class="hammer-square"></div>
-
           </div>
 
         </div>
 
         <div class="black-pants leg left-leg"></div>
-
         <div class="black-pants leg right-leg"></div>
 
         <div class="white-shoe left-shoe"></div>
-
         <div class="white-shoe right-shoe"></div>
 
       </div>
@@ -638,10 +456,9 @@ function characterHTML(
   }
 
 
-  if (
-    character ===
-    "connor"
-  ) {
+  /* ---------------- CONNOR ---------------- */
+
+  if (c === "connor") {
 
     return `
       <div class="pixel-person connor-model">
@@ -651,13 +468,13 @@ function characterHTML(
         <div class="face">
 
           <div class="eye eye-left"></div>
-
           <div class="eye eye-right"></div>
 
           <div class="mouth"></div>
 
         </div>
 
+        <!-- Light beard / stubble -->
         <div class="connor-stubble"></div>
 
         <div class="connor-shirt"></div>
@@ -671,11 +488,9 @@ function characterHTML(
         </div>
 
         <div class="gray-pants leg left-leg"></div>
-
         <div class="gray-pants leg right-leg"></div>
 
         <div class="dark-shoe left-shoe"></div>
-
         <div class="dark-shoe right-shoe"></div>
 
       </div>
@@ -684,38 +499,115 @@ function characterHTML(
   }
 
 
+  /* ---------------- ERIN ---------------- */
+
+  if (c === "erin") {
+
+    return `
+      <div class="pixel-person erin-model">
+
+        <div class="erin-hair"></div>
+
+        <div class="face">
+
+          <div class="eye eye-left"></div>
+          <div class="eye eye-right"></div>
+
+          <div class="mouth"></div>
+
+        </div>
+
+        <div class="erin-shirt"></div>
+
+        <div class="skin arm left-arm"></div>
+
+        <div class="skin arm right-arm weapon-arm">
+
+          <div class="hairbrush"></div>
+
+        </div>
+
+        <div class="blue-jeans leg left-leg"></div>
+        <div class="blue-jeans leg right-leg"></div>
+
+        <div class="white-shoe left-shoe"></div>
+        <div class="white-shoe right-shoe"></div>
+
+      </div>
+    `;
+
+  }
+
+
+  /* ---------------- SHANNAN ---------------- */
+
+  if (c === "shannan") {
+
+    return `
+      <div class="pixel-person shannan-model">
+
+        <div class="shannan-hair"></div>
+
+        <div class="face">
+
+          <div class="eye eye-left"></div>
+          <div class="eye eye-right"></div>
+
+          <div class="mouth"></div>
+
+        </div>
+
+        <div class="shannan-shirt"></div>
+
+        <div class="skin arm left-arm"></div>
+
+        <div class="skin arm right-arm weapon-arm">
+
+          <div class="syringe"></div>
+
+        </div>
+
+        <div class="shannan-pants leg left-leg"></div>
+        <div class="shannan-pants leg right-leg"></div>
+
+        <div class="dark-shoe left-shoe"></div>
+        <div class="dark-shoe right-shoe"></div>
+
+      </div>
+    `;
+
+  }
+
+
+  /* ---------------- MARTIN ---------------- */
+
   return `
-    <div class="pixel-person erin-model">
+    <div class="martin-model">
 
-      <div class="erin-hair"></div>
+      <div class="martin-body"></div>
 
-      <div class="face">
+      <div class="martin-chest"></div>
 
-        <div class="eye eye-left"></div>
+      <div class="martin-head">
 
-        <div class="eye eye-right"></div>
+        <div class="martin-face-light"></div>
 
-        <div class="mouth"></div>
+        <div class="martin-eye left"></div>
+        <div class="martin-eye right"></div>
 
-      </div>
+        <div class="martin-nose"></div>
 
-      <div class="erin-shirt"></div>
-
-      <div class="skin arm left-arm"></div>
-
-      <div class="skin arm right-arm weapon-arm">
-
-        <div class="hairbrush"></div>
+        <div class="martin-ear left"></div>
+        <div class="martin-ear right"></div>
 
       </div>
 
-      <div class="blue-jeans leg left-leg"></div>
+      <div class="martin-tail"></div>
 
-      <div class="blue-jeans leg right-leg"></div>
-
-      <div class="white-shoe left-shoe"></div>
-
-      <div class="white-shoe right-shoe"></div>
+      <div class="martin-leg leg-one"></div>
+      <div class="martin-leg leg-two"></div>
+      <div class="martin-leg leg-three"></div>
+      <div class="martin-leg leg-four"></div>
 
     </div>
   `;
@@ -724,1129 +616,638 @@ function characterHTML(
 
 
 /* =====================================================
-   CHARACTER SELECT PREVIEWS
+   CHARACTER DISPLAY NAMES
 ===================================================== */
 
-document
-  .querySelectorAll(
-    "[data-preview]"
-  )
-  .forEach(
-    element => {
+function displayName(character) {
 
-      element.innerHTML =
-        characterHTML(
-          element.dataset.preview
-        );
+  const names = {
 
-    }
-  );
+    brendan: "BRENDAN",
+    grandaddy: "GRANDADDY",
+    connor: "CONNOR",
+    erin: "ERIN",
+    shannan: "SHANNAN",
+    martin: "MARTIN"
+
+  };
+
+  return names[character] || character.toUpperCase();
+
+}
 
 
 /* =====================================================
-   RANDOM TITLE MATCHUP
+   ABILITY ICONS
+===================================================== */
+
+function specialIconHTML(character) {
+
+  if (character === "brendan") {
+    return `
+      <div class="mini-golf-icon">
+        <div class="mini-golf-stick"></div>
+        <div class="mini-golf-head"></div>
+      </div>
+    `;
+  }
+
+  if (character === "grandaddy") {
+    return `
+      <div class="mini-ladder-icon">
+        <span></span>
+        <span></span>
+        <span></span>
+      </div>
+    `;
+  }
+
+  if (character === "connor") {
+    return `
+      <div class="mini-paint-icon">
+        <div class="mini-paint-handle"></div>
+        <div class="mini-paint-head"></div>
+      </div>
+    `;
+  }
+
+  if (character === "erin") {
+    return `
+      <div class="mini-patch-icon">
+        <span></span>
+      </div>
+    `;
+  }
+
+  if (character === "shannan") {
+    return `
+      <div class="mini-phone-icon">
+        <div class="mini-phone-screen"></div>
+      </div>
+    `;
+  }
+
+  return `
+    <div class="mini-breath-icon">
+      <span></span>
+      <span></span>
+      <span></span>
+    </div>
+  `;
+
+}
+
+
+function ultimateIconHTML(character) {
+
+  if (character === "brendan") {
+
+    return `
+      <div class="mini-ipo-icon">
+        IPO
+      </div>
+    `;
+
+  }
+
+  if (character === "grandaddy") {
+
+    return `
+      <div class="mini-clock-icon">
+        <div class="mini-clock-hand"></div>
+      </div>
+    `;
+
+  }
+
+  if (character === "connor") {
+
+    return `
+      <div class="mini-chicken-icon">
+        <div class="mini-chicken-piece"></div>
+      </div>
+    `;
+
+  }
+
+  if (character === "erin") {
+
+    return `
+      <div class="mini-laundry-icon">
+        <span></span>
+        <span></span>
+        <span></span>
+      </div>
+    `;
+
+  }
+
+  if (character === "shannan") {
+
+    return `
+      <div class="mini-ufo-icon">
+        <div class="mini-ufo-dome"></div>
+        <div class="mini-ufo-base"></div>
+      </div>
+    `;
+
+  }
+
+  return `
+    <div class="mini-clyde-icon">
+      C
+    </div>
+  `;
+
+}
+
+
+/* =====================================================
+   SCREEN CONTROL
+===================================================== */
+
+function showScreen(screen) {
+
+  document
+    .querySelectorAll(".screen")
+    .forEach(s => s.classList.remove("active"));
+
+  screen.classList.add("active");
+
+}
+
+
+/* =====================================================
+   TITLE SCREEN RANDOM MATCHUP
 ===================================================== */
 
 function generateTitleMatchup() {
 
-  const left =
-    CHARACTERS[
-      Math.floor(
-        Math.random() *
-        CHARACTERS.length
-      )
+  const roster = unlockedRoster();
+
+  let left =
+    roster[
+      Math.floor(Math.random() * roster.length)
     ];
 
-
-  const remaining =
-    CHARACTERS.filter(
-      character =>
-        character !== left
-    );
-
-
-  const right =
-    remaining[
-      Math.floor(
-        Math.random() *
-        remaining.length
-      )
+  let right =
+    roster[
+      Math.floor(Math.random() * roster.length)
     ];
 
+  while (right === left) {
+
+    right =
+      roster[
+        Math.floor(Math.random() * roster.length)
+      ];
+
+  }
 
   titleLeftCharacter.innerHTML =
-    characterHTML(
-      left
-    );
-
+    characterHTML(left);
 
   titleRightCharacter.innerHTML =
-    characterHTML(
-      right
-    );
-
+    characterHTML(right);
 
   titleLeftName.textContent =
-    left.toUpperCase();
-
+    displayName(left);
 
   titleRightName.textContent =
-    right.toUpperCase();
+    displayName(right);
 
 }
 
 
+/* =====================================================
+   PREVIEW MODELS
+===================================================== */
+
+function renderPreviews() {
+
+  document
+    .querySelectorAll("[data-preview]")
+    .forEach(el => {
+
+      const character =
+        el.dataset.preview;
+
+      el.innerHTML =
+        characterHTML(character);
+
+    });
+
+  challengeMartinPreview.innerHTML =
+    characterHTML("martin");
+
+}
+
+
+/* =====================================================
+   INITIAL SETUP
+===================================================== */
+
+renderPreviews();
+updateMartinUI();
 generateTitleMatchup();
 
 
 /* =====================================================
-   SCREEN MANAGEMENT
+   START BUTTON
 ===================================================== */
 
-function showScreen(
-  screen
-) {
+startButton.onclick = () => {
 
-  [
-    titleScreen,
-    selectScreen,
-    mapScreen,
-    fightScreen
-  ]
-  .forEach(
-    item => {
+  challengeMode = false;
+  challengeResult = null;
 
-      item.classList.remove(
-        "active"
-      );
+  fightButton.textContent = "FIGHT";
+
+  showScreen(selectScreen);
+
+};
+
+
+/* =====================================================
+   NORMAL CHARACTER SELECT
+===================================================== */
+
+fighterCards.forEach(card => {
+
+  card.addEventListener("click", () => {
+
+    const character =
+      card.dataset.character;
+
+    /*
+      Martin behaves differently while locked.
+      Clicking him starts Martin's Challenge rather
+      than selecting him normally.
+    */
+    if (
+      character === "martin" &&
+      !isMartinUnlocked()
+    ) {
+
+      openMartinChallenge();
+      return;
 
     }
-  );
+
+    challengeMode = false;
+
+    selectedCharacter = character;
+
+    fighterCards.forEach(c =>
+      c.classList.remove("selected")
+    );
+
+    card.classList.add("selected");
+
+    selectionText.textContent =
+      "PLAYER: " +
+      displayName(selectedCharacter);
+
+  });
+
+});
 
 
-  screen.classList.add(
-    "active"
-  );
+/* =====================================================
+   MARTIN CHALLENGE
+===================================================== */
+
+function openMartinChallenge() {
+
+  challengeMode = true;
+  challengeResult = null;
+
+  renderChallengeChoices();
+
+  showScreen(challengeScreen);
 
 }
 
 
-/* =====================================================
-   TITLE
-===================================================== */
+martinChallengeButton.onclick = () => {
 
-startButton.onclick =
-  () => {
+  /*
+    Once Martin is unlocked, this button simply
+    takes you to normal fighter selection where
+    Martin is now available.
+  */
 
-    showScreen(
-      selectScreen
-    );
+  if (isMartinUnlocked()) {
 
-  };
+    challengeMode = false;
 
+    showScreen(selectScreen);
 
-/* =====================================================
-   CHARACTER SELECT
-===================================================== */
-
-fighterCards.forEach(
-  card => {
-
-    card.onclick =
-      () => {
-
-        fighterCards.forEach(
-          other => {
-
-            other.classList.remove(
-              "selected"
-            );
-
-          }
-        );
-
-
-        card.classList.add(
-          "selected"
-        );
-
-
-        selectedCharacter =
-          card.dataset.character;
-
-
-        selectionText.textContent =
-          "PLAYER: " +
-          selectedCharacter.toUpperCase();
-
-      };
+    return;
 
   }
-);
+
+  openMartinChallenge();
+
+};
+
+
+challengeBackButton.onclick = () => {
+
+  challengeMode = false;
+
+  showScreen(titleScreen);
+
+};
+
+
+function renderChallengeChoices() {
+
+  challengeFighterGrid.innerHTML = "";
+
+  BASE_ROSTER.forEach(character => {
+
+    const button =
+      document.createElement("button");
+
+    button.className =
+      "challenge-choice-card";
+
+    button.innerHTML = `
+
+      <div class="challenge-choice-model">
+        ${characterHTML(character)}
+      </div>
+
+      <strong>
+        ${displayName(character)}
+      </strong>
+
+    `;
+
+    button.onclick = () => {
+
+      selectedCharacter =
+        character;
+
+      cpuCharacter =
+        "martin";
+
+      challengeMode =
+        true;
+
+      selectedMap =
+        "virginia";
+
+      mapCards.forEach(card => {
+
+        card.classList.toggle(
+          "selected",
+          card.dataset.map ===
+            selectedMap
+        );
+
+      });
+
+      mapSelectionText.textContent =
+        "MAP: " +
+        MAP_NAMES[selectedMap];
+
+      fightButton.textContent =
+        "FIGHT MARTIN";
+
+      showScreen(mapScreen);
+
+    };
+
+    challengeFighterGrid.appendChild(
+      button
+    );
+
+  });
+
+}
 
 
 /* =====================================================
    MAP SELECT
 ===================================================== */
 
-mapSelectButton.onclick =
-  () => {
-
-    showScreen(
-      mapScreen
-    );
-
-  };
-
-
-backToFighterButton.onclick =
-  () => {
-
-    showScreen(
-      selectScreen
-    );
-
-  };
-
-
-mapCards.forEach(
-  card => {
-
-    card.onclick =
-      () => {
-
-        mapCards.forEach(
-          other => {
-
-            other.classList.remove(
-              "selected"
-            );
-
-          }
-        );
-
-
-        card.classList.add(
-          "selected"
-        );
-
-
-        selectedMap =
-          card.dataset.map;
-
-
-        mapSelectionText.textContent =
-          "MAP: " +
-          MAP_NAMES[
-            selectedMap
-          ];
-
-      };
-
-  }
-);
-
-
-fightButton.onclick =
-  startMatch;
-
-
-/* =====================================================
-   HELPERS
-===================================================== */
-
-function motion(
-  fighter
-) {
-
-  return fighter.querySelector(
-    ".motion-layer"
-  );
-
-}
-
-
-function model(
-  fighter
-) {
-
-  return fighter.querySelector(
-    ".pixel-person"
-  );
-
-}
-
-
-function fighterX(
-  fighter
-) {
-
-  return parseFloat(
-    fighter.style.left
-  ) || 0;
-
-}
-
-
-function distance() {
-
-  return Math.abs(
-    playerX -
-    cpuX
-  );
-
-}
-
-
-function clamp() {
-
-  const max =
-    arena.clientWidth -
-    100;
-
-
-  playerX =
-    Math.max(
-      0,
-      Math.min(
-        max,
-        playerX
-      )
-    );
-
-
-  cpuX =
-    Math.max(
-      0,
-      Math.min(
-        max,
-        cpuX
-      )
-    );
-
-}
-
-
-function updatePositions() {
-
-  playerFighter.style.left =
-    playerX +
-    "px";
-
-
-  cpuFighter.style.left =
-    cpuX +
-    "px";
-
-}
-
-
-/* =====================================================
-   STANDING RESET
-===================================================== */
-
-function restoreStandingState(
-  fighter
-) {
-
-  const motionLayer =
-    motion(
-      fighter
-    );
-
-
-  const visualLayer =
-    fighter.querySelector(
-      ".visual-layer"
-    );
-
-
-  const fighterModel =
-    model(
-      fighter
-    );
-
-
-  [
-    motionLayer,
-    visualLayer
-  ]
-  .forEach(
-    element => {
-
-      if (
-        !element
-      ) {
-        return;
-      }
-
-
-      element
-        .getAnimations()
-        .forEach(
-          animation => {
-
-            animation.cancel();
-
-          }
-        );
-
-
-      element.style.animation =
-        "none";
-
-
-      element.style.transform =
-        "translate3d(0,0,0)";
-
-
-      void element.offsetWidth;
-
-
-      element.style.animation =
-        "";
-
-    }
-  );
-
-
-  fighter.classList.remove(
-    "walking",
-    "jumping",
-    "crouching",
-    "hit-animation",
-    "stunned",
-    "ko-loser"
-  );
-
+mapSelectButton.onclick = () => {
 
   if (
-    fighterModel
+    selectedCharacter === "martin" &&
+    !isMartinUnlocked()
   ) {
 
-    fighterModel.classList.remove(
-      "blocking",
-      "weapon-attacking",
-      "special-swing",
-      "hammer-pointing"
-    );
+    openMartinChallenge();
+    return;
 
   }
 
+  showScreen(mapScreen);
 
-  fighter.style.bottom =
-    "25px";
+};
 
-}
+
+mapCards.forEach(card => {
+
+  card.addEventListener("click", () => {
+
+    selectedMap =
+      card.dataset.map;
+
+    mapCards.forEach(c =>
+      c.classList.remove("selected")
+    );
+
+    card.classList.add("selected");
+
+    mapSelectionText.textContent =
+      "MAP: " +
+      MAP_NAMES[selectedMap];
+
+  });
+
+});
+
+
+backToFighterButton.onclick = () => {
+
+  if (challengeMode) {
+
+    renderChallengeChoices();
+
+    showScreen(challengeScreen);
+
+  } else {
+
+    showScreen(selectScreen);
+
+  }
+
+};
 
 
 /* =====================================================
-   MAP
+   CPU CHARACTER CHOICE
 ===================================================== */
 
-function applyMap() {
+function chooseCPUCharacter() {
 
-  arena.className =
-    "arena map-" +
-    selectedMap;
+  if (challengeMode) {
 
+    cpuCharacter = "martin";
 
-  battleMapName.textContent =
-    MAP_NAMES[
-      selectedMap
+    return;
+
+  }
+
+  const roster =
+    unlockedRoster()
+      .filter(c =>
+        c !== selectedCharacter
+      );
+
+  cpuCharacter =
+    roster[
+      Math.floor(
+        Math.random() *
+        roster.length
+      )
     ];
 
 }
 
 
 /* =====================================================
-   RANDOM CPU
+   FIGHT BUTTON
 ===================================================== */
 
-function chooseCPU() {
+fightButton.onclick = () => {
 
-  const available =
-    CHARACTERS.filter(
-      character =>
-        character !==
-        selectedCharacter
-    );
+  chooseCPUCharacter();
+
+  beginMatch();
+
+};
 
 
-  return available[
-    Math.floor(
-      Math.random() *
-      available.length
-    )
-  ];
+/* =====================================================
+   MAP CLASSES
+===================================================== */
+
+function setArenaMap() {
+
+  arena.className =
+    "arena map-" +
+    selectedMap;
+
+  battleMapName.textContent =
+    MAP_NAMES[selectedMap];
 
 }
 
 
 /* =====================================================
-   ICONS
+   FIGHTER MODEL SETUP
 ===================================================== */
 
-function icons(
-  character
-) {
-
-  if (
-    character ===
-    "grandaddy"
-  ) {
-
-    return {
-
-      special:
-        "🪜",
-
-      ultimate:
-        "💬"
-
-    };
-
-  }
-
-
-  if (
-    character ===
-    "connor"
-  ) {
-
-    return {
-
-      special:
-        "🎨",
-
-      ultimate:
-        "🍗"
-
-    };
-
-  }
-
-
-  if (
-    character ===
-    "erin"
-  ) {
-
-    return {
-
-      special:
-        "🩹",
-
-      ultimate:
-        "👕"
-
-    };
-
-  }
-
-
-  return {
-
-    special:
-      "⛳",
-
-    ultimate:
-      "📈"
-
-  };
-
-}
-
-
-function setIcons() {
-
-  const playerIcons =
-    icons(
-      selectedCharacter
-    );
-
-
-  const cpuIcons =
-    icons(
-      cpuCharacter
-    );
-
-
-  playerSpecialIcon.textContent =
-    playerIcons.special;
-
-
-  playerUltimateIcon.textContent =
-    playerIcons.ultimate;
-
-
-  cpuSpecialIcon.textContent =
-    cpuIcons.special;
-
-
-  cpuUltimateIcon.textContent =
-    cpuIcons.ultimate;
-
-}
-
-
-/* =====================================================
-   START MATCH
-===================================================== */
-
-function startMatch() {
-
-  matchId++;
-
-
-  playerRoundWins =
-    0;
-
-
-  cpuRoundWins =
-    0;
-
-
-  currentRound =
-    1;
-
-
-  gameOver =
-    false;
-
-
-  matchActive =
-    true;
-
-
-  cpuCharacter =
-    chooseCPU();
-
+function renderFightCharacters() {
 
   playerModelSlot.innerHTML =
     characterHTML(
       selectedCharacter
     );
 
-
   cpuModelSlot.innerHTML =
     characterHTML(
       cpuCharacter
     );
 
+  playerFighter.dataset.character =
+    selectedCharacter;
+
+  cpuFighter.dataset.character =
+    cpuCharacter;
 
   playerName.textContent =
-    selectedCharacter.toUpperCase();
-
+    displayName(
+      selectedCharacter
+    );
 
   cpuName.textContent =
-    cpuCharacter.toUpperCase();
+    displayName(
+      cpuCharacter
+    );
+
+  playerSpecialIcon.innerHTML =
+    specialIconHTML(
+      selectedCharacter
+    );
+
+  playerUltimateIcon.innerHTML =
+    ultimateIconHTML(
+      selectedCharacter
+    );
+
+  cpuSpecialIcon.innerHTML =
+    specialIconHTML(
+      cpuCharacter
+    );
+
+  cpuUltimateIcon.innerHTML =
+    ultimateIconHTML(
+      cpuCharacter
+    );
+
+}
 
 
-  setIcons();
+/* =====================================================
+   BEGIN MATCH
+===================================================== */
 
+function beginMatch() {
 
-  applyMap();
+  matchId++;
 
+  currentRound = 1;
 
-  showScreen(
-    fightScreen
-  );
+  playerRoundWins = 0;
+  cpuRoundWins = 0;
 
+  playerUltimate = 0;
+  cpuUltimate = 0;
+
+  gameOver = false;
+  roundOver = false;
+
+  actionLock = false;
+
+  playerMaxHealth =
+    MAX_HEALTH[
+      selectedCharacter
+    ];
+
+  cpuMaxHealth =
+    MAX_HEALTH[
+      cpuCharacter
+    ];
+
+  renderFightCharacters();
+
+  setArenaMap();
+
+  showScreen(fightScreen);
+
+  koOverlay.classList.add("hidden");
+
+  newGameButton.classList.add("hidden");
+
+  matchStatus.textContent = "";
 
   startRound();
-
-}
-
-
-/* =====================================================
-   START ROUND
-===================================================== */
-
-function startRound() {
-
-  roundId++;
-
-
-  const thisRound =
-    roundId;
-
-
-  playerHealth =
-    100;
-
-
-  cpuHealth =
-    100;
-
-
-  playerUltimate =
-    0;
-
-
-  cpuUltimate =
-    0;
-
-
-  roundOver =
-    false;
-
-
-  fightStarted =
-    false;
-
-
-  actionLock =
-    true;
-
-
-  playerJumping =
-    false;
-
-
-  cpuJumping =
-    false;
-
-
-  playerCrouching =
-    false;
-
-
-  cpuCrouching =
-    false;
-
-
-  playerBlocking =
-    false;
-
-
-  cpuBlocking =
-    false;
-
-
-  playerStunned =
-    false;
-
-
-  cpuStunned =
-    false;
-
-
-  playerAttackCooldown =
-    false;
-
-
-  cpuAttackCooldown =
-    false;
-
-
-  specialCooldown =
-    false;
-
-
-  cpuSpecialCooldown =
-    false;
-
-
-  playerSpecialReadyTime =
-    0;
-
-
-  cpuSpecialReadyTime =
-    0;
-
-
-  effects.innerHTML =
-    "";
-
-
-  restoreStandingState(
-    playerFighter
-  );
-
-
-  restoreStandingState(
-    cpuFighter
-  );
-
-
-  koOverlay.classList.add(
-    "hidden"
-  );
-
-
-  newGameButton.classList.add(
-    "hidden"
-  );
-
-
-  winnerText.textContent =
-    "";
-
-
-  matchStatus.textContent =
-    "";
-
-
-  roundText.textContent =
-    "";
-
-
-  updateRoundHUD();
-
-
-  setTimeout(
-    () => {
-
-      if (
-        thisRound !==
-        roundId
-      ) {
-        return;
-      }
-
-
-      playerX =
-        40;
-
-
-      cpuX =
-        arena.clientWidth -
-        140;
-
-
-      updatePositions();
-
-
-      updateHUD(
-        true
-      );
-
-
-      if (
-        currentRound ===
-        1
-      ) {
-
-        playEntrances(
-          thisRound
-        );
-
-      }
-
-      else {
-
-        playBattleIntro(
-          thisRound
-        );
-
-      }
-
-    },
-    60
-  );
-
-}
-
-
-/* =====================================================
-   ENTRANCES
-===================================================== */
-
-function playEntrances(
-  thisRound
-) {
-
-  let delay =
-    0;
-
-
-  if (
-    selectedCharacter ===
-    "erin"
-  ) {
-
-    erinIntro(
-      playerFighter
-    );
-
-
-    delay =
-      1500;
-
-  }
-
-
-  if (
-    cpuCharacter ===
-    "erin"
-  ) {
-
-    erinIntro(
-      cpuFighter
-    );
-
-
-    delay =
-      1500;
-
-  }
-
-
-  if (
-    selectedCharacter ===
-    "connor"
-  ) {
-
-    connorIntro(
-      playerFighter
-    );
-
-
-    delay =
-      1500;
-
-  }
-
-
-  if (
-    cpuCharacter ===
-    "connor"
-  ) {
-
-    connorIntro(
-      cpuFighter
-    );
-
-
-    delay =
-      1500;
-
-  }
-
-
-  setTimeout(
-    () => {
-
-      if (
-        thisRound ===
-        roundId
-      ) {
-
-        playBattleIntro(
-          thisRound
-        );
-
-      }
-
-    },
-    delay
-  );
-
-}
-
-
-/* =====================================================
-   ERIN INTRO
-===================================================== */
-
-function erinIntro(
-  fighter
-) {
-
-  const x =
-    fighterX(
-      fighter
-    );
-
-
-  const vanity =
-    document.createElement(
-      "div"
-    );
-
-
-  vanity.className =
-    "effect bathroom-vanity";
-
-
-  vanity.style.left =
-    Math.max(
-      10,
-      x -
-      20
-    ) +
-    "px";
-
-
-  vanity.style.bottom =
-    "25px";
-
-
-  effects.appendChild(
-    vanity
-  );
-
-
-  const brush =
-    document.createElement(
-      "div"
-    );
-
-
-  brush.className =
-    "effect intro-hairbrush";
-
-
-  brush.style.left =
-    x +
-    50 +
-    "px";
-
-
-  brush.style.bottom =
-    "94px";
-
-
-  effects.appendChild(
-    brush
-  );
-
-
-  roundText.textContent =
-    "JUST BORROWING IT...";
-
-
-  brush.animate(
-    [
-
-      {
-        transform:
-          "translate(0,0) rotate(30deg)"
-      },
-
-      {
-        transform:
-          "translate(22px,-35px) rotate(-20deg)"
-      },
-
-      {
-        transform:
-          "translate(8px,-65px) rotate(-45deg)"
-      }
-
-    ],
-
-    {
-
-      duration:
-        850,
-
-      fill:
-        "forwards",
-
-      easing:
-        "ease-in-out"
-
-    }
-  );
-
-
-  setTimeout(
-    () => {
-
-      brush.remove();
-
-
-      vanity.remove();
-
-
-      roundText.textContent =
-        "";
-
-    },
-    1250
-  );
-
-}
-
-
-/* =====================================================
-   CONNOR INTRO
-===================================================== */
-
-function connorIntro(
-  fighter
-) {
-
-  const motionLayer =
-    motion(
-      fighter
-    );
-
-
-  motionLayer.style.transform =
-    "rotate(90deg) translateY(10px)";
-
-
-  const z =
-    document.createElement(
-      "div"
-    );
-
-
-  z.className =
-    "effect sleep-intro-z";
-
-
-  z.textContent =
-    "Z Z Z";
-
-
-  z.style.left =
-    fighterX(
-      fighter
-    ) +
-    35 +
-    "px";
-
-
-  z.style.bottom =
-    "175px";
-
-
-  effects.appendChild(
-    z
-  );
-
-
-  setTimeout(
-    () => {
-
-      z.remove();
-
-
-      motionLayer.style.transform =
-        "translate3d(0,0,0)";
-
-
-      roundText.textContent =
-        "OVERSLEPT.";
-
-    },
-    850
-  );
-
-
-  setTimeout(
-    () => {
-
-      roundText.textContent =
-        "";
-
-    },
-    1250
-  );
 
 }
 
@@ -1862,7 +1263,6 @@ function updateRoundHUD() {
     " - " +
     cpuRoundWins;
 
-
   roundLabel.textContent =
     "ROUND " +
     currentRound;
@@ -1871,109 +1271,265 @@ function updateRoundHUD() {
 
 
 /* =====================================================
-   BATTLE INTRO
+   START ROUND
 ===================================================== */
 
-function playBattleIntro(
-  thisRound
-) {
+function startRound() {
 
-  actionLock =
-    true;
+  roundId++;
 
+  const thisMatch =
+    matchId;
 
-  battleIntro.classList.remove(
-    "hidden"
+  const thisRound =
+    roundId;
+
+  roundOver = false;
+  fightStarted = false;
+
+  actionLock = true;
+
+  playerHealth =
+    playerMaxHealth;
+
+  cpuHealth =
+    cpuMaxHealth;
+
+  playerBlocking = false;
+  cpuBlocking = false;
+
+  playerStunned = false;
+  cpuStunned = false;
+
+  playerCrouching = false;
+  cpuCrouching = false;
+
+  playerJumping = false;
+  cpuJumping = false;
+
+  playerAttackCooldown = false;
+  cpuAttackCooldown = false;
+
+  specialCooldown = false;
+  cpuSpecialCooldown = false;
+
+  playerSpecialReadyTime = 0;
+  cpuSpecialReadyTime = 0;
+
+  playerX = Math.max(
+    40,
+    arena.clientWidth * 0.19
   );
 
+  cpuX = Math.min(
+    arena.clientWidth - 110,
+    arena.clientWidth * 0.73
+  );
 
-  battleMapName.textContent =
-    MAP_NAMES[
-      selectedMap
-    ];
+  restoreStandingState(
+    playerFighter
+  );
 
+  restoreStandingState(
+    cpuFighter
+  );
+
+  updatePositions();
+
+  updateHUD();
+
+  updateRoundHUD();
 
   battleIntroRound.textContent =
     "ROUND " +
     currentRound;
 
-
-  battleIntroWord.classList.remove(
-    "begin"
-  );
-
-
   battleIntroWord.textContent =
     "READY...";
 
-
-  setTimeout(
-    () => {
-
-      if (
-        thisRound !==
-        roundId
-      ) {
-        return;
-      }
-
-
-      battleIntroWord.textContent =
-        "BEGIN!";
-
-
-      battleIntroWord.classList.add(
-        "begin"
-      );
-
-    },
-    950
+  battleIntro.classList.remove(
+    "hidden"
   );
 
+  /*
+    READY...
+  */
+  setTimeout(() => {
 
-  setTimeout(
-    () => {
+    if (
+      thisMatch !== matchId ||
+      thisRound !== roundId
+    ) return;
 
-      if (
-        thisRound !==
-        roundId
-      ) {
-        return;
-      }
+    battleIntroWord.textContent =
+      "BEGIN!";
 
-
-      battleIntro.classList.add(
-        "hidden"
-      );
-
-
-      battleIntroWord.classList.remove(
-        "begin"
-      );
+  }, 900);
 
 
-      fightStarted =
-        true;
+  /*
+    BEGIN!
+  */
+  setTimeout(() => {
+
+    if (
+      thisMatch !== matchId ||
+      thisRound !== roundId
+    ) return;
+
+    battleIntro.classList.add(
+      "hidden"
+    );
+
+    fightStarted = true;
+    matchActive = true;
+    actionLock = false;
+
+    cpuLoop(
+      thisMatch,
+      thisRound
+    );
+
+  }, 1650);
+
+}
 
 
-      actionLock =
-        false;
+/* =====================================================
+   HEALTH / ULTIMATE HUD
+===================================================== */
 
+function updateHUD() {
 
-      cpuLoop(
-        matchId,
-        thisRound
-      );
+  const playerPercent =
+    Math.max(
+      0,
+      playerHealth /
+      playerMaxHealth *
+      100
+    );
 
-    },
-    1650
+  const cpuPercent =
+    Math.max(
+      0,
+      cpuHealth /
+      cpuMaxHealth *
+      100
+    );
+
+  playerHealthBar.style.width =
+    playerPercent + "%";
+
+  cpuHealthBar.style.width =
+    cpuPercent + "%";
+
+  playerUltimateBar.style.width =
+    Math.min(
+      100,
+      playerUltimate
+    ) + "%";
+
+  cpuUltimateBar.style.width =
+    Math.min(
+      100,
+      cpuUltimate
+    ) + "%";
+
+  playerUltimateOrb.classList.toggle(
+    "ready",
+    playerUltimate >= 100
+  );
+
+  cpuUltimateOrb.classList.toggle(
+    "ready",
+    cpuUltimate >= 100
+  );
+
+  playerSpecialOrb.classList.toggle(
+    "cooldown",
+    specialCooldown
+  );
+
+  cpuSpecialOrb.classList.toggle(
+    "cooldown",
+    cpuSpecialCooldown
   );
 
 }
 
 
 /* =====================================================
-   ACTION CHECKS
+   FIGHTER POSITION
+===================================================== */
+
+function updatePositions() {
+
+  const maxX =
+    arena.clientWidth - 90;
+
+  playerX =
+    Math.max(
+      5,
+      Math.min(
+        playerX,
+        maxX
+      )
+    );
+
+  cpuX =
+    Math.max(
+      5,
+      Math.min(
+        cpuX,
+        maxX
+      )
+    );
+
+  /*
+    Prevent fighters from passing completely
+    through each other.
+  */
+
+  if (
+    playerX + 58 >
+    cpuX
+  ) {
+
+    const middle =
+      (playerX + cpuX) / 2;
+
+    playerX =
+      middle - 31;
+
+    cpuX =
+      middle + 31;
+
+  }
+
+  playerFighter.style.left =
+    playerX + "px";
+
+  cpuFighter.style.left =
+    cpuX + "px";
+
+}
+
+
+/* =====================================================
+   DISTANCE
+===================================================== */
+
+function distance() {
+
+  return Math.abs(
+    cpuX - playerX
+  );
+
+}
+
+
+/* =====================================================
+   CAN PLAYER / CPU ACT?
 ===================================================== */
 
 function canPlayer() {
@@ -2008,107 +1564,32 @@ function canCPU() {
    MOVEMENT
 ===================================================== */
 
-function movePlayer(
-  amount
-) {
+function movePlayer(amount) {
 
-  if (
-    !canPlayer() ||
-    playerBlocking
-  ) {
-    return;
-  }
+  if (!canPlayer()) return;
 
+  if (playerBlocking) return;
 
-  playerX +=
-    amount *
-    (
-      selectedCharacter ===
-      "erin"
+  if (playerCrouching) return;
 
-        ? 1.12
-
-        : 1
-    );
-
-
-  clamp();
-
-
-  if (
-    Math.abs(
-      playerX -
-      cpuX
-    ) <
-    60
-  ) {
-
-    playerX =
-      amount >
-      0
-
-        ? cpuX - 60
-
-        : cpuX + 60;
-
-  }
-
-
-  clamp();
-
+  playerX += amount;
 
   updatePositions();
 
 }
 
 
-function cpuStep(
-  amount
-) {
+function cpuStep(amount) {
 
-  if (
-    !canCPU()
-  ) {
-    return;
-  }
+  if (!canCPU()) return;
 
+  if (cpuBlocking) return;
 
-  cpuX +=
-    amount *
-    (
-      cpuCharacter ===
-      "erin"
+  /*
+    Negative means CPU moves toward player.
+  */
 
-        ? 1.12
-
-        : 1
-    );
-
-
-  clamp();
-
-
-  if (
-    Math.abs(
-      cpuX -
-      playerX
-    ) <
-    60
-  ) {
-
-    cpuX =
-      cpuX >
-      playerX
-
-        ? playerX + 60
-
-        : playerX - 60;
-
-  }
-
-
-  clamp();
-
+  cpuX += amount;
 
   updatePositions();
 
@@ -2116,108 +1597,76 @@ function cpuStep(
 
 
 /* =====================================================
-   JUMP / CROUCH
+   JUMP
 ===================================================== */
 
 function jumpPlayer() {
 
-  if (
-    !canPlayer() ||
-    playerJumping ||
-    playerCrouching ||
-    playerBlocking
-  ) {
-    return;
-  }
+  if (!canPlayer()) return;
 
+  if (playerJumping) return;
 
-  playerJumping =
-    true;
+  if (playerCrouching) return;
 
+  playerJumping = true;
 
   playerFighter.classList.add(
     "jumping"
   );
 
+  setTimeout(() => {
 
-  setTimeout(
-    () => {
+    playerFighter.classList.remove(
+      "jumping"
+    );
 
-      playerFighter.classList.remove(
-        "jumping"
-      );
+    playerJumping = false;
 
-
-      playerJumping =
-        false;
-
-    },
-    610
-  );
+  }, 620);
 
 }
 
 
 function jumpCPU() {
 
-  if (
-    !canCPU() ||
-    cpuJumping
-  ) {
-    return;
-  }
+  if (!canCPU()) return;
 
+  if (cpuJumping) return;
 
-  cpuJumping =
-    true;
-
+  cpuJumping = true;
 
   cpuFighter.classList.add(
     "jumping"
   );
 
+  setTimeout(() => {
 
-  setTimeout(
-    () => {
+    cpuFighter.classList.remove(
+      "jumping"
+    );
 
-      cpuFighter.classList.remove(
-        "jumping"
-      );
+    cpuJumping = false;
 
-
-      cpuJumping =
-        false;
-
-    },
-    610
-  );
+  }, 620);
 
 }
 
 
-function crouchPlayer(
-  active
-) {
+/* =====================================================
+   CROUCH
+===================================================== */
 
-  if (
-    active &&
-    (
-      !canPlayer() ||
-      playerJumping ||
-      playerBlocking
-    )
-  ) {
-    return;
-  }
+function crouchPlayer(on) {
 
+  if (!fightStarted) return;
 
-  playerCrouching =
-    active;
+  if (playerStunned) return;
 
+  playerCrouching = on;
 
   playerFighter.classList.toggle(
     "crouching",
-    active
+    on
   );
 
 }
@@ -2227,327 +1676,103 @@ function crouchPlayer(
    BLOCK
 ===================================================== */
 
-function setPlayerBlock(
-  active
-) {
+function setPlayerBlock(on) {
 
-  if (
-    active &&
-    !canPlayer()
-  ) {
-    return;
-  }
+  if (!fightStarted) return;
 
+  if (roundOver) return;
 
-  playerBlocking =
-    active;
+  if (playerStunned) return;
 
+  playerBlocking = on;
 
-  const fighterModel =
-    model(
-      playerFighter
-    );
-
-
-  if (
-    fighterModel
-  ) {
-
-    fighterModel.classList.toggle(
-      "blocking",
-      active
-    );
-
-  }
-
-
-  blockButton.classList.toggle(
-    "block-active",
-    active
+  playerFighter.classList.toggle(
+    "blocking",
+    on
   );
-
-}
-
-
-function setCPUBlock(
-  active
-) {
-
-  cpuBlocking =
-    active;
-
-
-  const fighterModel =
-    model(
-      cpuFighter
-    );
-
-
-  if (
-    fighterModel
-  ) {
-
-    fighterModel.classList.toggle(
-      "blocking",
-      active
-    );
-
-  }
 
 }
 
 
 function cpuBlock() {
 
-  setCPUBlock(
-    true
+  if (!canCPU()) return;
+
+  cpuBlocking = true;
+
+  cpuFighter.classList.add(
+    "blocking"
   );
 
+  setTimeout(() => {
 
-  setTimeout(
-    () => {
+    cpuBlocking = false;
 
-      setCPUBlock(
-        false
-      );
+    cpuFighter.classList.remove(
+      "blocking"
+    );
 
-    },
-    470
-  );
+  }, 430);
 
 }
 
 
 /* =====================================================
-   HUD
+   RESTORE CHARACTER STATE
 ===================================================== */
 
-function updateHUD(
-  immediate =
-    false
+function restoreStandingState(
+  fighter
 ) {
 
-  playerHealth =
-    Math.max(
-      0,
-      Math.min(
-        100,
-        playerHealth
-      )
-    );
-
-
-  cpuHealth =
-    Math.max(
-      0,
-      Math.min(
-        100,
-        cpuHealth
-      )
-    );
-
-
-  playerUltimate =
-    Math.max(
-      0,
-      Math.min(
-        100,
-        playerUltimate
-      )
-    );
-
-
-  cpuUltimate =
-    Math.max(
-      0,
-      Math.min(
-        100,
-        cpuUltimate
-      )
-    );
-
-
-  playerHealthBar.style.width =
-    playerHealth +
-    "%";
-
-
-  cpuHealthBar.style.width =
-    cpuHealth +
-    "%";
-
+  fighter.classList.remove(
+    "attacking",
+    "special-attacking",
+    "ultimate-attacking",
+    "blocking",
+    "crouching",
+    "jumping",
+    "stunned",
+    "hit",
+    "ko-loser"
+  );
 
   if (
-    immediate
+    fighter === playerFighter
   ) {
 
-    playerDamageTrail.style.width =
-      playerHealth +
-      "%";
+    playerBlocking = false;
+    playerCrouching = false;
+    playerJumping = false;
 
+  } else {
 
-    cpuDamageTrail.style.width =
-      cpuHealth +
-      "%";
-
-  }
-
-  else {
-
-    setTimeout(
-      () => {
-
-        playerDamageTrail.style.width =
-          playerHealth +
-          "%";
-
-
-        cpuDamageTrail.style.width =
-          cpuHealth +
-          "%";
-
-      },
-      170
-    );
+    cpuBlocking = false;
+    cpuCrouching = false;
+    cpuJumping = false;
 
   }
 
+}
+/* =====================================================
+   EFFECT HELPERS
+===================================================== */
 
-  playerUltimateBar.style.width =
-    playerUltimate +
-    "%";
+function fighterScreenX(
+  fighter
+) {
 
-
-  cpuUltimateBar.style.width =
-    cpuUltimate +
-    "%";
-
-
-  ultimateButton.classList.toggle(
-    "ultimate-ready",
-    playerUltimate >=
-      100
-  );
+  return parseFloat(
+    fighter.style.left
+  ) || 0;
 
 }
 
 
-/* =====================================================
-   ABILITY HUD
-===================================================== */
-
-function abilityHUD() {
-
-  const playerProgress =
-    specialCooldown
-
-      ? 1 -
-        Math.max(
-          0,
-          playerSpecialReadyTime -
-          Date.now()
-        ) /
-        SPECIAL_COOLDOWN
-
-      : 1;
-
-
-  const cpuProgress =
-    cpuSpecialCooldown
-
-      ? 1 -
-        Math.max(
-          0,
-          cpuSpecialReadyTime -
-          Date.now()
-        ) /
-        SPECIAL_COOLDOWN
-
-      : 1;
-
-
-  playerSpecialOrb.style.setProperty(
-    "--fill",
-    Math.max(
-      0,
-      playerProgress
-    ) *
-    360 +
-    "deg"
-  );
-
-
-  cpuSpecialOrb.style.setProperty(
-    "--fill",
-    Math.max(
-      0,
-      cpuProgress
-    ) *
-    360 +
-    "deg"
-  );
-
-
-  playerSpecialOrb.classList.toggle(
-    "ability-ready",
-    !specialCooldown
-  );
-
-
-  cpuSpecialOrb.classList.toggle(
-    "ability-ready",
-    !cpuSpecialCooldown
-  );
-
-
-  playerUltimateOrb.style.setProperty(
-    "--fill",
-    playerUltimate *
-    3.6 +
-    "deg"
-  );
-
-
-  cpuUltimateOrb.style.setProperty(
-    "--fill",
-    cpuUltimate *
-    3.6 +
-    "deg"
-  );
-
-
-  playerUltimateOrb.classList.toggle(
-    "ability-ready",
-    playerUltimate >=
-      100
-  );
-
-
-  cpuUltimateOrb.classList.toggle(
-    "ability-ready",
-    cpuUltimate >=
-      100
-  );
-
-
-  requestAnimationFrame(
-    abilityHUD
-  );
-
-}
-
-
-abilityHUD();
-
-
-/* =====================================================
-   HIT SPARK
-===================================================== */
-
-function spark(
-  fighter,
-  type =
-    "normal"
+function createEffect(
+  className,
+  left,
+  bottom
 ) {
 
   const effect =
@@ -2555,45 +1780,111 @@ function spark(
       "div"
     );
 
-
   effect.className =
     "effect " +
-    (
-      type ===
-      "ultimate"
-
-        ? "hit-spark-ultimate"
-
-        : type ===
-          "special"
-
-          ? "hit-spark-special"
-
-          : "hit-spark-normal"
-    );
-
+    className;
 
   effect.style.left =
-    fighterX(
-      fighter
-    ) +
-    30 +
-    "px";
-
+    left + "px";
 
   effect.style.bottom =
-    "100px";
-
+    bottom + "px";
 
   effects.appendChild(
     effect
   );
 
+  return effect;
+
+}
+
+
+function createComicText(
+  text,
+  className = "comic-callout",
+  duration = 1000
+) {
+
+  const callout =
+    document.createElement(
+      "div"
+    );
+
+  callout.className =
+    className;
+
+  callout.textContent =
+    text;
+
+  effects.appendChild(
+    callout
+  );
 
   setTimeout(
     () => {
 
-      effect.remove();
+      callout.remove();
+
+    },
+    duration
+  );
+
+}
+
+
+function createHitSpark(
+  fighter,
+  type = "normal"
+) {
+
+  const spark =
+    document.createElement(
+      "div"
+    );
+
+  let sparkClass =
+    "hit-spark-normal";
+
+  if (
+    type === "special"
+  ) {
+
+    sparkClass =
+      "hit-spark-special";
+
+  }
+
+  if (
+    type === "ultimate"
+  ) {
+
+    sparkClass =
+      "hit-spark-ultimate";
+
+  }
+
+  spark.className =
+    "effect " +
+    sparkClass;
+
+  spark.style.left =
+    fighterScreenX(
+      fighter
+    ) +
+    30 +
+    "px";
+
+  spark.style.bottom =
+    "105px";
+
+  effects.appendChild(
+    spark
+  );
+
+  setTimeout(
+    () => {
+
+      spark.remove();
 
     },
     350
@@ -2608,8 +1899,7 @@ function spark(
 
 function damageCPU(
   amount,
-  options =
-    {}
+  options = {}
 ) {
 
   if (
@@ -2617,54 +1907,60 @@ function damageCPU(
     gameOver ||
     !fightStarted
   ) {
-    return;
-  }
 
+    return;
+
+  }
 
   const type =
     options.type ||
     "normal";
 
+  let finalDamage =
+    amount;
 
   if (
     cpuBlocking &&
     !options.ignoreBlock
   ) {
 
-    amount *=
-      type ===
-      "special"
+    if (
+      type === "special"
+    ) {
 
-        ? 0.5
+      finalDamage *=
+        0.5;
 
-        : 0.2;
+    }
+
+    else {
+
+      finalDamage *=
+        0.2;
+
+    }
 
   }
 
   else {
 
-    spark(
+    createHitSpark(
       cpuFighter,
       type
     );
 
   }
 
-
   cpuHealth -=
-    amount;
-
+    finalDamage;
 
   playerUltimate +=
     METER_ON_HIT;
 
-
   cpuUltimate +=
     METER_ON_DAMAGE;
 
-
   updateHUD();
-
 
   checkKO();
 
@@ -2673,8 +1969,7 @@ function damageCPU(
 
 function damagePlayer(
   amount,
-  options =
-    {}
+  options = {}
 ) {
 
   if (
@@ -2682,54 +1977,60 @@ function damagePlayer(
     gameOver ||
     !fightStarted
   ) {
-    return;
-  }
 
+    return;
+
+  }
 
   const type =
     options.type ||
     "normal";
 
+  let finalDamage =
+    amount;
 
   if (
     playerBlocking &&
     !options.ignoreBlock
   ) {
 
-    amount *=
-      type ===
-      "special"
+    if (
+      type === "special"
+    ) {
 
-        ? 0.5
+      finalDamage *=
+        0.5;
 
-        : 0.2;
+    }
+
+    else {
+
+      finalDamage *=
+        0.2;
+
+    }
 
   }
 
   else {
 
-    spark(
+    createHitSpark(
       playerFighter,
       type
     );
 
   }
 
-
   playerHealth -=
-    amount;
-
+    finalDamage;
 
   cpuUltimate +=
     METER_ON_HIT;
 
-
   playerUltimate +=
     METER_ON_DAMAGE;
 
-
   updateHUD();
-
 
   checkKO();
 
@@ -2737,7 +2038,7 @@ function damagePlayer(
 
 
 /* =====================================================
-   BASIC ATTACK
+   ATTACK ANIMATION
 ===================================================== */
 
 function weaponSwing(
@@ -2746,30 +2047,27 @@ function weaponSwing(
 ) {
 
   const fighterModel =
-    model(
-      fighter
+    fighter.querySelector(
+      ".pixel-person, .martin-model"
     );
-
 
   if (
     !fighterModel
   ) {
-    return;
-  }
 
+    return;
+
+  }
 
   fighterModel.classList.remove(
     "weapon-attacking"
   );
 
-
   void fighterModel.offsetWidth;
-
 
   fighterModel.classList.add(
     "weapon-attacking"
   );
-
 
   setTimeout(
     () => {
@@ -2785,15 +2083,20 @@ function weaponSwing(
 }
 
 
+/* =====================================================
+   BASIC ATTACK - PLAYER
+===================================================== */
+
 function playerAttack() {
 
   if (
     !canPlayer() ||
     playerAttackCooldown
   ) {
-    return;
-  }
 
+    return;
+
+  }
 
   if (
     playerBlocking
@@ -2805,28 +2108,31 @@ function playerAttack() {
 
   }
 
-
   const stats =
     NORMAL[
       selectedCharacter
     ];
 
-
   playerAttackCooldown =
     true;
-
 
   weaponSwing(
     playerFighter,
     stats.animation
   );
 
-
   setTimeout(
     () => {
 
       if (
-        !roundOver &&
+        roundOver
+      ) {
+
+        return;
+
+      }
+
+      if (
         distance() <=
           stats.range &&
         !cpuJumping
@@ -2846,7 +2152,6 @@ function playerAttack() {
     stats.impact
   );
 
-
   setTimeout(
     () => {
 
@@ -2860,37 +2165,46 @@ function playerAttack() {
 }
 
 
+/* =====================================================
+   BASIC ATTACK - CPU
+===================================================== */
+
 function cpuNormalAttack() {
 
   if (
     !canCPU() ||
     cpuAttackCooldown
   ) {
-    return;
-  }
 
+    return;
+
+  }
 
   const stats =
     NORMAL[
       cpuCharacter
     ];
 
-
   cpuAttackCooldown =
     true;
-
 
   weaponSwing(
     cpuFighter,
     stats.animation
   );
 
-
   setTimeout(
     () => {
 
       if (
-        !roundOver &&
+        roundOver
+      ) {
+
+        return;
+
+      }
+
+      if (
         distance() <=
           stats.range &&
         !playerJumping
@@ -2910,7 +2224,6 @@ function cpuNormalAttack() {
     stats.impact
   );
 
-
   setTimeout(
     () => {
 
@@ -2925,7 +2238,7 @@ function cpuNormalAttack() {
 
 
 /* =====================================================
-   SPECIAL ROUTING
+   PLAYER SPECIAL
 ===================================================== */
 
 function playerSpecial() {
@@ -2934,37 +2247,32 @@ function playerSpecial() {
     !canPlayer() ||
     specialCooldown
   ) {
-    return;
-  }
 
+    return;
+
+  }
 
   specialCooldown =
     true;
-
 
   playerSpecialReadyTime =
     Date.now() +
     SPECIAL_COOLDOWN;
 
-
   specialButton.disabled =
     true;
-
 
   specialButton.classList.add(
     "cooling-down"
   );
-
 
   useSpecial(
     selectedCharacter,
     true
   );
 
-
   const thisRound =
     roundId;
-
 
   setTimeout(
     () => {
@@ -2973,21 +2281,19 @@ function playerSpecial() {
         thisRound !==
         roundId
       ) {
-        return;
-      }
 
+        return;
+
+      }
 
       specialCooldown =
         false;
 
-
       playerSpecialReadyTime =
         0;
 
-
       specialButton.disabled =
         false;
-
 
       specialButton.classList.remove(
         "cooling-down"
@@ -3000,14 +2306,27 @@ function playerSpecial() {
 }
 
 
+/* =====================================================
+   SPECIAL ROUTER
+===================================================== */
+
 function useSpecial(
   character,
   playerOwned
 ) {
 
   if (
-    character ===
-    "grandaddy"
+    character === "brendan"
+  ) {
+
+    bigDrive(
+      playerOwned
+    );
+
+  }
+
+  else if (
+    character === "grandaddy"
   ) {
 
     grandaddyLadder(
@@ -3017,8 +2336,7 @@ function useSpecial(
   }
 
   else if (
-    character ===
-    "connor"
+    character === "connor"
   ) {
 
     paintBeast(
@@ -3028,8 +2346,7 @@ function useSpecial(
   }
 
   else if (
-    character ===
-    "erin"
+    character === "erin"
   ) {
 
     pimplePatch(
@@ -3038,9 +2355,21 @@ function useSpecial(
 
   }
 
-  else {
+  else if (
+    character === "shannan"
+  ) {
 
-    bigDrive(
+    brainrot(
+      playerOwned
+    );
+
+  }
+
+  else if (
+    character === "martin"
+  ) {
+
+    dogBreath(
       playerOwned
     );
 
@@ -3050,7 +2379,7 @@ function useSpecial(
 
 
 /* =====================================================
-   BIG DRIVE
+   BRENDAN SPECIAL - BIG DRIVE
 ===================================================== */
 
 function bigDrive(
@@ -3059,73 +2388,65 @@ function bigDrive(
 
   const fighter =
     playerOwned
-
       ? playerFighter
-
       : cpuFighter;
 
-
   const fighterModel =
-    model(
-      fighter
+    fighter.querySelector(
+      ".brendan-model"
     );
 
+  if (
+    fighterModel
+  ) {
 
-  fighterModel.classList.add(
-    "special-swing"
-  );
+    fighterModel.classList.add(
+      "special-swing"
+    );
 
+    setTimeout(
+      () => {
 
-  setTimeout(
-    () => {
+        fighterModel.classList.remove(
+          "special-swing"
+        );
 
-      fighterModel.classList.remove(
-        "special-swing"
-      );
+      },
+      520
+    );
 
-    },
-    520
-  );
-
+  }
 
   roundText.textContent =
     "BIG DRIVE!";
-
 
   const ball =
     document.createElement(
       "div"
     );
 
-
   ball.className =
     "effect golf-ball";
 
-
   let x =
     playerOwned
-
       ? playerX + 80
-
       : cpuX;
-
 
   const direction =
     playerOwned
-
       ? 1
-
       : -1;
 
+  ball.style.left =
+    x + "px";
 
   ball.style.bottom =
     "60px";
 
-
   effects.appendChild(
     ball
   );
-
 
   const interval =
     setInterval(
@@ -3135,24 +2456,18 @@ function bigDrive(
           18 *
           direction;
 
-
         ball.style.left =
-          x +
-          "px";
+          x + "px";
 
-
-        const target =
+        const targetX =
           playerOwned
-
             ? cpuX
-
             : playerX;
-
 
         if (
           Math.abs(
             x -
-            target
+            targetX
           ) <
           28
         ) {
@@ -3161,9 +2476,7 @@ function bigDrive(
             interval
           );
 
-
           ball.remove();
-
 
           if (
             playerOwned
@@ -3191,24 +2504,20 @@ function bigDrive(
 
           }
 
-
           return;
 
         }
 
-
         if (
-          x <
-          -50 ||
+          x < -50 ||
           x >
-          arena.clientWidth +
-          50
+            arena.clientWidth +
+            50
         ) {
 
           clearInterval(
             interval
           );
-
 
           ball.remove();
 
@@ -3218,7 +2527,6 @@ function bigDrive(
       22
     );
 
-
   setTimeout(
     () => {
 
@@ -3226,14 +2534,14 @@ function bigDrive(
         "";
 
     },
-    750
+    800
   );
 
 }
 
 
 /* =====================================================
-   GRANDADDY LADDER
+   GRANDADDY SPECIAL - LADDER
 ===================================================== */
 
 function grandaddyLadder(
@@ -3243,130 +2551,99 @@ function grandaddyLadder(
   if (
     roundOver
   ) {
-    return;
-  }
 
+    return;
+
+  }
 
   const grandaddy =
     playerOwned
-
       ? playerFighter
-
       : cpuFighter;
-
 
   const opponent =
     playerOwned
-
       ? cpuFighter
-
       : playerFighter;
 
-
   const opponentMotion =
-    motion(
-      opponent
+    opponent.querySelector(
+      ".motion-layer"
     );
 
-
-  const grandaddyModel =
-    model(
-      grandaddy
-    );
-
+  actionLock =
+    true;
 
   restoreStandingState(
     opponent
   );
 
-
-  actionLock =
-    true;
-
-
-  grandaddyModel.classList.add(
-    "hammer-pointing"
-  );
-
-
   roundText.textContent =
     "HOLD THIS LADDER!";
-
 
   const ladder =
     document.createElement(
       "div"
     );
 
-
   ladder.className =
     "effect ladder-effect";
-
 
   ladder.textContent =
     "🪜";
 
-
   ladder.style.left =
-    fighterX(
+    fighterScreenX(
       opponent
     ) -
     5 +
     "px";
 
-
   ladder.style.bottom =
     "20px";
-
 
   effects.appendChild(
     ladder
   );
 
-
-  const climb =
-    opponentMotion.animate(
-      [
-
-        {
-          transform:
-            "translate3d(0,0,0)"
-        },
-
-        {
-          transform:
-            "translate3d(7px,-35px,0)"
-        },
-
-        {
-          transform:
-            "translate3d(14px,-65px,0)"
-        },
-
-        {
-          transform:
-            "translate3d(20px,-90px,0)"
-        }
-
-      ],
+  opponentMotion.animate(
+    [
 
       {
+        transform:
+          "translate3d(0,0,0)"
+      },
 
-        duration:
-          680,
+      {
+        transform:
+          "translate3d(8px,-35px,0)"
+      },
 
-        fill:
-          "forwards"
+      {
+        transform:
+          "translate3d(15px,-65px,0)"
+      },
 
+      {
+        transform:
+          "translate3d(20px,-90px,0)"
       }
-    );
 
+    ],
+
+    {
+
+      duration:
+        680,
+
+      fill:
+        "forwards"
+
+    }
+  );
 
   setTimeout(
     () => {
-
-      climb.cancel();
-
 
       ladder.animate(
         [
@@ -3393,7 +2670,6 @@ function grandaddyLadder(
 
         }
       );
-
 
       opponentMotion.animate(
         [
@@ -3430,7 +2706,6 @@ function grandaddyLadder(
     680
   );
 
-
   setTimeout(
     () => {
 
@@ -3464,67 +2739,47 @@ function grandaddyLadder(
     1090
   );
 
-
   setTimeout(
     () => {
 
       ladder.remove();
 
-
-      grandaddyModel.classList.remove(
-        "hammer-pointing"
-      );
-
-
       restoreStandingState(
         opponent
       );
 
-
       updatePositions();
-
 
       actionLock =
         false;
-
 
       roundText.textContent =
         "";
 
     },
-    1240
+    1300
   );
 
 }
 
 
 /* =====================================================
-   PIXEL DINOSAUR
+   CONNOR DINOSAUR HTML
 ===================================================== */
 
-function dinoHTML() {
+function dinosaurHTML() {
 
   return `
     <div class="pixel-dino-tail"></div>
-
     <div class="pixel-dino-body"></div>
-
     <div class="pixel-dino-head"></div>
-
     <div class="pixel-dino-eye"></div>
-
     <div class="pixel-dino-teeth"></div>
-
     <div class="pixel-dino-arm"></div>
-
     <div class="pixel-dino-leg-one"></div>
-
     <div class="pixel-dino-leg-two"></div>
-
     <div class="pixel-dino-paint-one"></div>
-
     <div class="pixel-dino-paint-two"></div>
-
     <div class="pixel-dino-paint-three"></div>
   `;
 
@@ -3532,7 +2787,7 @@ function dinoHTML() {
 
 
 /* =====================================================
-   PAINT BEAST
+   CONNOR SPECIAL - PAINT BEAST
 ===================================================== */
 
 function paintBeast(
@@ -3541,108 +2796,87 @@ function paintBeast(
 
   const fighter =
     playerOwned
-
       ? playerFighter
-
       : cpuFighter;
 
-
   const fighterModel =
-    model(
-      fighter
+    fighter.querySelector(
+      ".connor-model"
     );
 
+  if (
+    fighterModel
+  ) {
 
-  fighterModel.classList.add(
-    "special-swing"
-  );
+    fighterModel.classList.add(
+      "special-swing"
+    );
 
+  }
 
   roundText.textContent =
     "PAINT BEAST!";
-
 
   const splash =
     document.createElement(
       "div"
     );
 
-
   splash.className =
     "effect paint-splash";
 
-
   splash.style.left =
-    fighterX(
+    fighterScreenX(
       fighter
     ) +
     (
       playerOwned
-
         ? 67
-
         : -25
     ) +
     "px";
 
-
   splash.style.bottom =
     "100px";
-
 
   effects.appendChild(
     splash
   );
 
-
   /*
-  Slower paint splatter
+    Slower formation than the original.
   */
-
   setTimeout(
     () => {
 
       splash.remove();
-
 
       const dinosaur =
         document.createElement(
           "div"
         );
 
-
       dinosaur.className =
         "effect pixel-dino";
 
-
       dinosaur.innerHTML =
-        dinoHTML();
-
+        dinosaurHTML();
 
       let x =
         playerOwned
-
           ? playerX + 63
-
           : cpuX - 68;
-
 
       const direction =
         playerOwned
-
           ? 1
-
           : -1;
 
+      dinosaur.style.left =
+        x + "px";
 
       dinosaur.style.bottom =
         "44px";
-
-
-      dinosaur.style.left =
-        x +
-        "px";
-
 
       if (
         !playerOwned
@@ -3653,11 +2887,9 @@ function paintBeast(
 
       }
 
-
       effects.appendChild(
         dinosaur
       );
-
 
       dinosaur.animate(
         [
@@ -3668,10 +2900,8 @@ function paintBeast(
 
             transform:
               playerOwned
-
-                ? "scale(0.5)"
-
-                : "scaleX(-1) scale(0.5)"
+                ? "scale(.45)"
+                : "scaleX(-1) scale(.45)"
           },
 
           {
@@ -3680,9 +2910,7 @@ function paintBeast(
 
             transform:
               playerOwned
-
                 ? "scale(1)"
-
                 : "scaleX(-1) scale(1)"
           }
 
@@ -3699,11 +2927,9 @@ function paintBeast(
         }
       );
 
-
       /*
-      Slower dinosaur movement
+        Dinosaur deliberately moves slower now.
       */
-
       const interval =
         setInterval(
           () => {
@@ -3712,24 +2938,18 @@ function paintBeast(
               10 *
               direction;
 
-
             dinosaur.style.left =
-              x +
-              "px";
+              x + "px";
 
-
-            const target =
+            const targetX =
               playerOwned
-
                 ? cpuX
-
                 : playerX;
-
 
             if (
               Math.abs(
                 x -
-                target
+                targetX
               ) <
               38
             ) {
@@ -3737,7 +2957,6 @@ function paintBeast(
               clearInterval(
                 interval
               );
-
 
               if (
                 playerOwned
@@ -3765,7 +2984,6 @@ function paintBeast(
 
               }
 
-
               setTimeout(
                 () => {
 
@@ -3775,24 +2993,20 @@ function paintBeast(
                 220
               );
 
-
               return;
 
             }
 
-
             if (
-              x <
-              -130 ||
+              x < -130 ||
               x >
-              arena.clientWidth +
-              130
+                arena.clientWidth +
+                130
             ) {
 
               clearInterval(
                 interval
               );
-
 
               dinosaur.remove();
 
@@ -3806,14 +3020,18 @@ function paintBeast(
     800
   );
 
-
   setTimeout(
     () => {
 
-      fighterModel.classList.remove(
-        "special-swing"
-      );
+      if (
+        fighterModel
+      ) {
 
+        fighterModel.classList.remove(
+          "special-swing"
+        );
+
+      }
 
       roundText.textContent =
         "";
@@ -3826,44 +3044,7 @@ function paintBeast(
 
 
 /* =====================================================
-   PIMPLE PATCH COMIC TEXT
-===================================================== */
-
-function pimpleText() {
-
-  const text =
-    document.createElement(
-      "div"
-    );
-
-
-  text.className =
-    "pimple-comic-callout";
-
-
-  text.textContent =
-    "PIMPLE PATCH ATTACK";
-
-
-  effects.appendChild(
-    text
-  );
-
-
-  setTimeout(
-    () => {
-
-      text.remove();
-
-    },
-    1100
-  );
-
-}
-
-
-/* =====================================================
-   PIMPLE PATCH
+   ERIN SPECIAL - PIMPLE PATCH
 ===================================================== */
 
 function pimplePatch(
@@ -3872,72 +3053,65 @@ function pimplePatch(
 
   const fighter =
     playerOwned
-
       ? playerFighter
-
       : cpuFighter;
-
 
   const target =
     playerOwned
-
       ? cpuFighter
-
       : playerFighter;
-
-
-  const fighterModel =
-    model(
-      fighter
-    );
-
-
-  fighterModel.classList.add(
-    "special-swing"
-  );
-
 
   roundText.textContent =
     "PIMPLE PATCH!";
 
+  createComicText(
+    "PIMPLE PATCH ATTACK",
+    "pimple-comic-callout",
+    1100
+  );
 
-  pimpleText();
+  const fighterModel =
+    fighter.querySelector(
+      ".erin-model"
+    );
 
+  if (
+    fighterModel
+  ) {
+
+    fighterModel.classList.add(
+      "special-swing"
+    );
+
+  }
 
   const patch =
     document.createElement(
       "div"
     );
 
-
   patch.className =
     "effect pimple-projectile";
 
-
   let x =
     playerOwned
-
       ? playerX + 70
-
       : cpuX;
-
 
   const direction =
     playerOwned
-
       ? 1
-
       : -1;
 
+  patch.style.left =
+    x + "px";
 
   patch.style.bottom =
     "110px";
 
-
   effects.appendChild(
     patch
   );
-
 
   const interval =
     setInterval(
@@ -3947,17 +3121,13 @@ function pimplePatch(
           18 *
           direction;
 
-
         patch.style.left =
-          x +
-          "px";
-
+          x + "px";
 
         const targetX =
-          fighterX(
+          fighterScreenX(
             target
           );
-
 
         if (
           Math.abs(
@@ -3971,33 +3141,27 @@ function pimplePatch(
             interval
           );
 
-
           patch.remove();
-
 
           applyPimpleStun(
             target,
             playerOwned
           );
 
-
           return;
 
         }
 
-
         if (
-          x <
-          -40 ||
+          x < -40 ||
           x >
-          arena.clientWidth +
-          40
+            arena.clientWidth +
+            40
         ) {
 
           clearInterval(
             interval
           );
-
 
           patch.remove();
 
@@ -4007,28 +3171,28 @@ function pimplePatch(
       22
     );
 
-
   setTimeout(
     () => {
 
-      fighterModel.classList.remove(
-        "special-swing"
-      );
+      if (
+        fighterModel
+      ) {
 
+        fighterModel.classList.remove(
+          "special-swing"
+        );
+
+      }
 
       roundText.textContent =
         "";
 
     },
-    850
+    900
   );
 
 }
 
-
-/* =====================================================
-   PIMPLE STUN
-===================================================== */
 
 function applyPimpleStun(
   target,
@@ -4051,83 +3215,67 @@ function applyPimpleStun(
 
   }
 
-
   target.classList.add(
     "stunned"
   );
-
 
   const stuck =
     document.createElement(
       "div"
     );
 
-
   stuck.className =
     "effect pimple-stuck";
 
-
   stuck.style.left =
-    fighterX(
+    fighterScreenX(
       target
     ) +
     5 +
     "px";
 
-
   stuck.style.bottom =
     "65px";
-
 
   effects.appendChild(
     stuck
   );
-
 
   const label =
     document.createElement(
       "div"
     );
 
-
   label.className =
     "effect stun-label";
-
 
   label.textContent =
     "STUCK!";
 
-
   label.style.left =
-    fighterX(
+    fighterScreenX(
       target
     ) +
     12 +
     "px";
 
-
   label.style.bottom =
     "205px";
-
 
   effects.appendChild(
     label
   );
-
 
   setTimeout(
     () => {
 
       stuck.remove();
 
-
       label.remove();
-
 
       target.classList.remove(
         "stunned"
       );
-
 
       if (
         playerOwned
@@ -4145,47 +3293,6 @@ function applyPimpleStun(
 
       }
 
-
-      const release =
-        document.createElement(
-          "div"
-        );
-
-
-      release.className =
-        "effect release-label";
-
-
-      release.textContent =
-        "SNAP!";
-
-
-      release.style.left =
-        fighterX(
-          target
-        ) +
-        15 +
-        "px";
-
-
-      release.style.bottom =
-        "205px";
-
-
-      effects.appendChild(
-        release
-      );
-
-
-      setTimeout(
-        () => {
-
-          release.remove();
-
-        },
-        500
-      );
-
     },
     PIMPLE_PATCH_STUN
   );
@@ -4194,7 +3301,387 @@ function applyPimpleStun(
 
 
 /* =====================================================
-   ULTIMATE ROUTING
+   SHANNAN SPECIAL - BRAINROT
+===================================================== */
+
+function brainrot(
+  playerOwned
+) {
+
+  const target =
+    playerOwned
+      ? cpuFighter
+      : playerFighter;
+
+  roundText.textContent =
+    "BRAINROT!";
+
+  createComicText(
+    "BRAINROT!",
+    "brainrot-callout",
+    1200
+  );
+
+  if (
+    playerOwned
+  ) {
+
+    cpuStunned =
+      true;
+
+  }
+
+  else {
+
+    playerStunned =
+      true;
+
+  }
+
+  target.classList.add(
+    "stunned"
+  );
+
+  /*
+    Fake vertical reel cards fly around the target.
+    No Instagram logos are needed.
+  */
+  for (
+    let i = 0;
+    i < 4;
+    i++
+  ) {
+
+    const reel =
+      document.createElement(
+        "div"
+      );
+
+    reel.className =
+      "effect brainrot-reel";
+
+    reel.innerHTML =
+      `
+        <div class="reel-top"></div>
+        <div class="reel-video"></div>
+        <div class="reel-lines"></div>
+      `;
+
+    reel.style.left =
+      fighterScreenX(
+        target
+      ) +
+      (
+        i * 25 -
+        25
+      ) +
+      "px";
+
+    reel.style.bottom =
+      95 +
+      (
+        i % 2
+      ) *
+      55 +
+      "px";
+
+    effects.appendChild(
+      reel
+    );
+
+    reel.animate(
+      [
+
+        {
+          transform:
+            "scale(.25) rotate(-15deg)",
+
+          opacity:
+            0
+        },
+
+        {
+          transform:
+            "scale(1) rotate(8deg)",
+
+          opacity:
+            1
+        },
+
+        {
+          transform:
+            "translateY(-35px) rotate(-8deg)",
+
+          opacity:
+            1
+        }
+
+      ],
+
+      {
+
+        duration:
+          BRAINROT_STUN,
+
+        fill:
+          "forwards"
+
+      }
+    );
+
+    setTimeout(
+      () => {
+
+        reel.remove();
+
+      },
+      BRAINROT_STUN +
+      50
+    );
+
+  }
+
+  setTimeout(
+    () => {
+
+      target.classList.remove(
+        "stunned"
+      );
+
+      if (
+        playerOwned
+      ) {
+
+        cpuStunned =
+          false;
+
+      }
+
+      else {
+
+        playerStunned =
+          false;
+
+      }
+
+      roundText.textContent =
+        "";
+
+    },
+    BRAINROT_STUN
+  );
+
+}
+
+
+/* =====================================================
+   MARTIN SPECIAL - DOG BREATH
+===================================================== */
+
+function dogBreath(
+  playerOwned
+) {
+
+  const martin =
+    playerOwned
+      ? playerFighter
+      : cpuFighter;
+
+  const target =
+    playerOwned
+      ? cpuFighter
+      : playerFighter;
+
+  roundText.textContent =
+    "DOG BREATH!";
+
+  createComicText(
+    "DOG BREATH!",
+    "dog-breath-text",
+    950
+  );
+
+  const cloud =
+    document.createElement(
+      "div"
+    );
+
+  cloud.className =
+    "effect dog-breath-cloud";
+
+  cloud.style.left =
+    fighterScreenX(
+      martin
+    ) +
+    (
+      playerOwned
+        ? 55
+        : -55
+    ) +
+    "px";
+
+  cloud.style.bottom =
+    "70px";
+
+  effects.appendChild(
+    cloud
+  );
+
+  cloud.animate(
+    [
+
+      {
+        transform:
+          "scale(.3)",
+
+        opacity:
+          0
+      },
+
+      {
+        transform:
+          "scale(1)",
+
+        opacity:
+          1
+      },
+
+      {
+        transform:
+          playerOwned
+            ? "translateX(70px) scale(1.35)"
+            : "translateX(-70px) scale(1.35)",
+
+        opacity:
+          0.85
+      }
+
+    ],
+
+    {
+
+      duration:
+        450,
+
+      fill:
+        "forwards",
+
+      easing:
+        "ease-out"
+
+    }
+  );
+
+  setTimeout(
+    () => {
+
+      cloud.remove();
+
+      if (
+        distance() >
+        150
+      ) {
+
+        roundText.textContent =
+          "";
+
+        return;
+
+      }
+
+      if (
+        playerOwned
+      ) {
+
+        cpuStunned =
+          true;
+
+      }
+
+      else {
+
+        playerStunned =
+          true;
+
+      }
+
+      target.classList.add(
+        "stunned"
+      );
+
+      const label =
+        document.createElement(
+          "div"
+        );
+
+      label.className =
+        "effect stun-label";
+
+      label.textContent =
+        "STUNNED!";
+
+      label.style.left =
+        fighterScreenX(
+          target
+        ) +
+        8 +
+        "px";
+
+      label.style.bottom =
+        "205px";
+
+      effects.appendChild(
+        label
+      );
+
+      setTimeout(
+        () => {
+
+          label.remove();
+
+          target.classList.remove(
+            "stunned"
+          );
+
+          if (
+            playerOwned
+          ) {
+
+            cpuStunned =
+              false;
+
+          }
+
+          else {
+
+            playerStunned =
+              false;
+
+          }
+
+        },
+        DOG_BREATH_STUN
+      );
+
+    },
+    430
+  );
+
+  setTimeout(
+    () => {
+
+      roundText.textContent =
+        "";
+
+    },
+    800
+  );
+
+}
+
+
+/* =====================================================
+   PLAYER ULTIMATE
 ===================================================== */
 
 function playerUltimateAttack() {
@@ -4204,16 +3691,15 @@ function playerUltimateAttack() {
     playerUltimate <
       100
   ) {
-    return;
-  }
 
+    return;
+
+  }
 
   playerUltimate =
     0;
 
-
   updateHUD();
-
 
   useUltimate(
     selectedCharacter,
@@ -4223,14 +3709,27 @@ function playerUltimateAttack() {
 }
 
 
+/* =====================================================
+   ULTIMATE ROUTER
+===================================================== */
+
 function useUltimate(
   character,
   playerOwned
 ) {
 
   if (
-    character ===
-    "grandaddy"
+    character === "brendan"
+  ) {
+
+    ipoUltimate(
+      playerOwned
+    );
+
+  }
+
+  else if (
+    character === "grandaddy"
   ) {
 
     backInMyDay(
@@ -4240,8 +3739,7 @@ function useUltimate(
   }
 
   else if (
-    character ===
-    "connor"
+    character === "connor"
   ) {
 
     friedChickenFeast(
@@ -4251,8 +3749,7 @@ function useUltimate(
   }
 
   else if (
-    character ===
-    "erin"
+    character === "erin"
   ) {
 
     laundryAvalanche(
@@ -4261,9 +3758,21 @@ function useUltimate(
 
   }
 
-  else {
+  else if (
+    character === "shannan"
+  ) {
 
-    ipoUltimate(
+    flyingSaucer(
+      playerOwned
+    );
+
+  }
+
+  else if (
+    character === "martin"
+  ) {
+
+    clydeReturns(
       playerOwned
     );
 
@@ -4273,7 +3782,7 @@ function useUltimate(
 
 
 /* =====================================================
-   BRENDAN IPO
+   BRENDAN ULTIMATE - IPO
 ===================================================== */
 
 function ipoUltimate(
@@ -4283,10 +3792,8 @@ function ipoUltimate(
   actionLock =
     true;
 
-
   roundText.textContent =
     "IPO!";
-
 
   const labels = [
     "FUNDING ROUND!",
@@ -4294,17 +3801,11 @@ function ipoUltimate(
     "IPO!"
   ];
 
-
   const icons = [
     "📱",
     "📈",
     "💰"
   ];
-
-
-  /*
-  About 1.75x slower than before
-  */
 
   IPO_HITS.forEach(
     (
@@ -4318,25 +3819,23 @@ function ipoUltimate(
           if (
             roundOver
           ) {
-            return;
-          }
 
+            return;
+
+          }
 
           const card =
             document.createElement(
               "div"
             );
 
-
           card.className =
             "effect ipo-card";
-
 
           card.innerHTML =
             icons[index] +
             "<br>" +
             labels[index];
-
 
           card.style.left =
             38 +
@@ -4344,18 +3843,15 @@ function ipoUltimate(
             8 +
             "%";
 
-
           card.style.top =
             80 +
             index *
             35 +
             "px";
 
-
           effects.appendChild(
             card
           );
-
 
           if (
             playerOwned
@@ -4389,7 +3885,9 @@ function ipoUltimate(
 
           }
 
-
+          /*
+            Text stays on-screen longer now.
+          */
           setTimeout(
             () => {
 
@@ -4400,6 +3898,10 @@ function ipoUltimate(
           );
 
         },
+
+        /*
+          Original spacing slowed about 1.75x.
+        */
         250 +
         index *
         595
@@ -4408,13 +3910,11 @@ function ipoUltimate(
     }
   );
 
-
   setTimeout(
     () => {
 
       actionLock =
         false;
-
 
       roundText.textContent =
         "";
@@ -4427,7 +3927,7 @@ function ipoUltimate(
 
 
 /* =====================================================
-   GRANDADDY ULTIMATE
+   GRANDADDY ULTIMATE - BACK IN MY DAY
 ===================================================== */
 
 function backInMyDay(
@@ -4437,18 +3937,19 @@ function backInMyDay(
   actionLock =
     true;
 
-
   const target =
     playerOwned
-
       ? cpuFighter
-
       : playerFighter;
-
 
   roundText.textContent =
     "BACK IN MY DAY...";
 
+  createComicText(
+    "BACK IN MY DAY...",
+    "grandaddy-ultimate-text",
+    950
+  );
 
   setTimeout(
     () => {
@@ -4456,7 +3957,6 @@ function backInMyDay(
       actionLock =
         false;
 
-
       if (
         playerOwned
       ) {
@@ -4473,102 +3973,76 @@ function backInMyDay(
 
       }
 
-
       target.classList.add(
         "stunned"
       );
-
 
       const label =
         document.createElement(
           "div"
         );
 
-
       label.className =
         "effect stun-label";
-
 
       label.textContent =
         "STUNNED!";
 
-
       label.style.left =
-        fighterX(
+        fighterScreenX(
           target
         ) +
         8 +
         "px";
 
-
       label.style.bottom =
         "220px";
 
-
-      label.dataset.stun =
-        "1";
-
-
       effects.appendChild(
         label
+      );
+
+      setTimeout(
+        () => {
+
+          label.remove();
+
+          target.classList.remove(
+            "stunned"
+          );
+
+          if (
+            playerOwned
+          ) {
+
+            cpuStunned =
+              false;
+
+          }
+
+          else {
+
+            playerStunned =
+              false;
+
+          }
+
+          roundText.textContent =
+            "";
+
+        },
+        BACK_IN_MY_DAY_STUN
       );
 
     },
     500
   );
 
-
-  setTimeout(
-    () => {
-
-      if (
-        playerOwned
-      ) {
-
-        cpuStunned =
-          false;
-
-      }
-
-      else {
-
-        playerStunned =
-          false;
-
-      }
-
-
-      target.classList.remove(
-        "stunned"
-      );
-
-
-      document
-        .querySelectorAll(
-          '[data-stun="1"]'
-        )
-        .forEach(
-          element => {
-
-            element.remove();
-
-          }
-        );
-
-
-      roundText.textContent =
-        "";
-
-    },
-    500 +
-    BACK_IN_MY_DAY_STUN
-  );
-
 }
 
 
 /* =====================================================
-   CONNOR FRIED CHICKEN
+   CONNOR ULTIMATE - FRIED CHICKEN
 ===================================================== */
 
 function friedChickenFeast(
@@ -4577,50 +4051,39 @@ function friedChickenFeast(
 
   const fighter =
     playerOwned
-
       ? playerFighter
-
       : cpuFighter;
-
 
   actionLock =
     true;
 
-
   roundText.textContent =
     "FRIED CHICKEN FEAST!";
-
 
   const bucket =
     document.createElement(
       "div"
     );
 
-
   bucket.className =
     "effect chicken-bucket";
-
 
   bucket.textContent =
     "🍗 🍗";
 
-
   bucket.style.left =
-    fighterX(
+    fighterScreenX(
       fighter
     ) +
     20 +
     "px";
 
-
   bucket.style.bottom =
     "95px";
-
 
   effects.appendChild(
     bucket
   );
-
 
   bucket.animate(
     [
@@ -4663,12 +4126,10 @@ function friedChickenFeast(
     }
   );
 
-
   setTimeout(
     () => {
 
       bucket.remove();
-
 
       if (
         roundOver
@@ -4677,23 +4138,21 @@ function friedChickenFeast(
         actionLock =
           false;
 
-
         return;
 
       }
 
-
       /*
-      GUARANTEED +30 HP
+        Exactly +30 HP,
+        capped at max health.
       */
-
       if (
         playerOwned
       ) {
 
         playerHealth =
           Math.min(
-            MAX_HEALTH,
+            playerMaxHealth,
             playerHealth +
             CONNOR_HEAL
           );
@@ -4704,61 +4163,51 @@ function friedChickenFeast(
 
         cpuHealth =
           Math.min(
-            MAX_HEALTH,
+            cpuMaxHealth,
             cpuHealth +
             CONNOR_HEAL
           );
 
       }
 
-
       updateHUD();
 
-
-      const heal =
+      const healText =
         document.createElement(
           "div"
         );
 
-
-      heal.className =
+      healText.className =
         "effect heal-text";
 
-
-      heal.textContent =
+      healText.textContent =
         "+30 HP";
 
-
-      heal.style.left =
-        fighterX(
+      healText.style.left =
+        fighterScreenX(
           fighter
         ) +
         8 +
         "px";
 
-
-      heal.style.bottom =
+      healText.style.bottom =
         "180px";
 
-
       effects.appendChild(
-        heal
+        healText
       );
-
 
       setTimeout(
         () => {
 
-          heal.remove();
+          healText.remove();
 
         },
         800
       );
 
-
       actionLock =
         false;
-
 
       roundText.textContent =
         "";
@@ -4771,7 +4220,7 @@ function friedChickenFeast(
 
 
 /* =====================================================
-   ERIN LAUNDRY AVALANCHE
+   ERIN ULTIMATE - LAUNDRY AVALANCHE
 ===================================================== */
 
 function laundryAvalanche(
@@ -4781,26 +4230,26 @@ function laundryAvalanche(
   actionLock =
     true;
 
-
   const target =
     playerOwned
-
       ? cpuFighter
-
       : playerFighter;
-
 
   roundText.textContent =
     "LAUNDRY AVALANCHE!";
 
+  createComicText(
+    "LAUNDRY AVALANCHE!",
+    "laundry-comic-text",
+    950
+  );
 
-  const clothes = [
+  const firstClothes = [
     "👕",
     "🧦"
   ];
 
-
-  clothes.forEach(
+  firstClothes.forEach(
     (
       clothing,
       index
@@ -4812,47 +4261,39 @@ function laundryAvalanche(
           if (
             roundOver
           ) {
-            return;
-          }
 
+            return;
+
+          }
 
           const item =
             document.createElement(
               "div"
             );
 
-
           item.className =
             "effect laundry-item";
-
 
           item.textContent =
             clothing;
 
-
           item.style.left =
-            fighterX(
+            fighterScreenX(
               target
             ) +
             (
-              index ===
-              0
-
+              index === 0
                 ? -2
-
                 : 35
             ) +
             "px";
 
-
           item.style.top =
             "-95px";
-
 
           effects.appendChild(
             item
           );
-
 
           item.animate(
             [
@@ -4882,7 +4323,6 @@ function laundryAvalanche(
 
             }
           );
-
 
           setTimeout(
             () => {
@@ -4923,7 +4363,6 @@ function laundryAvalanche(
 
               }
 
-
               setTimeout(
                 () => {
 
@@ -4945,62 +4384,56 @@ function laundryAvalanche(
     }
   );
 
-
   /*
-  BIGGER BUT TIGHT FINAL PILE
+    Tight final pile.
   */
-
   setTimeout(
     () => {
 
       if (
         roundOver
       ) {
-        return;
-      }
 
+        return;
+
+      }
 
       const pile =
         document.createElement(
           "div"
         );
 
-
       pile.className =
         "effect laundry-pile-box";
 
-
-      pile.innerHTML = `
-        <span class="laundry-piece-one">👕</span>
-        <span class="laundry-piece-two">👖</span>
-        <span class="laundry-piece-three">🧦</span>
-        <span class="laundry-piece-four">👚</span>
-      `;
-
+      pile.innerHTML =
+        `
+          <span class="laundry-piece-one">👕</span>
+          <span class="laundry-piece-two">👖</span>
+          <span class="laundry-piece-three">🧦</span>
+          <span class="laundry-piece-four">👚</span>
+        `;
 
       pile.style.left =
-        fighterX(
+        fighterScreenX(
           target
         ) -
         17 +
         "px";
 
-
       pile.style.top =
         "-95px";
-
 
       effects.appendChild(
         pile
       );
-
 
       pile.animate(
         [
 
           {
             transform:
-              "translateY(0) scale(0.8)"
+              "translateY(0) scale(.8)"
           },
 
           {
@@ -5023,7 +4456,6 @@ function laundryAvalanche(
 
         }
       );
-
 
       setTimeout(
         () => {
@@ -5060,7 +4492,6 @@ function laundryAvalanche(
 
           }
 
-
           setTimeout(
             () => {
 
@@ -5078,7 +4509,6 @@ function laundryAvalanche(
     1040
   );
 
-
   setTimeout(
     () => {
 
@@ -5086,13 +4516,10 @@ function laundryAvalanche(
         target
       );
 
-
       updatePositions();
-
 
       actionLock =
         false;
-
 
       roundText.textContent =
         "";
@@ -5105,6 +4532,613 @@ function laundryAvalanche(
 
 
 /* =====================================================
+   SHANNAN ULTIMATE - FLYING SAUCER
+===================================================== */
+
+function flyingSaucer(
+  playerOwned
+) {
+
+  actionLock =
+    true;
+
+  const target =
+    playerOwned
+      ? cpuFighter
+      : playerFighter;
+
+  roundText.textContent =
+    "FLYING SAUCER!";
+
+  createComicText(
+    "FLYING SAUCER!",
+    "ufo-comic-text",
+    1000
+  );
+
+  const ufo =
+    document.createElement(
+      "div"
+    );
+
+  ufo.className =
+    "effect ufo";
+
+  ufo.innerHTML =
+    `
+      <div class="ufo-dome"></div>
+      <div class="ufo-body"></div>
+      <div class="ufo-light light-one"></div>
+      <div class="ufo-light light-two"></div>
+      <div class="ufo-light light-three"></div>
+    `;
+
+  ufo.style.left =
+    "-160px";
+
+  ufo.style.top =
+    "45px";
+
+  effects.appendChild(
+    ufo
+  );
+
+  const targetX =
+    Math.max(
+      50,
+      Math.min(
+        arena.clientWidth -
+        160,
+        fighterScreenX(
+          target
+        ) -
+        25
+      )
+    );
+
+  ufo.animate(
+    [
+
+      {
+        transform:
+          "translateX(0)"
+      },
+
+      {
+        transform:
+          `translateX(${targetX + 160}px)`
+      }
+
+    ],
+
+    {
+
+      duration:
+        700,
+
+      fill:
+        "forwards",
+
+      easing:
+        "ease-out"
+
+    }
+  );
+
+  setTimeout(
+    () => {
+
+      const beam =
+        document.createElement(
+          "div"
+        );
+
+      beam.className =
+        "effect ufo-beam";
+
+      beam.style.left =
+        targetX +
+        35 +
+        "px";
+
+      beam.style.top =
+        "95px";
+
+      effects.appendChild(
+        beam
+      );
+
+      beam.animate(
+        [
+
+          {
+            transform:
+              "scaleY(.05)",
+
+            opacity:
+              0
+          },
+
+          {
+            transform:
+              "scaleY(1)",
+
+            opacity:
+              0.95
+          }
+
+        ],
+
+        {
+
+          duration:
+            330,
+
+          fill:
+            "forwards",
+
+          transformOrigin:
+            "top center"
+
+        }
+      );
+
+      setTimeout(
+        () => {
+
+          if (
+            playerOwned
+          ) {
+
+            damageCPU(
+              UFO_DAMAGE,
+              {
+                type:
+                  "ultimate",
+
+                ignoreBlock:
+                  true
+              }
+            );
+
+          }
+
+          else {
+
+            damagePlayer(
+              UFO_DAMAGE,
+              {
+                type:
+                  "ultimate",
+
+                ignoreBlock:
+                  true
+              }
+            );
+
+          }
+
+        },
+        320
+      );
+
+      setTimeout(
+        () => {
+
+          beam.remove();
+
+        },
+        900
+      );
+
+    },
+    760
+  );
+
+  setTimeout(
+    () => {
+
+      ufo.animate(
+        [
+
+          {
+            opacity:
+              1
+          },
+
+          {
+            transform:
+              "translateX(500px)",
+
+            opacity:
+              0
+          }
+
+        ],
+
+        {
+
+          duration:
+            600,
+
+          fill:
+            "forwards"
+
+        }
+      );
+
+    },
+    1550
+  );
+
+  setTimeout(
+    () => {
+
+      ufo.remove();
+
+      actionLock =
+        false;
+
+      roundText.textContent =
+        "";
+
+    },
+    2200
+  );
+
+}
+
+
+/* =====================================================
+   CLYDE MODEL
+===================================================== */
+
+function clydeHTML() {
+
+  return `
+    <div class="clyde-tail"></div>
+
+    <div class="clyde-body">
+      <div class="clyde-zombie-side"></div>
+    </div>
+
+    <div class="clyde-head">
+
+      <div class="clyde-face-light"></div>
+
+      <div class="clyde-eye normal-eye"></div>
+
+      <div class="clyde-eye zombie-eye"></div>
+
+      <div class="clyde-nose"></div>
+
+      <div class="clyde-ear left"></div>
+
+      <div class="clyde-ear right"></div>
+
+    </div>
+
+    <div class="clyde-leg one"></div>
+
+    <div class="clyde-leg two"></div>
+
+    <div class="clyde-leg three"></div>
+
+    <div class="clyde-leg four"></div>
+  `;
+
+}
+
+
+/* =====================================================
+   MARTIN ULTIMATE - CLYDE RETURNS
+===================================================== */
+
+function clydeReturns(
+  playerOwned
+) {
+
+  actionLock =
+    true;
+
+  const target =
+    playerOwned
+      ? cpuFighter
+      : playerFighter;
+
+  const owner =
+    playerOwned
+      ? playerFighter
+      : cpuFighter;
+
+  roundText.textContent =
+    "CLYDE RETURNS!";
+
+  createComicText(
+    "CLYDE RETURNS!",
+    "clyde-comic-text",
+    1100
+  );
+
+  const grave =
+    document.createElement(
+      "div"
+    );
+
+  grave.className =
+    "effect grave";
+
+  grave.innerHTML =
+    `
+      <div class="grave-top">
+        CLYDE
+      </div>
+    `;
+
+  grave.style.left =
+    fighterScreenX(
+      owner
+    ) +
+    (
+      playerOwned
+        ? 70
+        : -70
+    ) +
+    "px";
+
+  grave.style.bottom =
+    "24px";
+
+  effects.appendChild(
+    grave
+  );
+
+  grave.animate(
+    [
+
+      {
+        transform:
+          "translateY(90px)"
+      },
+
+      {
+        transform:
+          "translateY(0)"
+      }
+
+    ],
+
+    {
+
+      duration:
+        500,
+
+      fill:
+        "forwards",
+
+      easing:
+        "ease-out"
+
+    }
+  );
+
+  setTimeout(
+    () => {
+
+      const clyde =
+        document.createElement(
+          "div"
+        );
+
+      clyde.className =
+        "effect clyde-model";
+
+      clyde.innerHTML =
+        clydeHTML();
+
+      let x =
+        fighterScreenX(
+          owner
+        ) +
+        (
+          playerOwned
+            ? 55
+            : -45
+        );
+
+      const direction =
+        playerOwned
+          ? 1
+          : -1;
+
+      clyde.style.left =
+        x +
+        "px";
+
+      clyde.style.bottom =
+        "45px";
+
+      if (
+        !playerOwned
+      ) {
+
+        clyde.style.transform =
+          "scaleX(-1)";
+
+      }
+
+      effects.appendChild(
+        clyde
+      );
+
+      clyde.animate(
+        [
+
+          {
+            transform:
+              playerOwned
+                ? "translateY(55px)"
+                : "scaleX(-1) translateY(55px)",
+
+            opacity:
+              0
+          },
+
+          {
+            transform:
+              playerOwned
+                ? "translateY(0)"
+                : "scaleX(-1) translateY(0)",
+
+            opacity:
+              1
+          }
+
+        ],
+
+        {
+
+          duration:
+            450,
+
+          easing:
+            "ease-out"
+
+        }
+      );
+
+      setTimeout(
+        () => {
+
+          const interval =
+            setInterval(
+              () => {
+
+                x +=
+                  13 *
+                  direction;
+
+                clyde.style.left =
+                  x +
+                  "px";
+
+                const targetX =
+                  fighterScreenX(
+                    target
+                  );
+
+                if (
+                  Math.abs(
+                    x -
+                    targetX
+                  ) <
+                  40
+                ) {
+
+                  clearInterval(
+                    interval
+                  );
+
+                  clyde.classList.add(
+                    "clyde-bite"
+                  );
+
+                  if (
+                    playerOwned
+                  ) {
+
+                    damageCPU(
+                      CLYDE_DAMAGE,
+                      {
+                        type:
+                          "ultimate",
+
+                        ignoreBlock:
+                          true
+                      }
+                    );
+
+                  }
+
+                  else {
+
+                    damagePlayer(
+                      CLYDE_DAMAGE,
+                      {
+                        type:
+                          "ultimate",
+
+                        ignoreBlock:
+                          true
+                      }
+                    );
+
+                  }
+
+                  setTimeout(
+                    () => {
+
+                      clyde.remove();
+
+                    },
+                    350
+                  );
+
+                  return;
+
+                }
+
+                if (
+                  x < -130 ||
+                  x >
+                    arena.clientWidth +
+                    130
+                ) {
+
+                  clearInterval(
+                    interval
+                  );
+
+                  clyde.remove();
+
+                }
+
+              },
+              28
+            );
+
+        },
+        300
+      );
+
+    },
+    700
+  );
+
+  setTimeout(
+    () => {
+
+      grave.remove();
+
+    },
+    2100
+  );
+
+  setTimeout(
+    () => {
+
+      actionLock =
+        false;
+
+      roundText.textContent =
+        "";
+
+    },
+    2300
+  );
+
+}
+/* =====================================================
    CPU SPECIAL COOLDOWN
 ===================================================== */
 
@@ -5113,32 +5147,30 @@ function startCPUSpecialCooldown() {
   cpuSpecialCooldown =
     true;
 
-
   cpuSpecialReadyTime =
     Date.now() +
     SPECIAL_COOLDOWN;
 
-
   const thisRound =
     roundId;
-
 
   setTimeout(
     () => {
 
       if (
-        thisRound ===
+        thisRound !==
         roundId
       ) {
 
-        cpuSpecialCooldown =
-          false;
-
-
-        cpuSpecialReadyTime =
-          0;
+        return;
 
       }
+
+      cpuSpecialCooldown =
+        false;
+
+      cpuSpecialReadyTime =
+        0;
 
     },
     SPECIAL_COOLDOWN
@@ -5170,7 +5202,6 @@ function cpuLoop(
 
   }
 
-
   if (
     !canCPU()
   ) {
@@ -5184,32 +5215,40 @@ function cpuLoop(
         );
 
       },
-      160
+      150
     );
-
 
     return;
 
   }
 
-
   const currentDistance =
     distance();
 
-
   const roll =
     Math.random();
-
 
   const stats =
     NORMAL[
       cpuCharacter
     ];
 
-
   /*
-  Connor prioritizes healing
+    Martin is slightly tougher when he is
+    being fought as the locked boss.
+
+    Once Martin is unlocked and appears as a
+    normal CPU, he uses normal CPU difficulty.
   */
+  const martinBoss =
+    challengeMode &&
+    cpuCharacter ===
+      "martin";
+
+
+  /* ===================================================
+     CONNOR HEAL PRIORITY
+  =================================================== */
 
   if (
     cpuCharacter ===
@@ -5217,7 +5256,8 @@ function cpuLoop(
     cpuUltimate >=
       100 &&
     cpuHealth <=
-      58 &&
+      cpuMaxHealth *
+      0.58 &&
     roll <
       0.78
   ) {
@@ -5225,9 +5265,7 @@ function cpuLoop(
     cpuUltimate =
       0;
 
-
     updateHUD();
-
 
     friedChickenFeast(
       false
@@ -5236,19 +5274,25 @@ function cpuLoop(
   }
 
 
+  /* ===================================================
+     CPU ULTIMATE
+  =================================================== */
+
   else if (
     cpuUltimate >=
       100 &&
     roll <
-      0.31
+      (
+        martinBoss
+          ? 0.38
+          : 0.31
+      )
   ) {
 
     cpuUltimate =
       0;
 
-
     updateHUD();
-
 
     useUltimate(
       cpuCharacter,
@@ -5258,6 +5302,10 @@ function cpuLoop(
   }
 
 
+  /* ===================================================
+     MOVE TOWARD PLAYER
+  =================================================== */
+
   else if (
     currentDistance >
     stats.range +
@@ -5265,15 +5313,25 @@ function cpuLoop(
   ) {
 
     cpuStep(
-      -29
+      martinBoss
+        ? -34
+        : -29
     );
 
   }
 
 
+  /* ===================================================
+     BASIC ATTACK
+  =================================================== */
+
   else if (
     roll <
-    0.58
+      (
+        martinBoss
+          ? 0.64
+          : 0.58
+      )
   ) {
 
     cpuNormalAttack();
@@ -5281,14 +5339,21 @@ function cpuLoop(
   }
 
 
+  /* ===================================================
+     SPECIAL ATTACK
+  =================================================== */
+
   else if (
     roll <
-      0.79 &&
+      (
+        martinBoss
+          ? 0.86
+          : 0.79
+      ) &&
     !cpuSpecialCooldown
   ) {
 
     startCPUSpecialCooldown();
-
 
     useSpecial(
       cpuCharacter,
@@ -5298,9 +5363,13 @@ function cpuLoop(
   }
 
 
+  /* ===================================================
+     BLOCK
+  =================================================== */
+
   else if (
     roll <
-    0.89
+    0.92
   ) {
 
     cpuBlock();
@@ -5308,15 +5377,23 @@ function cpuLoop(
   }
 
 
+  /* ===================================================
+     JUMP
+  =================================================== */
+
   else if (
     roll <
-    0.95
+    0.97
   ) {
 
     jumpCPU();
 
   }
 
+
+  /* ===================================================
+     SMALL POSITION ADJUSTMENT
+  =================================================== */
 
   else {
 
@@ -5325,6 +5402,25 @@ function cpuLoop(
     );
 
   }
+
+
+  /*
+    Martin's challenge AI acts a touch faster.
+
+    Normal CPU stays close to the difficulty
+    you already had.
+  */
+
+  const delay =
+    martinBoss
+
+      ? 315 +
+        Math.random() *
+        105
+
+      : 395 +
+        Math.random() *
+        135;
 
 
   setTimeout(
@@ -5336,10 +5432,7 @@ function cpuLoop(
       );
 
     },
-
-    395 +
-    Math.random() *
-    135
+    delay
   );
 
 }
@@ -5354,9 +5447,10 @@ function checkKO() {
   if (
     roundOver
   ) {
-    return;
-  }
 
+    return;
+
+  }
 
   if (
     playerHealth <=
@@ -5384,7 +5478,48 @@ function checkKO() {
 
 
 /* =====================================================
-   ROUND END
+   MARTIN UNLOCK BANNER
+===================================================== */
+
+function showMartinUnlockBanner() {
+
+  const banner =
+    document.createElement(
+      "div"
+    );
+
+  banner.className =
+    "unlock-banner";
+
+  banner.innerHTML =
+    `
+      <span class="unlock-small">
+        NEW FIGHTER UNLOCKED
+      </span>
+
+      <span class="unlock-big">
+        MARTIN
+      </span>
+    `;
+
+  effects.appendChild(
+    banner
+  );
+
+  setTimeout(
+    () => {
+
+      banner.remove();
+
+    },
+    1600
+  );
+
+}
+
+
+/* =====================================================
+   FINISH ROUND
 ===================================================== */
 
 function finishRound(
@@ -5394,37 +5529,29 @@ function finishRound(
   if (
     roundOver
   ) {
-    return;
-  }
 
+    return;
+
+  }
 
   roundOver =
     true;
 
-
   fightStarted =
     false;
-
 
   actionLock =
     true;
 
-
   const loser =
     playerWon
-
       ? cpuFighter
-
       : playerFighter;
-
 
   const winner =
     playerWon
-
       ? selectedCharacter
-
       : cpuCharacter;
-
 
   if (
     playerWon
@@ -5440,33 +5567,34 @@ function finishRound(
 
   }
 
-
   updateRoundHUD();
-
 
   restoreStandingState(
     loser
   );
 
-
   loser.classList.add(
     "ko-loser"
   );
-
 
   setTimeout(
     () => {
 
       winnerText.textContent =
-        winner.toUpperCase() +
+        displayName(
+          winner
+        ) +
         " WINS ROUND " +
         currentRound;
-
 
       koOverlay.classList.remove(
         "hidden"
       );
 
+
+      /* ===============================================
+         MATCH OVER
+      =============================================== */
 
       if (
         playerRoundWins >=
@@ -5478,52 +5606,123 @@ function finishRound(
         gameOver =
           true;
 
-
         matchActive =
           false;
 
 
+        /* =============================================
+           MARTIN CHALLENGE WIN
+        ============================================= */
+
+        if (
+          challengeMode &&
+          playerRoundWins >=
+            2
+        ) {
+
+          challengeResult =
+            "won";
+
+          /*
+            THIS is what permanently unlocks Martin
+            on this browser.
+          */
+
+          unlockMartin();
+
+          matchStatus.textContent =
+            "MARTIN DEFEATED — FIGHTER UNLOCKED";
+
+          newGameButton.textContent =
+            "CONTINUE";
+
+          showMartinUnlockBanner();
+
+          newGameButton.classList.remove(
+            "hidden"
+          );
+
+          return;
+
+        }
+
+
+        /* =============================================
+           MARTIN CHALLENGE LOSS
+        ============================================= */
+
+        if (
+          challengeMode &&
+          cpuRoundWins >=
+            2
+        ) {
+
+          challengeResult =
+            "lost";
+
+          matchStatus.textContent =
+            "MARTIN WINS — TRY AGAIN";
+
+          newGameButton.textContent =
+            "TRY AGAIN";
+
+          newGameButton.classList.remove(
+            "hidden"
+          );
+
+          return;
+
+        }
+
+
+        /* =============================================
+           NORMAL MATCH
+        ============================================= */
+
         matchStatus.textContent =
-          winner.toUpperCase() +
+          displayName(
+            winner
+          ) +
           " WINS THE MATCH";
 
+        newGameButton.textContent =
+          "NEW GAME";
 
         newGameButton.classList.remove(
           "hidden"
         );
 
-      }
-
-      else {
-
-        matchStatus.textContent =
-          playerRoundWins +
-          " - " +
-          cpuRoundWins;
-
-
-        setTimeout(
-          () => {
-
-            currentRound++;
-
-
-            effects.innerHTML =
-              "";
-
-
-            koOverlay.classList.add(
-              "hidden"
-            );
-
-
-            startRound();
-
-          },
-          1900
-        );
+        return;
 
       }
+
+
+      /* ===============================================
+         NEXT ROUND
+      =============================================== */
+
+      matchStatus.textContent =
+        playerRoundWins +
+        " - " +
+        cpuRoundWins;
+
+      setTimeout(
+        () => {
+
+          currentRound++;
+
+          effects.innerHTML =
+            "";
+
+          koOverlay.classList.add(
+            "hidden"
+          );
+
+          startRound();
+
+        },
+        1900
+      );
 
     },
     650
@@ -5533,7 +5732,7 @@ function finishRound(
 
 
 /* =====================================================
-   NEW GAME
+   NEW GAME / CHALLENGE RESULTS
 ===================================================== */
 
 newGameButton.onclick =
@@ -5541,39 +5740,227 @@ newGameButton.onclick =
 
     matchId++;
 
-
     roundId++;
-
 
     matchActive =
       false;
 
+    fightStarted =
+      false;
 
     gameOver =
       false;
 
-
     roundOver =
       false;
 
+    actionLock =
+      false;
 
     effects.innerHTML =
       "";
-
 
     koOverlay.classList.add(
       "hidden"
     );
 
 
-    generateTitleMatchup();
+    /* ===============================================
+       LOST TO MARTIN
+    =============================================== */
 
+    if (
+      challengeMode &&
+      challengeResult ===
+        "lost"
+    ) {
+
+      challengeResult =
+        null;
+
+      renderChallengeChoices();
+
+      showScreen(
+        challengeScreen
+      );
+
+      return;
+
+    }
+
+
+    /* ===============================================
+       BEAT MARTIN
+    =============================================== */
+
+    if (
+      challengeMode &&
+      challengeResult ===
+        "won"
+    ) {
+
+      challengeMode =
+        false;
+
+      challengeResult =
+        null;
+
+      updateMartinUI();
+
+      renderPreviews();
+
+      generateTitleMatchup();
+
+      fightButton.textContent =
+        "FIGHT";
+
+      showScreen(
+        selectScreen
+      );
+
+      return;
+
+    }
+
+
+    /* ===============================================
+       NORMAL NEW GAME
+    =============================================== */
+
+    challengeMode =
+      false;
+
+    challengeResult =
+      null;
+
+    fightButton.textContent =
+      "FIGHT";
+
+    updateMartinUI();
+
+    generateTitleMatchup();
 
     showScreen(
       selectScreen
     );
 
   };
+
+
+/* =====================================================
+   SPECIAL / ULTIMATE ORB DISPLAY
+===================================================== */
+
+function updateAbilityOrbs() {
+
+  /*
+    SPECIAL
+  */
+
+  const playerSpecialPercent =
+    specialCooldown
+
+      ? 1 -
+        Math.max(
+          0,
+          playerSpecialReadyTime -
+          Date.now()
+        ) /
+        SPECIAL_COOLDOWN
+
+      : 1;
+
+
+  const cpuSpecialPercent =
+    cpuSpecialCooldown
+
+      ? 1 -
+        Math.max(
+          0,
+          cpuSpecialReadyTime -
+          Date.now()
+        ) /
+        SPECIAL_COOLDOWN
+
+      : 1;
+
+
+  playerSpecialOrb.style.setProperty(
+    "--fill",
+    Math.max(
+      0,
+      playerSpecialPercent
+    ) *
+    360 +
+    "deg"
+  );
+
+
+  cpuSpecialOrb.style.setProperty(
+    "--fill",
+    Math.max(
+      0,
+      cpuSpecialPercent
+    ) *
+    360 +
+    "deg"
+  );
+
+
+  playerSpecialOrb.classList.toggle(
+    "ability-ready",
+    !specialCooldown
+  );
+
+
+  cpuSpecialOrb.classList.toggle(
+    "ability-ready",
+    !cpuSpecialCooldown
+  );
+
+
+  /*
+    ULTIMATE
+  */
+
+  playerUltimateOrb.style.setProperty(
+    "--fill",
+    playerUltimate *
+    3.6 +
+    "deg"
+  );
+
+
+  cpuUltimateOrb.style.setProperty(
+    "--fill",
+    cpuUltimate *
+    3.6 +
+    "deg"
+  );
+
+
+  playerUltimateOrb.classList.toggle(
+    "ability-ready",
+    playerUltimate >=
+      100
+  );
+
+
+  cpuUltimateOrb.classList.toggle(
+    "ability-ready",
+    cpuUltimate >=
+      100
+  );
+
+
+  requestAnimationFrame(
+    updateAbilityOrbs
+  );
+
+}
+
+
+updateAbilityOrbs();
 
 
 /* =====================================================
@@ -5623,7 +6010,7 @@ blockButton.onpointerleave =
 
 
 /* =====================================================
-   KEYBOARD
+   KEYBOARD - KEY DOWN
 ===================================================== */
 
 document.addEventListener(
@@ -5635,9 +6022,10 @@ document.addEventListener(
         "active"
       )
     ) {
-      return;
-    }
 
+      return;
+
+    }
 
     const key =
       event.key.toLowerCase();
@@ -5667,14 +6055,13 @@ document.addEventListener(
       true;
 
 
+    /* JUMP */
+
     if (
       (
-        key ===
-          "w" ||
-        key ===
-          "arrowup" ||
-        key ===
-          " "
+        key === "w" ||
+        key === "arrowup" ||
+        key === " "
       ) &&
       !event.repeat
     ) {
@@ -5684,11 +6071,11 @@ document.addEventListener(
     }
 
 
+    /* CROUCH */
+
     if (
-      key ===
-        "s" ||
-      key ===
-        "arrowdown"
+      key === "s" ||
+      key === "arrowdown"
     ) {
 
       crouchPlayer(
@@ -5698,9 +6085,10 @@ document.addEventListener(
     }
 
 
+    /* BLOCK */
+
     if (
-      key ===
-        "i" &&
+      key === "i" &&
       !event.repeat
     ) {
 
@@ -5711,9 +6099,10 @@ document.addEventListener(
     }
 
 
+    /* BASIC ATTACK */
+
     if (
-      key ===
-        "j" &&
+      key === "j" &&
       !event.repeat
     ) {
 
@@ -5722,9 +6111,10 @@ document.addEventListener(
     }
 
 
+    /* SPECIAL */
+
     if (
-      key ===
-        "k" &&
+      key === "k" &&
       !event.repeat
     ) {
 
@@ -5733,9 +6123,10 @@ document.addEventListener(
     }
 
 
+    /* ULTIMATE */
+
     if (
-      key ===
-        "l" &&
+      key === "l" &&
       !event.repeat
     ) {
 
@@ -5747,13 +6138,16 @@ document.addEventListener(
 );
 
 
+/* =====================================================
+   KEYBOARD - KEY UP
+===================================================== */
+
 document.addEventListener(
   "keyup",
   event => {
 
     const key =
       event.key.toLowerCase();
-
 
     keys[
       key
@@ -5762,10 +6156,8 @@ document.addEventListener(
 
 
     if (
-      key ===
-        "s" ||
-      key ===
-        "arrowdown"
+      key === "s" ||
+      key === "arrowdown"
     ) {
 
       crouchPlayer(
@@ -5776,8 +6168,7 @@ document.addEventListener(
 
 
     if (
-      key ===
-      "i"
+      key === "i"
     ) {
 
       setPlayerBlock(
@@ -5791,7 +6182,7 @@ document.addEventListener(
 
 
 /* =====================================================
-   MOVEMENT LOOP
+   PLAYER MOVEMENT LOOP
 ===================================================== */
 
 function movementLoop() {
@@ -5813,7 +6204,6 @@ function movementLoop() {
         -6
       );
 
-
       moving =
         true;
 
@@ -5828,7 +6218,6 @@ function movementLoop() {
       movePlayer(
         6
       );
-
 
       moving =
         true;
@@ -5854,3 +6243,36 @@ function movementLoop() {
 
 
 movementLoop();
+
+
+/* =====================================================
+   WINDOW RESIZE
+===================================================== */
+
+window.addEventListener(
+  "resize",
+  () => {
+
+    if (
+      fightScreen.classList.contains(
+        "active"
+      )
+    ) {
+
+      updatePositions();
+
+    }
+
+  }
+);
+
+
+/* =====================================================
+   FINAL INITIALIZATION
+===================================================== */
+
+updateMartinUI();
+
+renderPreviews();
+
+generateTitleMatchup();
