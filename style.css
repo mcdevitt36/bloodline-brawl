@@ -2,8 +2,14 @@
   box-sizing: border-box;
 }
 
+html,
 body {
   margin: 0;
+  width: 100%;
+  min-height: 100%;
+}
+
+body {
   background: #080c13;
   color: white;
   font-family: Arial, Helvetica, sans-serif;
@@ -17,21 +23,28 @@ button {
 
 #game {
   width: 100%;
-  max-width: 1000px;
+  max-width: 1260px;
   margin: auto;
 }
 
 
-/* =============================
+/* =====================================================
    SCREENS
-============================= */
+===================================================== */
 
 .screen {
   display: none;
+
+  width: 100%;
+
   min-height: 100vh;
-  padding: 22px 18px;
+
+  padding: 18px 22px;
+
   flex-direction: column;
+
   align-items: center;
+
   justify-content: center;
 }
 
@@ -40,832 +53,2304 @@ button {
 }
 
 
-/* =============================
+/* =====================================================
    TITLE
-============================= */
+===================================================== */
 
 .title-screen {
+  position: relative;
+
+  width: 100%;
+
+  height: 100vh;
+  height: 100dvh;
+
+  min-height: 0;
+
+  padding: 5px 18px;
+
+  overflow: hidden;
+
   background:
     linear-gradient(
-      #3496d9 0%,
-      #77c8ed 55%,
-      #4e9638 56%,
-      #2e711e 100%
+      #238ed2 0%,
+      #63bce8 56%,
+      #4d9838 57%,
+      #2a6e1d 100%
     );
 }
 
-.studio-name {
-  font-size: 23px;
-  font-weight: 1000;
-  letter-spacing: 5px;
-  text-shadow: 3px 3px black;
+
+.title-screen::before {
+  content: "";
+
+  position: absolute;
+
+  inset: 0;
+
+  background:
+    repeating-conic-gradient(
+      from -15deg at 50% 36%,
+      rgba(255,255,255,0.045) 0deg 9deg,
+      transparent 9deg 18deg
+    );
+
+  pointer-events: none;
 }
+
+
+.title-screen::after {
+  content: "";
+
+  position: absolute;
+
+  left: 0;
+  right: 0;
+
+  top: 55%;
+
+  height: 7px;
+
+  background: rgba(0,0,0,0.13);
+
+  box-shadow:
+    0 7px 0 rgba(255,255,255,0.06);
+}
+
+
+.title-bg-lines {
+  position: absolute;
+
+  inset: 0;
+
+  pointer-events: none;
+}
+
+
+.title-bg-lines::before,
+.title-bg-lines::after {
+  content: "";
+
+  position: absolute;
+
+  width: 280px;
+
+  height: 280px;
+
+  border: 3px solid rgba(255,255,255,0.08);
+
+  transform: rotate(45deg);
+}
+
+
+.title-bg-lines::before {
+  left: -150px;
+  top: -120px;
+}
+
+
+.title-bg-lines::after {
+  right: -150px;
+  bottom: -120px;
+}
+
+
+.title-content {
+  position: relative;
+
+  z-index: 5;
+
+  width: 100%;
+
+  display: flex;
+
+  flex-direction: column;
+
+  align-items: center;
+
+  justify-content: center;
+}
+
+
+.studio-name {
+  font-size: clamp(17px, 2vw, 27px);
+
+  font-weight: 1000;
+
+  letter-spacing: 7px;
+
+  text-shadow:
+    4px 4px 0 #111;
+}
+
 
 .presents {
-  margin-top: 4px;
-  font-size: 11px;
-  font-weight: 900;
-  letter-spacing: 6px;
-  opacity: 0.85;
-  text-shadow: 2px 2px black;
+  margin-top: 1px;
+
+  font-size: 9px;
+
+  font-weight: 1000;
+
+  letter-spacing: 8px;
+
+  text-shadow:
+    2px 2px black;
 }
 
+
 .game-logo {
-  margin: 12px 0 0;
-  line-height: 0.8;
+  margin: 3px 0 0;
+
+  line-height: 0.78;
+
   text-align: center;
-  font-size: clamp(55px, 10vw, 95px);
-  color: #ffd52a;
-  text-shadow: 7px 7px 0 black;
+
+  font-size: clamp(53px, 8vw, 95px);
+
+  color: #ffd129;
+
+  text-shadow:
+    7px 7px 0 black;
+
+  transform: rotate(-1deg);
 }
+
 
 .game-logo span {
   display: block;
-  color: #ef3326;
+
+  color: #ef352b;
+
+  transform: rotate(1deg);
 }
+
 
 .tagline {
-  margin-top: 28px;
-  padding: 13px 24px;
+  margin-top: 15px;
+
+  padding: 9px 25px;
+
   background: #070707;
-  font-size: 18px;
-  font-weight: 900;
-  letter-spacing: 3px;
+
+  border-top: 2px solid #343434;
+
+  border-bottom: 4px solid #000;
+
+  font-size: clamp(12px, 1.5vw, 18px);
+
+  font-weight: 1000;
+
+  letter-spacing: 4px;
 }
 
-.title-fighters {
+
+.title-versus-panel {
   display: flex;
+
   align-items: flex-end;
+
   justify-content: center;
-  gap: 50px;
-  margin: 45px 0 35px;
+
+  gap: clamp(26px, 7vw, 85px);
+
+  margin: 16px 0 5px;
 }
+
 
 .title-fighter {
   display: flex;
+
   flex-direction: column;
+
   align-items: center;
 }
 
+
 .title-name {
-  margin-top: 14px;
-  font-size: 20px;
-  font-weight: 900;
+  margin-top: 0;
+
+  font-size: 18px;
+
+  font-weight: 1000;
+
+  text-shadow: 2px 2px black;
 }
+
+
+.title-vs-wrap {
+  display: flex;
+
+  flex-direction: column;
+
+  align-items: center;
+
+  margin-bottom: 5px;
+}
+
+
+.title-vs-small {
+  font-size: 8px;
+
+  letter-spacing: 4px;
+
+  font-weight: 900;
+
+  opacity: 0.8;
+}
+
 
 .vs {
-  font-size: 42px;
-  font-weight: 900;
+  font-size: 41px;
+
+  line-height: 1;
+
+  font-weight: 1000;
+
   color: #ffd52a;
-  text-shadow: 3px 3px black;
+
+  text-shadow: 4px 4px black;
 }
 
 
-/* =============================
-   MAIN BUTTON
-============================= */
+.title-start-button {
+  margin-top: 2px;
+}
+
+
+.title-footer {
+  margin-top: 9px;
+
+  font-size: 9px;
+
+  font-weight: 900;
+
+  letter-spacing: 4px;
+
+  opacity: 0.7;
+}
+
+
+/* =====================================================
+   BUTTONS
+===================================================== */
 
 .big-button {
-  min-width: 220px;
-  padding: 15px 42px;
+  min-width: 210px;
+
+  padding: 12px 36px;
+
   background: #ffd52a;
+
   color: #111;
+
   border: 4px solid #111;
+
   border-radius: 8px;
+
   box-shadow: 0 6px 0 #111;
-  font-size: 25px;
-  font-weight: 900;
+
+  font-size: 21px;
+
+  font-weight: 1000;
+
   cursor: pointer;
+
+  transition:
+    transform 0.1s,
+    filter 0.15s;
 }
+
+
+.big-button:hover {
+  filter: brightness(1.08);
+
+  transform: translateY(-2px);
+}
+
 
 .big-button:active {
   transform: translateY(4px);
+
   box-shadow: 0 2px 0 #111;
 }
 
 
-/* =============================
+.secondary-button {
+  min-width: 120px;
+
+  padding: 12px 22px;
+
+  background: #18222d;
+
+  color: white;
+
+  border: 3px solid #7b8792;
+
+  border-radius: 7px;
+
+  font-weight: 900;
+
+  cursor: pointer;
+}
+
+
+/* =====================================================
    CHARACTER BASE
-============================= */
+===================================================== */
 
 .pixel-person {
   position: relative;
+
   width: 100px;
+
   height: 185px;
 }
 
+
 .face {
   position: absolute;
+
   width: 43px;
+
   height: 45px;
+
   left: 29px;
+
   top: 27px;
+
   background: #efc09b;
+
   border: 3px solid #111;
+
   border-radius: 3px;
+
   z-index: 5;
 }
 
+
 .eye {
   position: absolute;
+
   width: 5px;
+
   height: 8px;
+
   top: 15px;
+
   background: #111;
 }
+
 
 .eye-left {
   left: 9px;
 }
 
+
 .eye-right {
   right: 9px;
 }
 
+
 .mouth {
   position: absolute;
+
   width: 14px;
+
   height: 6px;
+
   left: 12px;
+
   bottom: 7px;
+
   border-bottom: 3px solid #111;
+
   border-radius: 50%;
 }
 
 
-/* =============================
+/* =====================================================
    BRENDAN
-============================= */
+===================================================== */
 
 .brendan-hair {
   position: absolute;
+
   width: 48px;
+
   height: 19px;
+
   left: 27px;
+
   top: 17px;
+
   background: #111;
+
   border: 3px solid #111;
+
   border-radius: 7px 7px 2px 2px;
+
   z-index: 10;
 }
 
+
 .brendan-shirt {
   position: absolute;
+
   width: 60px;
+
   height: 64px;
+
   left: 20px;
+
   top: 69px;
+
   background: #173963;
+
   border: 3px solid #111;
+
   z-index: 2;
 }
 
+
 .polo-collar {
   position: absolute;
+
   width: 18px;
+
   height: 15px;
+
   top: -1px;
+
   background: white;
+
   z-index: 8;
 }
 
+
 .collar-left {
   left: 12px;
-  clip-path: polygon(0 0, 100% 0, 100% 100%);
+
+  clip-path:
+    polygon(
+      0 0,
+      100% 0,
+      100% 100%
+    );
 }
+
 
 .collar-right {
   right: 12px;
-  clip-path: polygon(0 0, 100% 0, 0 100%);
+
+  clip-path:
+    polygon(
+      0 0,
+      100% 0,
+      0 100%
+    );
 }
 
-.whale {
+
+/* tiny whale-like polo logo made with CSS */
+
+.whale-mark {
   position: absolute;
-  right: 7px;
-  top: 27px;
-  font-size: 11px;
+
+  width: 11px;
+
+  height: 6px;
+
+  right: 8px;
+
+  top: 31px;
+
+  background: #71bce3;
+
+  border-radius: 60% 45% 45% 60%;
 }
 
 
-/* =============================
+.whale-mark::before {
+  content: "";
+
+  position: absolute;
+
+  width: 5px;
+
+  height: 5px;
+
+  right: -3px;
+
+  top: -2px;
+
+  background: #71bce3;
+
+  transform: rotate(45deg);
+}
+
+
+/* =====================================================
    GRANDADDY
-============================= */
+===================================================== */
 
 .grandaddy-face {
   background: #dfb28e;
 }
 
+
 .grandaddy-hair {
   position: absolute;
+
   width: 54px;
+
   height: 21px;
+
   left: 24px;
+
   top: 28px;
+
   background: #ddd;
+
   z-index: 3;
 }
 
+
 .glasses {
   position: absolute;
+
   width: 18px;
+
   height: 14px;
+
   top: 42px;
+
   border: 3px solid #111;
+
   z-index: 15;
 }
+
 
 .glasses-left {
   left: 31px;
 }
 
+
 .glasses-right {
   left: 51px;
 }
 
+
 .glasses-bridge {
   position: absolute;
+
   width: 7px;
+
   height: 3px;
+
   left: 47px;
+
   top: 48px;
+
   background: #111;
+
   z-index: 16;
 }
 
+
 .orange-hat {
   position: absolute;
+
   width: 59px;
+
   height: 25px;
+
   left: 21px;
+
   top: 8px;
+
   background: #f26822;
+
   border: 3px solid #111;
+
   border-radius: 12px 12px 3px 3px;
+
   z-index: 20;
 }
 
+
 .orange-brim {
   position: absolute;
+
   width: 38px;
+
   height: 9px;
+
   left: 8px;
+
   top: 29px;
+
   background: #f26822;
+
   border: 3px solid #111;
+
   z-index: 21;
 }
 
+
 .hat-letter {
   position: absolute;
+
   top: 9px;
+
   left: 43px;
+
   color: navy;
+
   font-size: 18px;
-  font-weight: 900;
+
+  font-weight: 1000;
+
   z-index: 22;
 }
 
+
 .grandaddy-shirt {
   position: absolute;
+
   width: 62px;
+
   height: 65px;
+
   left: 19px;
+
   top: 70px;
+
   background: #233f68;
+
   border: 3px solid #111;
 }
 
 
-/* =============================
+/* =====================================================
    ARMS
-============================= */
+===================================================== */
 
 .skin {
   background: #efc09b;
+
   border: 3px solid #111;
 }
 
+
 .arm {
   position: absolute;
+
   width: 15px;
+
   height: 58px;
+
   top: 76px;
+
   z-index: 8;
+
   transform-origin: 50% 8px;
 }
 
+
 .left-arm {
   left: 11px;
+
   transform: rotate(5deg);
 }
 
+
 .right-arm {
   right: 11px;
+
   transform: rotate(-5deg);
 }
+
 
 .weapon-arm {
   overflow: visible;
 }
 
 
-/* =============================
-   LEGS / SHOES
-============================= */
+/* =====================================================
+   LEGS
+===================================================== */
 
 .leg {
   position: absolute;
+
   width: 23px;
+
   height: 54px;
+
   top: 127px;
+
   border: 3px solid #111;
 }
+
 
 .left-leg {
   left: 25px;
 }
 
+
 .right-leg {
   right: 25px;
 }
+
 
 .khaki {
   background: #c4a565;
 }
 
+
 .black-pants {
   background: #161616;
 }
 
+
+/* =====================================================
+   SHOES
+===================================================== */
+
 .white-shoe {
   position: absolute;
+
   width: 30px;
+
   height: 13px;
+
   top: 170px;
+
   background: white;
+
   border: 3px solid #111;
 }
+
 
 .left-shoe {
   left: 18px;
 }
+
 
 .right-shoe {
   right: 18px;
 }
 
 
-/* =============================
+/* =====================================================
    GOLF CLUB
-============================= */
+===================================================== */
 
 .golf-club {
   position: absolute;
+
   width: 5px;
+
   height: 96px;
+
   left: 5px;
+
   top: 27px;
+
   background: #777;
+
   border: 2px solid #111;
+
   transform: rotate(-8deg);
+
   transform-origin: top center;
 }
 
+
 .golf-club::after {
   content: "";
+
   position: absolute;
+
   width: 21px;
+
   height: 11px;
+
   left: -2px;
+
   bottom: -4px;
+
   background: #999;
+
   border: 2px solid #111;
+
   border-radius: 2px 4px 4px 2px;
 }
 
 
-/* =============================
+/* =====================================================
    HAMMER
-============================= */
+===================================================== */
 
 .hammer {
   position: absolute;
+
   width: 6px;
+
   height: 68px;
+
   left: 10px;
+
   top: -26px;
+
   background: #79512f;
+
   border: 2px solid #111;
+
   transform: rotate(24deg);
+
   transform-origin: 50% 61px;
 }
 
+
 .hammer::before {
   content: "";
+
   position: absolute;
+
   width: 26px;
+
   height: 12px;
+
   left: 50%;
+
   top: -9px;
+
   transform: translateX(-50%);
+
   background: #777;
+
   border: 2px solid #111;
+
   border-radius: 2px;
 }
 
+
 .hammer::after {
   content: "";
+
   position: absolute;
+
   width: 9px;
+
   height: 7px;
+
   right: -10px;
+
   top: -7px;
+
   background: #777;
+
   border: 2px solid #111;
+
   transform: rotate(15deg);
 }
 
 
-/* =============================
-   NORMAL ATTACKS
-============================= */
+/* =====================================================
+   ATTACKS
+===================================================== */
 
 .brendan-model.weapon-attacking .right-arm {
   animation: brendanSwing 0.44s ease-out;
 }
 
+
 @keyframes brendanSwing {
-  0% { transform: rotate(-5deg); }
-  25% { transform: rotate(-50deg); }
-  68% { transform: rotate(78deg); }
-  100% { transform: rotate(-5deg); }
+
+  0% {
+    transform: rotate(-5deg);
+  }
+
+  25% {
+    transform: rotate(-50deg);
+  }
+
+  68% {
+    transform: rotate(78deg);
+  }
+
+  100% {
+    transform: rotate(-5deg);
+  }
+
 }
+
 
 .grandaddy-model.weapon-attacking .right-arm {
   animation: grandaddySwing 0.33s ease-in-out;
 }
 
+
 @keyframes grandaddySwing {
-  0% { transform: rotate(-5deg); }
-  25% { transform: rotate(-60deg); }
-  70% { transform: rotate(54deg); }
-  100% { transform: rotate(-5deg); }
+
+  0% {
+    transform: rotate(-5deg);
+  }
+
+  25% {
+    transform: rotate(-60deg);
+  }
+
+  70% {
+    transform: rotate(54deg);
+  }
+
+  100% {
+    transform: rotate(-5deg);
+  }
+
 }
 
-
-/* SWING TRAIL */
 
 .weapon-attacking::after {
   content: "";
+
   position: absolute;
+
   width: 90px;
+
   height: 90px;
+
   right: -42px;
+
   top: 50px;
+
   border-radius: 50%;
+
   border: 5px solid rgba(255,255,255,0.28);
+
   border-left-color: transparent;
+
   border-bottom-color: transparent;
+
   animation: trailFlash 0.38s forwards;
+
   pointer-events: none;
 }
 
+
 @keyframes trailFlash {
-  0% { opacity: 0; }
-  25% { opacity: 0.85; }
-  100% { opacity: 0; }
+
+  0% {
+    opacity: 0;
+  }
+
+  25% {
+    opacity: 0.85;
+  }
+
+  100% {
+    opacity: 0;
+  }
+
 }
 
 
-/* =============================
+/* =====================================================
    BIG DRIVE
-============================= */
+===================================================== */
 
 .brendan-model.special-swing .right-arm {
   animation: bigDriveSwing 0.52s ease-out;
 }
 
+
 @keyframes bigDriveSwing {
-  0% { transform: rotate(-5deg); }
-  30% { transform: rotate(-62deg); }
-  73% { transform: rotate(85deg); }
-  100% { transform: rotate(-5deg); }
+
+  0% {
+    transform: rotate(-5deg);
+  }
+
+  30% {
+    transform: rotate(-62deg);
+  }
+
+  73% {
+    transform: rotate(85deg);
+  }
+
+  100% {
+    transform: rotate(-5deg);
+  }
+
 }
 
 
-/* =============================
-   GRANDADDY POINTING
-============================= */
+/* =====================================================
+   HAMMER POINT
+===================================================== */
 
 .grandaddy-model.hammer-pointing .right-arm {
   animation: hammerPoint 0.3s forwards;
 }
 
+
 @keyframes hammerPoint {
-  from { transform: rotate(-5deg); }
-  to { transform: rotate(62deg); }
+
+  from {
+    transform: rotate(-5deg);
+  }
+
+  to {
+    transform: rotate(62deg);
+  }
+
 }
 
 
-/* =============================
+/* =====================================================
    BLOCK
-============================= */
+===================================================== */
 
 .brendan-model.blocking .left-arm {
-  transform: translate(18px,-13px) rotate(-62deg);
+  transform:
+    translate(18px,-13px)
+    rotate(-62deg);
 }
 
+
 .brendan-model.blocking .right-arm {
-  transform: translate(-9px,-12px) rotate(43deg);
+  transform:
+    translate(-9px,-12px)
+    rotate(43deg);
 }
+
 
 .brendan-model.blocking .golf-club {
   transform: rotate(28deg);
 }
 
+
 .grandaddy-model.blocking .left-arm {
-  transform: translate(18px,-14px) rotate(-66deg);
+  transform:
+    translate(18px,-14px)
+    rotate(-66deg);
 }
 
+
 .grandaddy-model.blocking .right-arm {
-  transform: translate(-7px,-14px) rotate(46deg);
+  transform:
+    translate(-7px,-14px)
+    rotate(46deg);
 }
+
 
 .grandaddy-model.blocking .hammer {
   transform: rotate(-15deg);
 }
 
 
-/* =============================
+/* =====================================================
    SELECT
-============================= */
+===================================================== */
 
-.select-screen {
+.select-screen,
+.map-screen {
   background:
     radial-gradient(
-      circle,
-      #183653,
-      #060a12 70%
+      circle at top,
+      #213c58,
+      #070c13 68%
     );
 }
 
-.select-screen h2 {
-  margin-top: 0;
-  font-size: clamp(32px, 6vw, 55px);
-  text-align: center;
+
+.screen-kicker {
+  margin-bottom: 6px;
+
+  color: #ffd52a;
+
+  font-size: 11px;
+
+  font-weight: 1000;
+
+  letter-spacing: 5px;
 }
+
+
+.screen-heading {
+  margin-bottom: 26px;
+
+  font-size: clamp(34px,5vw,60px);
+
+  font-weight: 1000;
+
+  letter-spacing: 2px;
+
+  text-align: center;
+
+  text-shadow: 4px 4px black;
+}
+
+
+/* =====================================================
+   FIGHTER CARDS
+===================================================== */
 
 .fighter-select {
   width: 100%;
+
   display: flex;
+
   justify-content: center;
+
   flex-wrap: wrap;
+
   gap: 25px;
 }
 
+
 .fighter-card {
   width: 280px;
-  min-height: 365px;
+
+  min-height: 355px;
+
   padding: 24px;
-  background: #121a24;
+
+  background:
+    linear-gradient(
+      #172432,
+      #101720
+    );
+
   color: white;
-  border: 4px solid #555;
+
+  border: 4px solid #57626d;
+
+  border-radius: 10px;
+
   display: flex;
+
   flex-direction: column;
+
   align-items: center;
+
   cursor: pointer;
+
+  box-shadow:
+    0 8px 18px rgba(0,0,0,0.35);
+
+  transition:
+    transform 0.15s,
+    border-color 0.15s,
+    box-shadow 0.15s;
 }
+
+
+.fighter-card:hover {
+  transform: translateY(-5px);
+}
+
 
 .fighter-card.selected {
   border-color: #40aaff;
-  box-shadow: 0 0 25px rgba(64,170,255,0.5);
+
+  box-shadow:
+    0 0 28px rgba(64,170,255,0.5);
 }
+
 
 .card-model {
-  transform: scale(1.15);
-  margin-bottom: 35px;
+  transform: scale(1.12);
+
+  margin-bottom: 30px;
 }
 
+
 .fighter-card strong {
-  font-size: 26px;
+  font-size: 25px;
 }
+
 
 .fighter-card small {
   margin-top: 8px;
-  color: #aaa;
-}
 
-#selectionText {
-  margin: 26px 0;
-  font-weight: 900;
+  color: #abb5bf;
 }
 
 
-/* =============================
-   HUD
-============================= */
+#selectionText,
+#mapSelectionText {
+  margin: 23px 0;
+
+  font-size: 17px;
+
+  font-weight: 1000;
+
+  letter-spacing: 1px;
+}
+
+
+/* =====================================================
+   MAP SELECT
+===================================================== */
+
+.map-grid {
+  width: 100%;
+
+  max-width: 1000px;
+
+  display: grid;
+
+  grid-template-columns:
+    repeat(
+      2,
+      minmax(250px,1fr)
+    );
+
+  gap: 20px;
+}
+
+
+.map-card {
+  padding: 10px;
+
+  background: #121b25;
+
+  color: white;
+
+  border: 4px solid #56616c;
+
+  border-radius: 10px;
+
+  cursor: pointer;
+
+  transition:
+    transform 0.15s,
+    border-color 0.15s,
+    box-shadow 0.15s;
+}
+
+
+.map-card:hover {
+  transform: translateY(-4px);
+}
+
+
+.map-card.selected {
+  border-color: #ffd52a;
+
+  box-shadow:
+    0 0 22px rgba(255,213,42,0.38);
+}
+
+
+.map-card strong {
+  display: block;
+
+  margin-top: 10px;
+
+  font-size: 18px;
+}
+
+
+.map-card small {
+  display: block;
+
+  min-height: 34px;
+
+  margin: 5px 4px;
+
+  color: #aeb7c0;
+
+  line-height: 1.25;
+}
+
+
+.map-preview {
+  position: relative;
+
+  width: 100%;
+
+  height: 145px;
+
+  overflow: hidden;
+
+  border-radius: 6px;
+
+  border: 2px solid #050607;
+}
+
+
+/* =====================================================
+   VIRGINIA PREVIEW
+===================================================== */
+
+.virginia-preview {
+  background:
+    linear-gradient(
+      #78c8ed 0%,
+      #78c8ed 56%,
+      #4a9a38 57%,
+      #31751f 100%
+    );
+}
+
+
+.preview-sun {
+  position: absolute;
+
+  width: 28px;
+
+  height: 28px;
+
+  right: 28px;
+
+  top: 18px;
+
+  border-radius: 50%;
+
+  background: #ffd752;
+}
+
+
+.preview-house {
+  position: absolute;
+
+  bottom: 25px;
+
+  width: 65px;
+
+  height: 42px;
+
+  background: #d1b48b;
+
+  border: 3px solid #392b20;
+}
+
+
+.preview-house::before {
+  content: "";
+
+  position: absolute;
+
+  width: 55px;
+
+  height: 35px;
+
+  top: -24px;
+
+  left: 2px;
+
+  background: #67462e;
+
+  clip-path:
+    polygon(
+      50% 0,
+      100% 100%,
+      0 100%
+    );
+}
+
+
+.house-one {
+  left: 25px;
+}
+
+
+.house-two {
+  right: 24px;
+
+  transform: scale(0.85);
+}
+
+
+.preview-tree {
+  position: absolute;
+
+  bottom: 25px;
+
+  width: 14px;
+
+  height: 40px;
+
+  background: #6b4429;
+}
+
+
+.preview-tree::before {
+  content: "";
+
+  position: absolute;
+
+  width: 55px;
+
+  height: 55px;
+
+  left: -21px;
+
+  top: -36px;
+
+  border-radius: 50%;
+
+  background: #2f7c2c;
+}
+
+
+.tree-one {
+  left: 45%;
+}
+
+
+.tree-two {
+  right: 10%;
+}
+
+
+/* =====================================================
+   BEACH PREVIEW
+===================================================== */
+
+.westhampton-preview {
+  background:
+    linear-gradient(
+      #7cccf0 0%,
+      #7cccf0 43%,
+      #2088c4 44%,
+      #2ba3d4 62%,
+      #ead291 63%,
+      #dfbe72 100%
+    );
+}
+
+
+.beach-sun {
+  left: 30px;
+  right: auto;
+}
+
+
+.preview-ocean {
+  position: absolute;
+
+  left: 0;
+  right: 0;
+
+  top: 65px;
+
+  height: 4px;
+
+  background: rgba(255,255,255,0.85);
+
+  box-shadow:
+    0 10px 0 rgba(255,255,255,0.45);
+}
+
+
+.preview-umbrella {
+  position: absolute;
+
+  right: 55px;
+
+  bottom: 20px;
+
+  width: 6px;
+
+  height: 55px;
+
+  background: #684b37;
+
+  transform: rotate(7deg);
+}
+
+
+.preview-umbrella::before {
+  content: "";
+
+  position: absolute;
+
+  width: 70px;
+
+  height: 35px;
+
+  left: -32px;
+
+  top: -5px;
+
+  background:
+    repeating-linear-gradient(
+      90deg,
+      #f04848 0 14px,
+      white 14px 28px
+    );
+
+  border-radius: 70px 70px 5px 5px;
+}
+
+
+/* =====================================================
+   NEW CANAAN PREVIEW
+===================================================== */
+
+.newcanaan-preview {
+  background:
+    linear-gradient(
+      #88c9e5 0%,
+      #88c9e5 46%,
+      #777 47%,
+      #555 100%
+    );
+}
+
+
+.preview-shop {
+  position: absolute;
+
+  bottom: 45px;
+
+  width: 120px;
+
+  height: 72px;
+
+  padding-top: 8px;
+
+  color: #222;
+
+  font-size: 11px;
+
+  font-weight: 1000;
+
+  border: 3px solid #36291f;
+
+  background: #e6ddce;
+}
+
+
+.preview-shop::after {
+  content: "";
+
+  position: absolute;
+
+  left: 12px;
+  right: 12px;
+
+  bottom: 9px;
+
+  height: 26px;
+
+  background: #6aafc7;
+
+  border: 2px solid #333;
+}
+
+
+.shop-one {
+  left: 18px;
+}
+
+
+.shop-two {
+  right: 18px;
+
+  background: #d8bea1;
+}
+
+
+.preview-lamp {
+  position: absolute;
+
+  left: 50%;
+
+  bottom: 31px;
+
+  width: 6px;
+
+  height: 68px;
+
+  background: #222;
+}
+
+
+.preview-lamp::before {
+  content: "";
+
+  position: absolute;
+
+  left: -11px;
+
+  top: -12px;
+
+  width: 27px;
+
+  height: 24px;
+
+  background: #f4db76;
+
+  border: 4px solid #222;
+}
+
+
+/* =====================================================
+   MADRID PREVIEW
+===================================================== */
+
+.madrid-preview {
+  background:
+    linear-gradient(
+      #7ec7e7 0%,
+      #7ec7e7 52%,
+      #c9aa78 53%,
+      #a98b60 100%
+    );
+}
+
+
+.preview-building {
+  position: absolute;
+
+  bottom: 40px;
+
+  width: 100px;
+
+  height: 82px;
+
+  background: #dbb47d;
+
+  border: 3px solid #6a4a31;
+}
+
+
+.preview-building::after {
+  content: "";
+
+  position: absolute;
+
+  inset: 15px 12px;
+
+  background:
+    repeating-linear-gradient(
+      90deg,
+      #584133 0 10px,
+      transparent 10px 25px
+    );
+}
+
+
+.madrid-building-left {
+  left: 12px;
+}
+
+
+.madrid-building-right {
+  right: 12px;
+
+  background: #d49169;
+}
+
+
+.preview-fountain {
+  position: absolute;
+
+  left: 50%;
+
+  bottom: 22px;
+
+  transform: translateX(-50%);
+
+  width: 66px;
+
+  height: 24px;
+
+  border-radius: 50%;
+
+  background: #7dc7dd;
+
+  border: 5px solid #908171;
+}
+
+
+.preview-fountain::before {
+  content: "";
+
+  position: absolute;
+
+  left: 27px;
+
+  bottom: 16px;
+
+  width: 5px;
+
+  height: 30px;
+
+  background: #c5c5c5;
+}
+
+
+.map-screen-buttons {
+  display: flex;
+
+  align-items: center;
+
+  gap: 20px;
+}
+
+
+/* =====================================================
+   FIGHT
+===================================================== */
 
 .fight-screen {
   background: #090d12;
+
   justify-content: flex-start;
 }
 
+
+/* =====================================================
+   HUD
+===================================================== */
+
 .hud {
   width: 100%;
+
   display: grid;
-  grid-template-columns: 1fr auto 1fr;
+
+  grid-template-columns:
+    1fr 155px 1fr;
+
   gap: 15px;
+
   align-items: start;
 }
+
 
 .hud-side.right {
   text-align: right;
 }
 
+
 .hud-name {
   margin-bottom: 5px;
+
   font-size: 18px;
-  font-weight: 900;
+
+  font-weight: 1000;
 }
+
 
 .health-bar {
   position: relative;
+
   width: 100%;
+
   height: 25px;
+
   background: #562020;
+
   border: 3px solid white;
+
   overflow: hidden;
 }
 
+
 .damage-trail {
   position: absolute;
+
   inset: 0;
+
   width: 100%;
+
   background: #e14838;
+
   transition: width 0.65s ease-out;
+
   z-index: 1;
 }
 
+
 .health-fill {
   position: absolute;
+
   inset: 0;
+
   width: 100%;
+
   background: #2fd63a;
+
   transition: width 0.16s;
+
   z-index: 2;
 }
 
+
 .health-bar.low-health {
-  animation: lowHealthPulse 0.55s infinite alternate;
+  animation:
+    lowHealthPulse
+    0.55s
+    infinite
+    alternate;
 }
 
+
 @keyframes lowHealthPulse {
+
   from {
-    box-shadow: 0 0 2px #e03131;
+    box-shadow:
+      0 0 2px #e03131;
   }
 
   to {
-    box-shadow: 0 0 14px #ff2020;
+    box-shadow:
+      0 0 14px #ff2020;
   }
+
 }
+
 
 .ultimate-bar {
   width: 100%;
+
   height: 11px;
+
   margin-top: 5px;
+
   background: #222;
+
   border: 2px solid white;
 }
 
+
 .ultimate-bar div {
   width: 0%;
+
   height: 100%;
+
   background: #ffd52a;
+
   transition: width 0.2s;
 }
 
-.round-text {
-  min-width: 165px;
+
+.center-hud {
   text-align: center;
-  font-size: 22px;
-  font-weight: 900;
+}
+
+
+.round-score {
+  font-size: 25px;
+
+  line-height: 1;
+
+  font-weight: 1000;
+
+  color: white;
+}
+
+
+.round-label {
+  margin-top: 5px;
+
+  font-size: 10px;
+
+  font-weight: 1000;
+
+  color: #8d98a2;
+
+  letter-spacing: 3px;
+}
+
+
+.round-text {
+  min-height: 18px;
+
+  margin-top: 4px;
+
+  text-align: center;
+
+  font-size: 14px;
+
+  font-weight: 1000;
+
   color: #ffd52a;
 }
 
 
-/* =============================
+/* =====================================================
    ARENA
-============================= */
+===================================================== */
 
 .arena {
   position: relative;
+
   width: 100%;
+
   height: 500px;
+
   margin-top: 18px;
+
   overflow: hidden;
+
   border: 4px solid #333;
 
+  isolation: isolate;
+}
+
+
+.map-decor {
+  position: absolute;
+
+  inset: 0;
+
+  z-index: -2;
+
+  pointer-events: none;
+}
+
+
+/* =====================================================
+   VIRGINIA MAP — NO EMOJIS
+===================================================== */
+
+.map-virginia {
   background:
     linear-gradient(
-      #70c7ef 0%,
-      #70c7ef 63%,
-      #4f9d3d 64%,
-      #2c741f 100%
+      #72c5ed 0%,
+      #72c5ed 59%,
+      #4c9a39 60%,
+      #2d741f 100%
     );
 }
 
-.fence {
+
+.map-virginia .map-decor::before {
+  content: "";
+
   position: absolute;
-  bottom: 110px;
-  width: 100%;
-  height: 85px;
+
+  left: 0;
+  right: 0;
+
+  bottom: 105px;
+
+  height: 90px;
 
   background:
     repeating-linear-gradient(
       90deg,
       #8a6742 0,
-      #8a6742 22px,
-      #65492f 22px,
-      #65492f 27px
+      #8a6742 26px,
+      #65492f 26px,
+      #65492f 32px
     );
 
   border-top: 8px solid #594027;
 }
 
-.cloud {
+
+.map-virginia .map-decor::after {
+  content: "";
+
   position: absolute;
-  width: 95px;
-  height: 28px;
-  background: rgba(255,255,255,0.75);
-  border-radius: 40px;
+
+  left: 6%;
+
+  bottom: 186px;
+
+  width: 110px;
+
+  height: 65px;
+
+  background: #c8aa83;
+
+  border: 4px solid #4e3929;
+
+  box-shadow:
+    550px 8px 0 #d3b692;
+
+  clip-path:
+    polygon(
+      0 28%,
+      50% 0,
+      100% 28%,
+      100% 100%,
+      0 100%
+    );
 }
 
-.cloud-one {
-  top: 35px;
-  left: 12%;
+
+/* =====================================================
+   WESTHAMPTON — NO EMOJIS
+===================================================== */
+
+.map-westhampton {
+  background:
+    linear-gradient(
+      #78c9ee 0%,
+      #78c9ee 42%,
+      #238fc9 43%,
+      #2fa3d2 60%,
+      #ead298 61%,
+      #d7b56e 100%
+    );
 }
 
-.cloud-two {
-  top: 85px;
-  right: 15%;
+
+.map-westhampton .map-decor::before {
+  content: "";
+
+  position: absolute;
+
+  left: 0;
+  right: 0;
+
+  top: 218px;
+
+  height: 5px;
+
+  background: rgba(255,255,255,0.9);
+
+  box-shadow:
+    0 17px 0 rgba(255,255,255,0.45),
+    0 35px 0 rgba(255,255,255,0.25);
 }
 
 
-/* =============================
+.map-westhampton .map-decor::after {
+  content: "";
+
+  position: absolute;
+
+  right: 12%;
+
+  bottom: 100px;
+
+  width: 90px;
+
+  height: 42px;
+
+  border-radius: 90px 90px 5px 5px;
+
+  background:
+    repeating-linear-gradient(
+      90deg,
+      #e44b4b 0 18px,
+      white 18px 36px
+    );
+
+  border-bottom: 5px solid #63452f;
+
+  box-shadow:
+    -520px -310px 0 -22px #ffd756;
+}
+
+
+/* =====================================================
+   NEW CANAAN — NO EMOJIS
+===================================================== */
+
+.map-newcanaan {
+  background:
+    linear-gradient(
+      #83c7e4 0%,
+      #83c7e4 49%,
+      #787878 50%,
+      #454545 100%
+    );
+}
+
+
+.map-newcanaan .map-decor::before {
+  content: "CAFE        BOOKS        MARKET";
+
+  position: absolute;
+
+  left: 0;
+  right: 0;
+
+  bottom: 145px;
+
+  height: 155px;
+
+  padding: 14px 45px;
+
+  color: #2b2018;
+
+  font-size: 13px;
+
+  font-weight: 1000;
+
+  letter-spacing: 5px;
+
+  word-spacing: 90px;
+
+  background:
+    repeating-linear-gradient(
+      90deg,
+      #e3d4bf 0,
+      #e3d4bf 25%,
+      #d3ad83 25%,
+      #d3ad83 50%
+    );
+
+  border-top: 8px solid #5c4635;
+
+  border-bottom: 8px solid #5c4635;
+}
+
+
+.map-newcanaan .map-decor::after {
+  content: "";
+
+  position: absolute;
+
+  left: 11%;
+
+  bottom: 152px;
+
+  width: 110px;
+
+  height: 66px;
+
+  background: #74afc4;
+
+  border: 6px solid #574333;
+
+  box-shadow:
+    285px 0 0 -1px #7aacc1,
+    570px 0 0 -1px #6da5bc;
+}
+
+
+/* =====================================================
+   MADRID — NO EMOJIS
+===================================================== */
+
+.map-madrid {
+  background:
+    linear-gradient(
+      #78c4e5 0%,
+      #78c4e5 52%,
+      #c9ad7e 53%,
+      #a88b62 100%
+    );
+}
+
+
+.map-madrid .map-decor::before {
+  content: "";
+
+  position: absolute;
+
+  left: 0;
+  right: 0;
+
+  bottom: 135px;
+
+  height: 185px;
+
+  background:
+    repeating-linear-gradient(
+      90deg,
+      #d7a369 0,
+      #d7a369 135px,
+      #be784f 135px,
+      #be784f 270px
+    );
+
+  border-bottom: 8px solid #70563e;
+}
+
+
+.map-madrid .map-decor::after {
+  content: "";
+
+  position: absolute;
+
+  left: 50%;
+
+  bottom: 92px;
+
+  transform: translateX(-50%);
+
+  width: 115px;
+
+  height: 33px;
+
+  border-radius: 50%;
+
+  background: #77bdd4;
+
+  border: 7px solid #8a7b69;
+
+  box-shadow:
+    0 -20px 0 -13px #b8b8b8,
+    0 -45px 0 -16px #b8b8b8;
+}
+
+
+/* =====================================================
    FIGHTER LAYERS
-============================= */
+===================================================== */
 
 .fight-character {
   position: absolute;
+
   bottom: 25px;
+
   width: 100px;
+
   height: 185px;
+
   transition: left 0.055s linear;
+
+  z-index: 20;
 }
 
-
-/*
-Facing stays ONLY on fighter container.
-*/
 
 .cpu-facing {
   transform: scaleX(-1);
 }
 
 
-/*
-Ladder / jump motion ONLY.
-*/
-
 .motion-layer {
   position: absolute;
+
   inset: 0;
+
   transform: translate3d(0,0,0);
+
   transform-origin: bottom center;
 }
 
-
-/*
-Idle / walking / crouch / reaction ONLY.
-*/
 
 .visual-layer {
   position: absolute;
+
   inset: 0;
+
   transform: translate3d(0,0,0);
+
   transform-origin: bottom center;
 }
 
 
-/* =============================
+/* =====================================================
    IDLE
-============================= */
+===================================================== */
 
 .idle-breathing .visual-layer {
-  animation: idleBreathing 1.3s ease-in-out infinite alternate;
+  animation:
+    idleBreathing
+    1.3s
+    ease-in-out
+    infinite
+    alternate;
 }
 
+
 @keyframes idleBreathing {
+
   from {
     transform: translateY(0);
   }
@@ -873,18 +2358,25 @@ Idle / walking / crouch / reaction ONLY.
   to {
     transform: translateY(-2px);
   }
+
 }
 
 
-/* =============================
+/* =====================================================
    WALK
-============================= */
+===================================================== */
 
 .walking .visual-layer {
-  animation: walkBob 0.22s infinite alternate;
+  animation:
+    walkBob
+    0.22s
+    infinite
+    alternate;
 }
 
+
 @keyframes walkBob {
+
   from {
     transform: translateY(0);
   }
@@ -892,17 +2384,22 @@ Idle / walking / crouch / reaction ONLY.
   to {
     transform: translateY(-4px);
   }
+
 }
+
 
 .walking .left-leg {
   animation: leftWalk 0.25s infinite alternate;
 }
 
+
 .walking .right-leg {
   animation: rightWalk 0.25s infinite alternate;
 }
 
+
 @keyframes leftWalk {
+
   from {
     transform: rotate(3deg);
   }
@@ -910,9 +2407,12 @@ Idle / walking / crouch / reaction ONLY.
   to {
     transform: rotate(-5deg);
   }
+
 }
+
 
 @keyframes rightWalk {
+
   from {
     transform: rotate(-5deg);
   }
@@ -920,18 +2420,25 @@ Idle / walking / crouch / reaction ONLY.
   to {
     transform: rotate(3deg);
   }
+
 }
 
 
-/* =============================
+/* =====================================================
    LOW HEALTH
-============================= */
+===================================================== */
 
 .low-health-fighter .visual-layer {
-  animation: lowHealthWobble 0.75s infinite alternate;
+  animation:
+    lowHealthWobble
+    0.75s
+    infinite
+    alternate;
 }
 
+
 @keyframes lowHealthWobble {
+
   from {
     transform: rotate(-1deg);
   }
@@ -939,18 +2446,24 @@ Idle / walking / crouch / reaction ONLY.
   to {
     transform: rotate(1deg);
   }
+
 }
 
 
-/* =============================
+/* =====================================================
    JUMP
-============================= */
+===================================================== */
 
 .jumping .motion-layer {
-  animation: jumpMotion 0.6s ease-out;
+  animation:
+    jumpMotion
+    0.6s
+    ease-out;
 }
 
+
 @keyframes jumpMotion {
+
   0% {
     transform: translateY(0);
   }
@@ -962,28 +2475,32 @@ Idle / walking / crouch / reaction ONLY.
   100% {
     transform: translateY(0);
   }
+
 }
 
 
-/* =============================
+/* =====================================================
    CROUCH
-============================= */
+===================================================== */
 
 .crouching .visual-layer {
   transform: scaleY(0.68);
+
   transform-origin: bottom center;
 }
 
 
-/* =============================
+/* =====================================================
    HIT
-============================= */
+===================================================== */
 
 .hit-animation .visual-layer {
   animation: hitFlash 0.2s;
 }
 
+
 @keyframes hitFlash {
+
   0% {
     filter: brightness(1);
   }
@@ -995,18 +2512,21 @@ Idle / walking / crouch / reaction ONLY.
   100% {
     filter: brightness(1);
   }
+
 }
 
 
-/* =============================
+/* =====================================================
    BLOCK RECOIL
-============================= */
+===================================================== */
 
 .block-recoil .visual-layer {
   animation: blockRecoil 0.18s;
 }
 
+
 @keyframes blockRecoil {
+
   0% {
     transform: translateX(0);
   }
@@ -1018,18 +2538,21 @@ Idle / walking / crouch / reaction ONLY.
   100% {
     transform: translateX(0);
   }
+
 }
 
 
-/* =============================
-   RECOVERY SHAKE
-============================= */
+/* =====================================================
+   RECOVERY
+===================================================== */
 
 .recovery-shake .visual-layer {
   animation: recoveryShake 0.45s;
 }
 
+
 @keyframes recoveryShake {
+
   0% {
     transform: translateX(0);
   }
@@ -1053,66 +2576,68 @@ Idle / walking / crouch / reaction ONLY.
   100% {
     transform: translateX(0);
   }
+
 }
 
 
-/* =============================
+/* =====================================================
    ABILITY ORBS
-============================= */
+===================================================== */
 
 .arena-abilities {
   position: absolute;
+
   bottom: 12px;
+
   display: flex;
+
   gap: 8px;
+
   z-index: 150;
 }
+
 
 .player-abilities {
   left: 12px;
 }
 
+
 .cpu-abilities {
   right: 12px;
 }
+
 
 .ability-orb {
   --fill: 0deg;
 
   position: relative;
+
   width: 50px;
+
   height: 50px;
+
   display: flex;
+
   align-items: center;
+
   justify-content: center;
+
   border-radius: 50%;
 
-  border:
-    3px solid
-    rgba(
-      255,
-      255,
-      255,
-      0.55
-    );
+  border: 3px solid rgba(255,255,255,0.55);
 
   overflow: hidden;
 
   box-shadow:
-    0
-    2px
-    7px
-    rgba(
-      0,
-      0,
-      0,
-      0.55
-    );
+    0 2px 7px rgba(0,0,0,0.55);
 }
+
 
 .ability-orb::before {
   content: "";
+
   position: absolute;
+
   inset: 0;
 
   background:
@@ -1124,50 +2649,67 @@ Idle / walking / crouch / reaction ONLY.
   opacity: 0.72;
 }
 
+
 .ability-orb::after {
   content: "";
+
   position: absolute;
+
   inset: 6px;
+
   background: #17202b;
+
   border-radius: 50%;
 }
 
+
 .ability-icon {
   position: relative;
+
   z-index: 4;
+
   font-size: 22px;
+
   line-height: 1;
 }
 
+
 .special-orb {
   color: #80b6d5;
-  filter: saturate(0.45) brightness(0.75);
+
+  filter:
+    saturate(0.45)
+    brightness(0.75);
 }
+
 
 .special-orb.ability-ready {
   color: #35b6ff;
-  filter: saturate(1.2) brightness(1.25);
+
+  filter:
+    saturate(1.2)
+    brightness(1.25);
 
   box-shadow:
-    0
-    0
-    16px
-    rgba(
-      53,
-      182,
-      255,
-      0.9
-    );
+    0 0 16px rgba(53,182,255,0.9);
 }
+
 
 .ultimate-orb {
   color: #aa965e;
-  filter: saturate(0.4) brightness(0.75);
+
+  filter:
+    saturate(0.4)
+    brightness(0.75);
 }
+
 
 .ultimate-orb.ability-ready {
   color: #ffd52a;
-  filter: saturate(1.3) brightness(1.3);
+
+  filter:
+    saturate(1.3)
+    brightness(1.3);
 
   animation:
     arenaUltimatePulse
@@ -1176,369 +2718,561 @@ Idle / walking / crouch / reaction ONLY.
     alternate;
 }
 
+
 @keyframes arenaUltimatePulse {
+
   from {
-    box-shadow: 0 0 5px rgba(255,213,42,0.6);
+    box-shadow:
+      0 0 5px rgba(255,213,42,0.6);
+
     transform: scale(1);
   }
 
   to {
-    box-shadow: 0 0 20px rgba(255,213,42,1);
+    box-shadow:
+      0 0 20px rgba(255,213,42,1);
+
     transform: scale(1.07);
   }
+
 }
 
 
-/* =============================
+/* =====================================================
    EFFECTS
-============================= */
+===================================================== */
 
 #effects {
   position: absolute;
+
   inset: 0;
+
   z-index: 50;
+
   pointer-events: none;
 }
 
+
 .effect {
   position: absolute;
+
   z-index: 100;
 }
 
 
-/* NORMAL HIT */
-
 .hit-spark-normal {
   width: 28px;
+
   height: 28px;
+
   border-radius: 50%;
+
   border: 4px solid white;
 
   box-shadow:
-    0
-    0
-    11px
-    rgba(
-      255,
-      255,
-      255,
-      0.85
-    );
+    0 0 11px rgba(255,255,255,0.85);
 
   animation: genericBurst 0.26s forwards;
 }
 
 
-/* SPECIAL HIT */
-
 .hit-spark-special {
   width: 40px;
+
   height: 40px;
+
   border-radius: 50%;
+
   border: 5px solid #4dc3ff;
 
   box-shadow:
-    0
-    0
-    17px
-    rgba(
-      77,
-      195,
-      255,
-      0.9
-    );
+    0 0 17px rgba(77,195,255,0.9);
 
   animation: genericBurst 0.3s forwards;
 }
 
 
-/* ULTIMATE HIT */
-
 .hit-spark-ultimate {
   width: 54px;
+
   height: 54px;
+
   border-radius: 50%;
+
   border: 6px solid #ffd52a;
 
   box-shadow:
-    0
-    0
-    18px
-    rgba(
-      255,
-      213,
-      42,
-      0.95
-    ),
-    0
-    0
-    30px
-    rgba(
-      255,
-      255,
-      255,
-      0.65
-    );
+    0 0 18px rgba(255,213,42,0.95),
+    0 0 30px rgba(255,255,255,0.65);
 
   animation: genericBurst 0.34s forwards;
 }
 
+
 @keyframes genericBurst {
+
   from {
     transform: scale(0.5);
+
     opacity: 1;
   }
 
   to {
     transform: scale(1.55);
+
     opacity: 0;
   }
+
 }
 
 
-/* DODGE */
+/* =====================================================
+   DODGE
+===================================================== */
 
 .dodge-label {
   padding: 4px 8px;
+
   background: rgba(8,14,22,0.92);
+
   color: white;
+
   border: 2px solid white;
+
   border-radius: 5px;
+
   font-size: 13px;
-  font-weight: 900;
+
+  font-weight: 1000;
+
   animation: dodgeFloat 0.6s forwards;
 }
 
+
 @keyframes dodgeFloat {
+
   from {
     transform: translateY(0);
+
     opacity: 1;
   }
 
   to {
     transform: translateY(-28px);
+
     opacity: 0;
   }
+
 }
 
 
-/* BLOCK EFFECT */
+/* =====================================================
+   BLOCK EFFECT
+===================================================== */
 
 .block-effect {
   width: 64px;
+
   height: 64px;
 
-  border:
-    5px solid
-    rgba(
-      150,
-      220,
-      255,
-      0.95
-    );
+  border: 5px solid rgba(150,220,255,0.95);
 
   border-radius: 50%;
 
   box-shadow:
-    0
-    0
-    18px
-    rgba(
-      100,
-      210,
-      255,
-      0.9
-    ),
-    inset
-    0
-    0
-    12px
-    rgba(
-      255,
-      255,
-      255,
-      0.8
-    );
+    0 0 18px rgba(100,210,255,0.9),
+    inset 0 0 12px rgba(255,255,255,0.8);
 
   animation: blockBurst 0.3s forwards;
 }
 
+
 .block-effect::after {
   content: "BLOCK!";
+
   position: absolute;
+
   left: 50%;
+
   top: -25px;
+
   transform: translateX(-50%);
+
   padding: 3px 6px;
+
   background: #102438;
+
   color: #b8ebff;
+
   border: 2px solid white;
+
   border-radius: 4px;
+
   font-size: 10px;
-  font-weight: 900;
+
+  font-weight: 1000;
+
   white-space: nowrap;
 }
 
+
 @keyframes blockBurst {
+
   0% {
     transform: scale(0.55);
+
     opacity: 1;
   }
 
   100% {
     transform: scale(1.35);
+
     opacity: 0;
   }
+
 }
 
 
-/* GOLF BALL */
+/* =====================================================
+   GOLF BALL
+===================================================== */
 
 .golf-ball {
   width: 13px;
+
   height: 13px;
+
   background: white;
+
   border: 2px solid #aaa;
+
   border-radius: 50%;
+
   box-shadow: 0 0 7px white;
 }
 
 
-/* LADDER */
+/* =====================================================
+   LADDER
+===================================================== */
 
 .ladder-effect {
   font-size: 100px;
+
   transform-origin: bottom center;
 
   filter:
     drop-shadow(
-      3px
-      3px
-      2px
-      rgba(
-        0,
-        0,
-        0,
-        0.45
-      )
+      3px 3px 2px rgba(0,0,0,0.45)
     );
 }
 
 
-/* STUN */
+/* =====================================================
+   STUN
+===================================================== */
 
 .stunned .visual-layer {
-  filter: saturate(0.5) brightness(1.2);
+  filter:
+    saturate(0.5)
+    brightness(1.2);
 }
+
 
 .stun-stars {
   font-size: 30px;
-  font-weight: 900;
-  animation: stunFloat 0.55s infinite alternate;
+
+  font-weight: 1000;
+
+  animation:
+    stunFloat
+    0.55s
+    infinite
+    alternate;
 }
 
+
 @keyframes stunFloat {
+
   from {
-    transform: translateY(0) rotate(-7deg);
+    transform:
+      translateY(0)
+      rotate(-7deg);
   }
 
   to {
-    transform: translateY(-12px) rotate(7deg);
+    transform:
+      translateY(-12px)
+      rotate(7deg);
   }
+
 }
+
 
 .stun-label {
   padding: 5px 10px;
+
   background: #111;
+
   color: #ffd52a;
+
   border: 2px solid white;
+
   border-radius: 6px;
+
   font-size: 17px;
-  font-weight: 900;
+
+  font-weight: 1000;
 }
+
 
 .release-label {
   padding: 5px 10px;
+
   background: #166d2e;
+
   color: white;
+
   border: 2px solid white;
+
   border-radius: 6px;
+
   font-size: 17px;
-  font-weight: 900;
+
+  font-weight: 1000;
+
   animation: releasePop 0.55s forwards;
 }
 
+
 @keyframes releasePop {
+
   0% {
     transform: scale(0.5);
+
     opacity: 0;
   }
 
   60% {
     transform: scale(1.2);
+
     opacity: 1;
   }
 
   100% {
     transform: scale(1);
+
     opacity: 1;
   }
+
 }
 
 
-/* IPO */
+/* =====================================================
+   IPO
+===================================================== */
 
 .ipo-card {
   padding: 7px 14px;
+
   background: #101821;
+
   color: white;
+
   border: 3px solid #ffd52a;
+
   border-radius: 8px;
+
   font-size: 24px;
+
   font-weight: 1000;
+
   text-align: center;
 
   box-shadow:
-    0
-    0
-    18px
-    rgba(
-      255,
-      213,
-      42,
-      0.6
-    );
+    0 0 18px rgba(255,213,42,0.6);
 
   animation: ipoImpact 0.32s forwards;
 }
 
+
 @keyframes ipoImpact {
+
   0% {
     transform: scale(0.5);
+
     opacity: 0;
   }
 
   65% {
     transform: scale(1.25);
+
     opacity: 1;
   }
 
   100% {
     transform: scale(1);
+
     opacity: 1;
   }
+
 }
 
 
-/* =============================
+/* =====================================================
+   BATTLE INTRO
+===================================================== */
+
+.battle-intro {
+  position: absolute;
+
+  inset: 0;
+
+  z-index: 400;
+
+  display: flex;
+
+  flex-direction: column;
+
+  align-items: center;
+
+  justify-content: center;
+
+  background:
+    rgba(0,0,0,0.42);
+
+  pointer-events: none;
+}
+
+
+.battle-map-name {
+  margin-bottom: 9px;
+
+  padding: 7px 18px;
+
+  background: rgba(0,0,0,0.82);
+
+  border: 2px solid white;
+
+  font-size: clamp(14px,2.5vw,23px);
+
+  font-weight: 1000;
+
+  letter-spacing: 5px;
+}
+
+
+.battle-intro-round {
+  margin-bottom: 7px;
+
+  font-size: clamp(22px,4vw,40px);
+
+  font-weight: 1000;
+
+  letter-spacing: 8px;
+
+  color: white;
+
+  text-shadow: 3px 3px black;
+}
+
+
+.battle-intro-word {
+  font-size: clamp(65px,11vw,135px);
+
+  font-weight: 1000;
+
+  font-style: italic;
+
+  color: #ffd52a;
+
+  text-shadow:
+    6px 6px #c52b25,
+    11px 11px #111;
+
+  animation:
+    introWordPop
+    0.45s
+    ease-out;
+}
+
+
+.battle-intro-word.begin {
+  color: white;
+
+  text-shadow:
+    6px 6px #1e76d1,
+    11px 11px #111;
+}
+
+
+@keyframes introWordPop {
+
+  0% {
+    transform:
+      scale(0.35)
+      rotate(-4deg);
+
+    opacity: 0;
+  }
+
+  75% {
+    transform:
+      scale(1.12)
+      rotate(1deg);
+
+    opacity: 1;
+  }
+
+  100% {
+    transform:
+      scale(1)
+      rotate(0deg);
+  }
+
+}
+
+
+.arena.map-enter {
+  animation:
+    mapEnter
+    0.7s
+    ease-out;
+}
+
+
+@keyframes mapEnter {
+
+  0% {
+    filter: brightness(2);
+
+    transform: scale(1.04);
+  }
+
+  50% {
+    filter: brightness(1.25);
+  }
+
+  100% {
+    filter: brightness(1);
+
+    transform: scale(1);
+  }
+
+}
+
+
+/* =====================================================
    WINNER
-============================= */
+===================================================== */
 
 .winner-pose.brendan-model .right-arm {
   animation: brendanWinner 0.8s forwards;
 }
 
+
 @keyframes brendanWinner {
+
   from {
     transform: rotate(-5deg);
   }
@@ -1546,13 +3280,17 @@ Idle / walking / crouch / reaction ONLY.
   to {
     transform: rotate(-105deg);
   }
+
 }
+
 
 .winner-pose.grandaddy-model .right-arm {
   animation: grandaddyWinner 0.8s forwards;
 }
 
+
 @keyframes grandaddyWinner {
+
   from {
     transform: rotate(-5deg);
   }
@@ -1560,22 +3298,24 @@ Idle / walking / crouch / reaction ONLY.
   to {
     transform: rotate(-135deg);
   }
+
 }
 
 
-/* =============================
+/* =====================================================
    CONTROLS
-============================= */
+===================================================== */
 
 .control-panel {
   width: 100%;
+
   margin-top: 12px;
+
   padding: 10px 14px;
 
   display: flex;
 
-  justify-content:
-    space-between;
+  justify-content: space-between;
 
   align-items: center;
 
@@ -1583,105 +3323,137 @@ Idle / walking / crouch / reaction ONLY.
 
   background: #111820;
 
-  border:
-    1px solid #303943;
+  border: 1px solid #303943;
 
   border-radius: 10px;
 }
 
+
 .keyboard-guide {
   display: flex;
+
   gap: 18px;
+
   flex-wrap: wrap;
+
   color: #9aa5b0;
+
   font-size: 11px;
+
   font-weight: 800;
 }
 
+
 .keyboard-guide span {
   display: flex;
+
   flex-direction: column;
 }
 
+
 .keyboard-guide b {
   margin-top: 2px;
+
   color: white;
+
   font-size: 10px;
 }
 
+
 .action-buttons {
   display: flex;
+
   gap: 8px;
 }
 
+
 .action-button {
   min-width: 82px;
+
   padding: 8px 12px;
+
   border: none;
+
   border-radius: 8px;
+
   font-size: 12px;
-  font-weight: 900;
+
+  font-weight: 1000;
+
   cursor: pointer;
 }
 
+
 .action-button small {
   display: block;
+
   margin-top: 2px;
+
   opacity: 0.65;
 }
+
 
 .action-button:active {
   transform: scale(0.95);
 }
 
+
 .block-button {
   background: #aeb4ba;
 }
+
 
 .attack-button {
   background: #eee;
 }
 
+
 .special-button {
   background: #5baeff;
 }
+
 
 .ultimate-button {
   background: #ffd52a;
 }
 
+
 #blockButton.block-active {
   background: #7fd8ff;
 
   box-shadow:
-    0
-    0
-    12px
-    rgba(
-      120,
-      220,
-      255,
-      0.85
-    );
+    0 0 12px rgba(120,220,255,0.85);
 }
+
 
 #specialButton.cooling-down {
   background: #353d46;
+
   color: #737c85;
+
   opacity: 0.55;
 }
+
 
 .action-button.stun-disabled {
   opacity: 0.35;
 }
 
+
 #ultimateButton.ultimate-ready {
-  animation: ultimateGlow 0.75s infinite alternate;
+  animation:
+    ultimateGlow
+    0.75s
+    infinite
+    alternate;
 }
 
+
 @keyframes ultimateGlow {
+
   from {
-    box-shadow: 0 0 4px #ffd52a;
+    box-shadow:
+      0 0 4px #ffd52a;
   }
 
   to {
@@ -1689,62 +3461,95 @@ Idle / walking / crouch / reaction ONLY.
       0 0 16px #ffd52a,
       0 0 28px rgba(255,213,42,0.65);
   }
+
 }
 
 
-/* =============================
+/* =====================================================
    KO
-============================= */
+===================================================== */
 
 .ko-loser .motion-layer {
-  animation: fallOver 0.75s forwards;
+  animation:
+    fallOver
+    0.75s
+    forwards;
 }
 
+
 @keyframes fallOver {
+
   from {
     transform: rotate(0deg);
   }
 
   to {
-    transform: rotate(90deg) translateY(15px);
+    transform:
+      rotate(90deg)
+      translateY(15px);
   }
+
 }
+
 
 .ko-loser .eye {
   width: 10px;
+
   height: 10px;
+
   background: transparent;
 }
+
 
 .ko-loser .eye::before,
 .ko-loser .eye::after {
   content: "";
+
   position: absolute;
+
   width: 11px;
+
   height: 3px;
+
   left: 0;
+
   top: 4px;
+
   background: #111;
 }
+
 
 .ko-loser .eye::before {
   transform: rotate(45deg);
 }
 
+
 .ko-loser .eye::after {
   transform: rotate(-45deg);
 }
 
+
 .sleep-zzz {
   position: absolute;
+
   color: white;
+
   font-size: 28px;
-  font-weight: 900;
+
+  font-weight: 1000;
+
   text-shadow: 2px 2px black;
-  animation: zzzFloat 1.1s infinite alternate;
+
+  animation:
+    zzzFloat
+    1.1s
+    infinite
+    alternate;
 }
 
+
 @keyframes zzzFloat {
+
   from {
     transform: translateY(0);
   }
@@ -1752,22 +3557,34 @@ Idle / walking / crouch / reaction ONLY.
   to {
     transform: translateY(-18px);
   }
+
 }
+
 
 .ko-overlay {
   position: absolute;
+
   inset: 0;
+
   z-index: 500;
+
   display: flex;
+
   flex-direction: column;
+
   align-items: center;
+
   justify-content: center;
-  background: rgba(0,0,0,0.38);
+
+  background: rgba(0,0,0,0.43);
 }
 
+
 .ko-text {
-  font-size: clamp(85px, 15vw, 150px);
+  font-size: clamp(85px,15vw,150px);
+
   font-weight: 1000;
+
   color: #ffcf27;
 
   text-shadow:
@@ -1777,7 +3594,9 @@ Idle / walking / crouch / reaction ONLY.
   animation: koPop 0.45s;
 }
 
+
 @keyframes koPop {
+
   0% {
     transform: scale(0.2);
   }
@@ -1789,32 +3608,112 @@ Idle / walking / crouch / reaction ONLY.
   100% {
     transform: scale(1);
   }
+
 }
+
 
 .winner-text {
   margin-top: 10px;
+
   font-size: 28px;
-  font-weight: 900;
+
+  font-weight: 1000;
 }
+
+
+.match-status {
+  margin-top: 7px;
+
+  color: #ffd52a;
+
+  font-size: 15px;
+
+  font-weight: 1000;
+
+  letter-spacing: 3px;
+}
+
 
 .new-game-button {
   margin-top: 20px;
+
   padding: 11px 26px;
+
   background: #111;
+
   color: white;
+
   border: 3px solid white;
+
   border-radius: 6px;
+
   font-size: 17px;
-  font-weight: 900;
+
+  font-weight: 1000;
+
   cursor: pointer;
 }
+
 
 .hidden {
   display: none !important;
 }
 
 
+/* =====================================================
+   LAPTOP TITLE FIT
+===================================================== */
+
+@media (max-height: 850px) {
+
+  .title-content {
+    transform: scale(0.88);
+
+    transform-origin: center;
+  }
+
+}
+
+
+@media (max-height: 760px) {
+
+  .title-content {
+    transform: scale(0.78);
+
+    transform-origin: center;
+  }
+
+}
+
+
+@media (max-height: 680px) {
+
+  .title-content {
+    transform: scale(0.68);
+
+    transform-origin: center;
+  }
+
+}
+
+
+/* =====================================================
+   MOBILE / SMALL WIDTH
+===================================================== */
+
 @media (max-width: 700px) {
+
+  .screen {
+    padding: 14px 10px;
+  }
+
+  .title-content {
+    transform: scale(0.73);
+  }
+
+  .map-grid {
+    grid-template-columns: 1fr;
+  }
 
   .control-panel {
     flex-direction: column;
@@ -1830,11 +3729,17 @@ Idle / walking / crouch / reaction ONLY.
 
   .action-button {
     flex: 1;
+
     min-width: 0;
   }
 
   .arena {
     height: 400px;
+  }
+
+  .hud {
+    grid-template-columns:
+      1fr 95px 1fr;
   }
 
 }
