@@ -11,156 +11,184 @@
 
   <title>Bloodline Brawl</title>
 
-  <link
-    rel="stylesheet"
-    href="style.css"
-  >
+  <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
 
 <div id="game">
 
-  <!-- TITLE -->
+  <!-- =====================================================
+       TITLE SCREEN
+  ====================================================== -->
 
   <section
     id="titleScreen"
     class="screen title-screen active"
   >
 
-    <div class="studio-name">
-      McD GAMES
-    </div>
+    <div class="title-bg-lines"></div>
 
-    <div class="presents">
-      PRESENTS
-    </div>
+    <div class="title-content">
 
-    <h1 class="game-logo">
-      BLOODLINE
-      <span>BRAWL</span>
-    </h1>
+      <div class="studio-name">
+        McD GAMES
+      </div>
 
-    <div class="tagline">
-      FAMILY FIGHTS GET PERSONAL
-    </div>
+      <div class="presents">
+        PRESENTS
+      </div>
+
+      <h1 class="game-logo">
+        BLOODLINE
+        <span>BRAWL</span>
+      </h1>
+
+      <div class="tagline">
+        FAMILY FIGHTS GET PERSONAL
+      </div>
 
 
-    <div class="title-fighters">
+      <div class="title-versus-panel">
 
-      <!-- BRENDAN -->
+        <div class="title-fighter">
 
-      <div class="title-fighter">
+          <div class="pixel-person brendan-model">
 
-        <div class="pixel-person brendan-model">
+            <div class="brendan-hair"></div>
 
-          <div class="brendan-hair"></div>
+            <div class="face">
+              <div class="eye eye-left"></div>
+              <div class="eye eye-right"></div>
+              <div class="mouth"></div>
+            </div>
 
-          <div class="face">
-            <div class="eye eye-left"></div>
-            <div class="eye eye-right"></div>
-            <div class="mouth"></div>
+            <div class="brendan-shirt">
+              <div class="polo-collar collar-left"></div>
+              <div class="polo-collar collar-right"></div>
+
+              <div class="whale-mark"></div>
+            </div>
+
+            <div class="skin arm left-arm"></div>
+
+            <div class="skin arm right-arm weapon-arm">
+              <div class="golf-club"></div>
+            </div>
+
+            <div class="khaki leg left-leg"></div>
+            <div class="khaki leg right-leg"></div>
+
+            <div class="white-shoe left-shoe"></div>
+            <div class="white-shoe right-shoe"></div>
+
           </div>
 
-          <div class="brendan-shirt">
-            <div class="polo-collar collar-left"></div>
-            <div class="polo-collar collar-right"></div>
-            <div class="whale">🐳</div>
+          <div class="title-name">
+            BRENDAN
           </div>
-
-          <div class="skin arm left-arm"></div>
-
-          <div class="skin arm right-arm weapon-arm">
-            <div class="golf-club"></div>
-          </div>
-
-          <div class="khaki leg left-leg"></div>
-          <div class="khaki leg right-leg"></div>
-
-          <div class="white-shoe left-shoe"></div>
-          <div class="white-shoe right-shoe"></div>
 
         </div>
 
-        <div class="title-name">
-          BRENDAN
+
+        <div class="title-vs-wrap">
+
+          <div class="title-vs-small">
+            FAMILY
+          </div>
+
+          <div class="vs">
+            VS
+          </div>
+
+          <div class="title-vs-small">
+            FAMILY
+          </div>
+
+        </div>
+
+
+        <div class="title-fighter">
+
+          <div class="pixel-person grandaddy-model">
+
+            <div class="grandaddy-hair"></div>
+
+            <div class="face grandaddy-face">
+              <div class="eye eye-left"></div>
+              <div class="eye eye-right"></div>
+              <div class="mouth"></div>
+            </div>
+
+            <div class="glasses glasses-left"></div>
+            <div class="glasses glasses-right"></div>
+            <div class="glasses-bridge"></div>
+
+            <div class="orange-hat"></div>
+            <div class="orange-brim"></div>
+
+            <div class="hat-letter">
+              S
+            </div>
+
+            <div class="grandaddy-shirt"></div>
+
+            <div class="skin arm left-arm"></div>
+
+            <div class="skin arm right-arm weapon-arm">
+              <div class="hammer"></div>
+            </div>
+
+            <div class="black-pants leg left-leg"></div>
+            <div class="black-pants leg right-leg"></div>
+
+            <div class="white-shoe left-shoe"></div>
+            <div class="white-shoe right-shoe"></div>
+
+          </div>
+
+          <div class="title-name">
+            GRANDADDY
+          </div>
+
         </div>
 
       </div>
 
 
-      <div class="vs">
-        VS
-      </div>
+      <button
+        id="startButton"
+        class="big-button title-start-button"
+      >
+        START
+      </button>
 
 
-      <!-- GRANDADDY -->
-
-      <div class="title-fighter">
-
-        <div class="pixel-person grandaddy-model">
-
-          <div class="grandaddy-hair"></div>
-
-          <div class="face grandaddy-face">
-            <div class="eye eye-left"></div>
-            <div class="eye eye-right"></div>
-            <div class="mouth"></div>
-          </div>
-
-          <div class="glasses glasses-left"></div>
-          <div class="glasses glasses-right"></div>
-          <div class="glasses-bridge"></div>
-
-          <div class="orange-hat"></div>
-          <div class="orange-brim"></div>
-          <div class="hat-letter">S</div>
-
-          <div class="grandaddy-shirt"></div>
-
-          <div class="skin arm left-arm"></div>
-
-          <div class="skin arm right-arm weapon-arm">
-            <div class="hammer"></div>
-          </div>
-
-          <div class="black-pants leg left-leg"></div>
-          <div class="black-pants leg right-leg"></div>
-
-          <div class="white-shoe left-shoe"></div>
-          <div class="white-shoe right-shoe"></div>
-
-        </div>
-
-        <div class="title-name">
-          GRANDADDY
-        </div>
-
+      <div class="title-footer">
+        FIRST TO TWO ROUNDS WINS
       </div>
 
     </div>
-
-
-    <button
-      id="startButton"
-      class="big-button"
-    >
-      START
-    </button>
 
   </section>
 
 
-  <!-- CHARACTER SELECT -->
+  <!-- =====================================================
+       CHARACTER SELECT
+  ====================================================== -->
 
   <section
     id="selectScreen"
     class="screen select-screen"
   >
 
-    <h2>
+    <div class="screen-kicker">
+      STEP 1
+    </div>
+
+    <div class="screen-heading">
       SELECT YOUR FIGHTER
-    </h2>
+    </div>
 
 
     <div class="fighter-select">
@@ -183,9 +211,12 @@
           </div>
 
           <div class="brendan-shirt">
+
             <div class="polo-collar collar-left"></div>
             <div class="polo-collar collar-right"></div>
-            <div class="whale">🐳</div>
+
+            <div class="whale-mark"></div>
+
           </div>
 
           <div class="skin arm left-arm"></div>
@@ -236,7 +267,10 @@
 
           <div class="orange-hat"></div>
           <div class="orange-brim"></div>
-          <div class="hat-letter">S</div>
+
+          <div class="hat-letter">
+            S
+          </div>
 
           <div class="grandaddy-shirt"></div>
 
@@ -268,21 +302,189 @@
 
 
     <div id="selectionText">
-      PLAYER 1: BRENDAN
+      PLAYER: BRENDAN
     </div>
 
 
     <button
-      id="fightButton"
+      id="mapSelectButton"
       class="big-button"
     >
-      FIGHT
+      CHOOSE MAP
     </button>
 
   </section>
 
 
-  <!-- FIGHT -->
+  <!-- =====================================================
+       MAP SELECT
+  ====================================================== -->
+
+  <section
+    id="mapScreen"
+    class="screen map-screen"
+  >
+
+    <div class="screen-kicker">
+      STEP 2
+    </div>
+
+    <div class="screen-heading">
+      SELECT BATTLEFIELD
+    </div>
+
+
+    <div class="map-grid">
+
+      <!-- VIRGINIA -->
+
+      <button
+        class="map-card selected"
+        data-map="virginia"
+      >
+
+        <div class="map-preview virginia-preview">
+
+          <div class="preview-sun"></div>
+
+          <div class="preview-house house-one"></div>
+          <div class="preview-house house-two"></div>
+
+          <div class="preview-tree tree-one"></div>
+          <div class="preview-tree tree-two"></div>
+
+        </div>
+
+        <strong>
+          SUBURBAN VIRGINIA
+        </strong>
+
+        <small>
+          Quiet streets. Big yards. Settle it in the suburbs.
+        </small>
+
+      </button>
+
+
+      <!-- WESTHAMPTON -->
+
+      <button
+        class="map-card"
+        data-map="westhampton"
+      >
+
+        <div class="map-preview westhampton-preview">
+
+          <div class="preview-sun beach-sun"></div>
+
+          <div class="preview-ocean"></div>
+
+          <div class="preview-umbrella"></div>
+
+        </div>
+
+        <strong>
+          WESTHAMPTON BEACH
+        </strong>
+
+        <small>
+          Sun, sand, and absolutely nowhere to run.
+        </small>
+
+      </button>
+
+
+      <!-- NEW CANAAN -->
+
+      <button
+        class="map-card"
+        data-map="newcanaan"
+      >
+
+        <div class="map-preview newcanaan-preview">
+
+          <div class="preview-shop shop-one">
+            CAFE
+          </div>
+
+          <div class="preview-shop shop-two">
+            MARKET
+          </div>
+
+          <div class="preview-lamp"></div>
+
+        </div>
+
+        <strong>
+          NEW CANAAN
+        </strong>
+
+        <small>
+          Small-town charm. Big-time problems.
+        </small>
+
+      </button>
+
+
+      <!-- MADRID -->
+
+      <button
+        class="map-card"
+        data-map="madrid"
+      >
+
+        <div class="map-preview madrid-preview">
+
+          <div class="preview-building madrid-building-left"></div>
+
+          <div class="preview-building madrid-building-right"></div>
+
+          <div class="preview-fountain"></div>
+
+        </div>
+
+        <strong>
+          MADRID
+        </strong>
+
+        <small>
+          The city is alive. Only one fighter walks away.
+        </small>
+
+      </button>
+
+    </div>
+
+
+    <div id="mapSelectionText">
+      MAP: SUBURBAN VIRGINIA
+    </div>
+
+
+    <div class="map-screen-buttons">
+
+      <button
+        id="backToFighterButton"
+        class="secondary-button"
+      >
+        BACK
+      </button>
+
+      <button
+        id="fightButton"
+        class="big-button"
+      >
+        FIGHT
+      </button>
+
+    </div>
+
+  </section>
+
+
+  <!-- =====================================================
+       FIGHT SCREEN
+  ====================================================== -->
 
   <section
     id="fightScreen"
@@ -324,10 +526,28 @@
       </div>
 
 
-      <div
-        id="roundText"
-        class="round-text"
-      ></div>
+      <div class="center-hud">
+
+        <div
+          id="roundScore"
+          class="round-score"
+        >
+          0 - 0
+        </div>
+
+        <div
+          id="roundLabel"
+          class="round-label"
+        >
+          ROUND 1
+        </div>
+
+        <div
+          id="roundText"
+          class="round-text"
+        ></div>
+
+      </div>
 
 
       <div class="hud-side right">
@@ -367,15 +587,46 @@
 
     <div
       id="arena"
-      class="arena"
+      class="arena map-virginia"
     >
 
-      <div class="cloud cloud-one"></div>
-      <div class="cloud cloud-two"></div>
-
-      <div class="fence"></div>
+      <div
+        id="mapDecor"
+        class="map-decor"
+      ></div>
 
       <div id="effects"></div>
+
+
+      <!-- BATTLE INTRO -->
+
+      <div
+        id="battleIntro"
+        class="battle-intro hidden"
+      >
+
+        <div
+          id="battleMapName"
+          class="battle-map-name"
+        >
+          SUBURBAN VIRGINIA
+        </div>
+
+        <div
+          id="battleIntroRound"
+          class="battle-intro-round"
+        >
+          ROUND 1
+        </div>
+
+        <div
+          id="battleIntroWord"
+          class="battle-intro-word"
+        >
+          READY...
+        </div>
+
+      </div>
 
 
       <!-- PLAYER -->
@@ -418,7 +669,7 @@
       </div>
 
 
-      <!-- PLAYER ABILITY HUD -->
+      <!-- ABILITY HUD -->
 
       <div class="arena-abilities player-abilities">
 
@@ -448,8 +699,6 @@
 
       </div>
 
-
-      <!-- CPU ABILITY HUD -->
 
       <div class="arena-abilities cpu-abilities">
 
@@ -496,9 +745,14 @@
           class="winner-text"
         ></div>
 
+        <div
+          id="matchStatus"
+          class="match-status"
+        ></div>
+
         <button
           id="newGameButton"
-          class="new-game-button"
+          class="new-game-button hidden"
         >
           NEW GAME
         </button>
