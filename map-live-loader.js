@@ -47,9 +47,19 @@
                   combat.addEventListener(
                     "load",
                     () => {
-                      const victory = document.createElement("script");
-                      victory.src = "victory-celebrations.js?v=1";
-                      document.body.appendChild(victory);
+                      const ipo = document.createElement("script");
+                      ipo.src = "brendan-ipo-upgrade.js?v=1";
+                      document.body.appendChild(ipo);
+
+                      ipo.addEventListener(
+                        "load",
+                        () => {
+                          const victory = document.createElement("script");
+                          victory.src = "victory-celebrations.js?v=1";
+                          document.body.appendChild(victory);
+                        },
+                        { once: true }
+                      );
                     },
                     { once: true }
                   );
