@@ -7,20 +7,58 @@ const bbVisualHotfixStyle =
   document.createElement("style");
 
 bbVisualHotfixStyle.textContent = `
-  /* LEAH — keep the current hair length, make the whole hair silhouette black. */
-  .leah-hair,
-  .leah-hood {
+  /* ===================================================
+     LEAH — all-black hair, same overall current length.
+     Keep the hoodie itself gray; add black side locks over it.
+  =================================================== */
+
+  .leah-hair {
     background: #080808 !important;
     border-color: #111 !important;
   }
 
-  /* KELLY — tuck the shovel a little farther into her hand. */
-  .shovel-weapon {
-    left: 1px !important;
-    top: 0 !important;
+  .leah-hair::before,
+  .leah-hair::after {
+    content: "";
+    position: absolute;
+    width: 9px;
+    height: 35px;
+    top: 12px;
+    background: #080808;
+    border-bottom: 3px solid #111;
+    z-index: 10;
   }
 
-  /* CHAIR YOGA — chair back behind Grandmommy while she sits. */
+  .leah-hair::before {
+    left: -7px;
+    border-left: 3px solid #111;
+    border-radius: 4px 0 2px 5px;
+  }
+
+  .leah-hair::after {
+    right: -7px;
+    border-right: 3px solid #111;
+    border-radius: 0 4px 5px 2px;
+  }
+
+
+  /* ===================================================
+     KELLY — move the shovel slightly left and up so the
+     shaft sits more naturally in her weapon hand.
+  =================================================== */
+
+  .shovel-weapon {
+    left: -1px !important;
+    top: -3px !important;
+  }
+
+
+  /* ===================================================
+     CHAIR YOGA — Grandmommy sits IN the chair before throw.
+     Real chair back goes behind her. A slim front seat/legs
+     layer goes in front so the body reads as seated.
+  =================================================== */
+
   .yoga-chair.bb-chair-yoga-stage {
     z-index: 42 !important;
   }
@@ -34,7 +72,6 @@ bbVisualHotfixStyle.textContent = `
     z-index: 72;
   }
 
-  /* Separate front edge lets her look seated IN the chair instead of hidden behind it. */
   .bb-chair-front {
     position: absolute;
     width: 80px;
@@ -46,9 +83,9 @@ bbVisualHotfixStyle.textContent = `
   .bb-chair-front-seat {
     position: absolute;
     width: 60px;
-    height: 18px;
+    height: 13px;
     left: 10px;
-    top: 49px;
+    top: 53px;
     background: #9c6a3d;
     border: 4px solid #472f1f;
     border-radius: 2px;
@@ -57,8 +94,8 @@ bbVisualHotfixStyle.textContent = `
   .bb-chair-front-leg {
     position: absolute;
     width: 7px;
-    height: 34px;
-    top: 61px;
+    height: 31px;
+    top: 64px;
     background: #8c5b34;
     border: 2px solid #472f1f;
   }
@@ -71,7 +108,12 @@ bbVisualHotfixStyle.textContent = `
     right: 17px;
   }
 
-  /* CLYDE — visible cartoon chomp while he runs. */
+
+  /* ===================================================
+     CLYDE — visible cartoon bite while running and a
+     stronger chomp at impact.
+  =================================================== */
+
   .bb-clyde-running-bite .clyde-head {
     transform-origin: 72% 68%;
     animation: bbClydeNibble 420ms steps(2, end) infinite;
@@ -142,7 +184,9 @@ bbVisualHotfixStyle.textContent = `
     100% { transform: scaleY(.55); }
   }
 
+
   /* Small, cartoony blood flecks on Clyde's successful bite. */
+
   .bb-clyde-blood-drop {
     position: absolute;
     width: 7px;
@@ -160,8 +204,15 @@ bbVisualHotfixStyle.textContent = `
       transform: translate(0, 0) scale(.7);
       opacity: 1;
     }
+
     100% {
-      transform: translate(var(--bb-blood-x), var(--bb-blood-y)) scale(.25);
+      transform:
+        translate(
+          var(--bb-blood-x),
+          var(--bb-blood-y)
+        )
+        scale(.25);
+
       opacity: 0;
     }
   }
@@ -193,6 +244,7 @@ displayName = function(
   );
 };
 
+
 function bbRenameKellyLabels() {
   document
     .querySelectorAll(
@@ -210,7 +262,9 @@ function bbRenameKellyLabels() {
           );
 
         if (
-          name
+          name &&
+          name.textContent.trim() !==
+            "KELLY"
         ) {
           name.textContent =
             "KELLY";
@@ -238,6 +292,95 @@ function bbRenameKellyLabels() {
 }
 
 bbRenameKellyLabels();
+
+
+/*
+  Keep the visible label corrected if the selection screen or HUD
+  is rebuilt later in the session.
+*/
+const bbKellyLabelObserver =
+  new MutationObserver(
+    () => {
+      bbRenameKellyLabels();
+    }
+  );
+
+bbKellyLabelObserver.observe(
+  document.body,
+  {
+    childList: true,
+    subtree: true
+  }
+);
+
+
+/* =====================================================
+   GRANDMOMMY — DON -> DONN
+===================================================== */
+
+/*
+  The base move calls addComicText("DON, GET OVER HERE!").
+  Keep the move itself intact and only correct the displayed spelling.
+*/
+const bbVisualOriginalAddComicText =
+  addComicText;
+
+addComicText = function(
+  text,
+  className,
+  duration
+) {
+  const correctedText =
+    text === "DON, GET OVER HERE!"
+      ? "DONN, GET OVER HERE!"
+      : text;
+
+  return bbVisualOriginalAddComicText(
+    correctedText,
+    className,
+    duration
+  );
+};
+
+
+/*
+  Correct the little special icon too, both now and on future HUD rebuilds.
+*/
+const bbVisualOriginalSpecialIconHTML =
+  specialIconHTML;
+
+specialIconHTML = function(
+  character
+) {
+  const html =
+    bbVisualOriginalSpecialIconHTML(
+      character
+    );
+
+  if (
+    character ===
+      "grandmommy"
+  ) {
+    return html.replace(
+      />DON</g,
+      ">DONN<"
+    );
+  }
+
+  return html;
+};
+
+
+document
+  .querySelectorAll(
+    ".mini-don-icon"
+  )
+  .forEach(
+    icon => {
+      icon.textContent =
+        "DONN";
+    }
+  );
 
 
 /* =====================================================
@@ -279,6 +422,7 @@ function bbSeatGrandmommyInChair(
     );
   }
 
+
   const front =
     document.createElement(
       "div"
@@ -304,10 +448,16 @@ function bbSeatGrandmommyInChair(
     front
   );
 
-  /* The real chair starts flying at 1900ms in the base move. */
+
+  /*
+    The real chair starts flying at about 1900ms in the base move.
+    Remove the fake front layer just before that so the original
+    chair throw animation continues untouched.
+  */
   setTimeout(
     () => {
       front.remove();
+
       chair.classList.remove(
         "bb-chair-yoga-stage"
       );
@@ -367,6 +517,7 @@ function bbReverseSpawnOrientation(
   }
 }
 
+
 function bbPrepareClyde(
   clyde
 ) {
@@ -412,7 +563,10 @@ const bbVisualEffectsObserver =
           mutation.addedNodes.forEach(
             node => {
               if (
-                !(node instanceof HTMLElement)
+                !(
+                  node instanceof
+                  HTMLElement
+                )
               ) {
                 return;
               }
@@ -526,6 +680,7 @@ function bbClydeBlood(
   );
 }
 
+
 const bbVisualOriginalDealDamage =
   dealDamage;
 
@@ -539,7 +694,9 @@ dealDamage = function(
     attacker &&
     attacker.character ===
       "martin" &&
-    amount === 32 &&
+    amount ===
+      STATS.martin
+        .ultimateDamage &&
     options.type ===
       "ultimate"
   ) {
