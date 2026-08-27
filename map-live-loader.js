@@ -1,7 +1,7 @@
 /* =====================================================
    BLOODLINE BRAWL — LIVE VISUAL LOADER
    Forces the newest map refinement pass, then loads the
-   final direct visual fixes so the live build cannot miss them.
+   direct visual fixes in order so the live build cannot miss them.
 ===================================================== */
 
 (() => {
@@ -26,14 +26,32 @@
       latest.addEventListener(
         "load",
         () => {
-          const finalFixes =
+          const v4 =
             document.createElement("script");
 
-          finalFixes.src =
+          v4.src =
             "visual-fixes-v4.js?v=1";
 
           document.body.appendChild(
-            finalFixes
+            v4
+          );
+
+          v4.addEventListener(
+            "load",
+            () => {
+              const v5 =
+                document.createElement("script");
+
+              v5.src =
+                "visual-fixes-v5.js?v=1";
+
+              document.body.appendChild(
+                v5
+              );
+            },
+            {
+              once: true
+            }
           );
         },
         {
