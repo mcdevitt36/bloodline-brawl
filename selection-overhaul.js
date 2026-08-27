@@ -61,7 +61,7 @@
                     document.createElement("script");
 
                   cleanup.src =
-                    "map-cleanup.js?v=1";
+                    "map-cleanup.js?v=2";
 
                   document.body.appendChild(
                     cleanup
