@@ -497,7 +497,7 @@ const bbCharacterPatchScript =
   document.createElement("script");
 
 bbCharacterPatchScript.src =
-  "character-updates.js?v=1";
+  "character-updates.js?v=2";
 
 document.body.appendChild(
   bbCharacterPatchScript
