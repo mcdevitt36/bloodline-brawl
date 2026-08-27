@@ -510,10 +510,28 @@ bbCharacterPatchScript.addEventListener(
       document.createElement("script");
 
     bbVisualHotfixScript.src =
-      "visual-hotfixes.js?v=1";
+      "visual-hotfixes.js?v=2";
 
     document.body.appendChild(
       bbVisualHotfixScript
+    );
+
+    bbVisualHotfixScript.addEventListener(
+      "load",
+      () => {
+        const bbSelectionOverhaulScript =
+          document.createElement("script");
+
+        bbSelectionOverhaulScript.src =
+          "selection-overhaul.js?v=1";
+
+        document.body.appendChild(
+          bbSelectionOverhaulScript
+        );
+      },
+      {
+        once: true
+      }
     );
   },
   {
