@@ -1811,7 +1811,7 @@ function beginMatch() {
   ) {
 
     player1SpecialKey.textContent =
-      "R";
+      "E";
 
     player1UltimateKey.textContent =
       "F";
@@ -1837,7 +1837,7 @@ function beginMatch() {
   else {
 
     player1SpecialKey.textContent =
-      "R";
+      "E";
 
     player1UltimateKey.textContent =
       "F";
