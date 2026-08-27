@@ -43,6 +43,16 @@
                   const combat = document.createElement("script");
                   combat.src = "combat-smoothing.js?v=1";
                   document.body.appendChild(combat);
+
+                  combat.addEventListener(
+                    "load",
+                    () => {
+                      const victory = document.createElement("script");
+                      victory.src = "victory-celebrations.js?v=1";
+                      document.body.appendChild(victory);
+                    },
+                    { once: true }
+                  );
                 },
                 { once: true }
               );
