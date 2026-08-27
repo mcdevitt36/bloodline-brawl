@@ -4,7 +4,7 @@
 
 (() => {
   const audio = document.createElement("script");
-  audio.src = "audio-v2.js?v=1";
+  audio.src = "audio-v3.js?v=1";
   document.body.appendChild(audio);
 
   const ui = document.createElement("script");
