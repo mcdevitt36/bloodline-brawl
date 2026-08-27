@@ -487,3 +487,18 @@ dealDamage = function(
     options
   );
 };
+
+
+/* =====================================================
+   LOAD CHARACTER VISUAL PATCHES
+===================================================== */
+
+const bbCharacterPatchScript =
+  document.createElement("script");
+
+bbCharacterPatchScript.src =
+  "character-updates.js?v=1";
+
+document.body.appendChild(
+  bbCharacterPatchScript
+);
