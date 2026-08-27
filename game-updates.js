@@ -502,3 +502,21 @@ bbCharacterPatchScript.src =
 document.body.appendChild(
   bbCharacterPatchScript
 );
+
+bbCharacterPatchScript.addEventListener(
+  "load",
+  () => {
+    const bbVisualHotfixScript =
+      document.createElement("script");
+
+    bbVisualHotfixScript.src =
+      "visual-hotfixes.js?v=1";
+
+    document.body.appendChild(
+      bbVisualHotfixScript
+    );
+  },
+  {
+    once: true
+  }
+);
