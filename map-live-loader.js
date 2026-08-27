@@ -1,10 +1,21 @@
 /* =====================================================
    BLOODLINE BRAWL — LIVE VISUAL LOADER
-   Forces the newest map refinement pass, then loads the
-   direct visual fixes in order so the live build cannot miss them.
+   Loads current UI polish immediately, then forces the newest
+   map and visual refinement passes in order.
 ===================================================== */
 
 (() => {
+  const ui =
+    document.createElement("script");
+
+  ui.src =
+    "ui-random-title.js?v=1";
+
+  document.body.appendChild(
+    ui
+  );
+
+
   window.setTimeout(
     () => {
       try {
