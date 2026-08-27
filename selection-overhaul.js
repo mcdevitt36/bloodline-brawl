@@ -66,6 +66,24 @@
                   document.body.appendChild(
                     cleanup
                   );
+
+                  cleanup.addEventListener(
+                    "load",
+                    () => {
+                      const refine =
+                        document.createElement("script");
+
+                      refine.src =
+                        "map-refine.js?v=2";
+
+                      document.body.appendChild(
+                        refine
+                      );
+                    },
+                    {
+                      once: true
+                    }
+                  );
                 },
                 {
                   once: true
