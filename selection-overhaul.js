@@ -1,7 +1,7 @@
 /* =====================================================
    BLOODLINE BRAWL — SELECTION / PRESENTATION BOOTSTRAP
    Loads the stable character-select overhaul first, then the
-   safe presentation layer after it finishes.
+   safe presentation and map layers after it finishes.
 ===================================================== */
 
 (() => {
@@ -26,6 +26,24 @@
 
       document.body.appendChild(
         presentation
+      );
+
+      presentation.addEventListener(
+        "load",
+        () => {
+          const maps =
+            document.createElement("script");
+
+          maps.src =
+            "map-upgrades.js?v=1";
+
+          document.body.appendChild(
+            maps
+          );
+        },
+        {
+          once: true
+        }
       );
     },
     {
