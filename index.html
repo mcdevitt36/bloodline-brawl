@@ -14,9 +14,9 @@
 
 <div id="game">
 
-  <!-- ===================================================
-       TITLE
-  ==================================================== -->
+  <!-- =====================================================
+       TITLE SCREEN
+  ====================================================== -->
 
   <section
     id="titleScreen"
@@ -24,14 +24,6 @@
   >
 
     <div class="title-content">
-
-      <div class="studio-name">
-        McD GAMES
-      </div>
-
-      <div class="presents">
-        PRESENTS
-      </div>
 
       <h1 class="game-logo">
         BLOODLINE
@@ -46,29 +38,37 @@
       <div class="title-versus-panel">
 
         <div class="title-fighter">
+
           <div
             id="titleLeftCharacter"
             class="title-character-space"
           ></div>
+
           <div
             id="titleLeftName"
             class="title-name"
           ></div>
+
         </div>
+
 
         <div class="title-vs">
           VS
         </div>
 
+
         <div class="title-fighter">
+
           <div
             id="titleRightCharacter"
             class="title-character-space"
           ></div>
+
           <div
             id="titleRightName"
             class="title-name"
           ></div>
+
         </div>
 
       </div>
@@ -77,6 +77,7 @@
       <div class="mode-title">
         CHOOSE MODE
       </div>
+
 
       <div class="mode-buttons">
 
@@ -101,7 +102,7 @@
 
       <button
         id="startButton"
-        class="big-button"
+        class="big-button title-start"
       >
         START
       </button>
@@ -120,9 +121,9 @@
 
 
 
-  <!-- ===================================================
+  <!-- =====================================================
        CHARACTER SELECT
-  ==================================================== -->
+  ====================================================== -->
 
   <section
     id="selectScreen"
@@ -205,7 +206,7 @@
         ></div>
         <strong>ERIN</strong>
         <small>
-          Hairbrush • Pimple Patch • Laundry
+          Hairbrush • Pimple Patch • Laundry Avalanche
         </small>
       </button>
 
@@ -283,13 +284,10 @@
 
         <div class="lock-overlay">
           <strong>LOCKED</strong>
-          <small>
-            BEAT MARTIN TO UNLOCK
-          </small>
+          <small>BEAT MARTIN TO UNLOCK</small>
         </div>
 
         <strong>MARTIN</strong>
-
         <small>
           Paws • Dog Breath • Clyde Returns
         </small>
@@ -330,9 +328,9 @@
 
 
 
-  <!-- ===================================================
+  <!-- =====================================================
        MARTIN CHALLENGE
-  ==================================================== -->
+  ====================================================== -->
 
   <section
     id="challengeScreen"
@@ -398,9 +396,9 @@
 
 
 
-  <!-- ===================================================
+  <!-- =====================================================
        MAP SELECT
-  ==================================================== -->
+  ====================================================== -->
 
   <section
     id="mapScreen"
@@ -425,9 +423,12 @@
         class="map-card selected"
         data-map="virginia"
       >
+
         <div class="map-preview virginia-preview">
-          <div class="preview-estate"></div>
-          <div class="preview-lawn"></div>
+          <div class="preview-sun"></div>
+          <div class="virginia-estate-preview"></div>
+          <div class="preview-tree t1"></div>
+          <div class="preview-tree t2"></div>
         </div>
 
         <strong>
@@ -435,8 +436,9 @@
         </strong>
 
         <small>
-          Estate lawns and suburban family warfare.
+          Big lawns. Bigger houses. Family business on the front lawn.
         </small>
+
       </button>
 
 
@@ -444,8 +446,11 @@
         class="map-card"
         data-map="westhampton"
       >
+
         <div class="map-preview westhampton-preview">
+          <div class="preview-sun beach-sun"></div>
           <div class="preview-ocean"></div>
+          <div class="preview-umbrella"></div>
           <div class="preview-icecream">
             ICE CREAM
           </div>
@@ -456,8 +461,9 @@
         </strong>
 
         <small>
-          Sand, waves and an ice cream stand.
+          Sun, sand, ice cream, and absolutely nowhere to run.
         </small>
+
       </button>
 
 
@@ -465,10 +471,23 @@
         class="map-card"
         data-map="newcanaan"
       >
+
         <div class="map-preview newcanaan-preview">
-          <div class="preview-shop red"></div>
-          <div class="preview-shop white"></div>
-          <div class="preview-shop brick"></div>
+
+          <div class="nc-preview-building nc-red">
+            MARKET
+          </div>
+
+          <div class="nc-preview-building nc-white">
+            CAFE
+          </div>
+
+          <div class="nc-preview-building nc-brick">
+            SHOPS
+          </div>
+
+          <div class="preview-lamp"></div>
+
         </div>
 
         <strong>
@@ -476,8 +495,9 @@
         </strong>
 
         <small>
-          A polished town center with red storefronts.
+          Small-town charm. Big-time problems.
         </small>
+
       </button>
 
 
@@ -485,9 +505,12 @@
         class="map-card"
         data-map="madrid"
       >
+
         <div class="map-preview madrid-preview">
-          <div class="preview-madrid-left"></div>
-          <div class="preview-madrid-right"></div>
+          <div class="madrid-preview-left"></div>
+          <div class="madrid-preview-right"></div>
+          <div class="madrid-preview-balcony b1"></div>
+          <div class="madrid-preview-balcony b2"></div>
           <div class="preview-fountain"></div>
         </div>
 
@@ -496,8 +519,9 @@
         </strong>
 
         <small>
-          A sunny Spanish plaza built for a showdown.
+          A sunlit Spanish plaza built for a family showdown.
         </small>
+
       </button>
 
     </div>
@@ -533,9 +557,9 @@
 
 
 
-  <!-- ===================================================
-       FIGHT
-  ==================================================== -->
+  <!-- =====================================================
+       FIGHT SCREEN
+  ====================================================== -->
 
   <section
     id="fightScreen"
@@ -552,14 +576,17 @@
         ></div>
 
         <div class="health-bar">
+
           <div
             id="player1DamageTrail"
             class="damage-trail"
           ></div>
+
           <div
             id="player1Health"
             class="health-fill"
           ></div>
+
         </div>
 
         <div class="ultimate-bar">
@@ -601,14 +628,17 @@
         ></div>
 
         <div class="health-bar">
+
           <div
             id="player2DamageTrail"
             class="damage-trail"
           ></div>
+
           <div
             id="player2Health"
             class="health-fill"
           ></div>
+
         </div>
 
         <div class="ultimate-bar">
@@ -627,10 +657,10 @@
     >
 
       <div class="map-decor">
-        <div class="decor decor-one"></div>
-        <div class="decor decor-two"></div>
-        <div class="decor decor-three"></div>
-        <div class="decor decor-four"></div>
+        <div class="map-extra decor-one"></div>
+        <div class="map-extra decor-two"></div>
+        <div class="map-extra decor-three"></div>
+        <div class="map-extra decor-four"></div>
       </div>
 
 
@@ -669,28 +699,30 @@
         id="player1Fighter"
         class="fight-character"
       >
+
         <div class="motion-layer">
           <div class="visual-layer">
             <div class="fighter-model-slot"></div>
           </div>
         </div>
+
       </div>
 
 
       <div
         id="player2Fighter"
-        class="fight-character player2-facing"
+        class="fight-character"
       >
+
         <div class="motion-layer">
           <div class="visual-layer">
             <div class="fighter-model-slot"></div>
           </div>
         </div>
+
       </div>
 
 
-
-      <!-- PLAYER 1 ABILITIES -->
 
       <div class="arena-abilities p1-abilities">
 
@@ -710,7 +742,7 @@
             id="player1SpecialKey"
             class="ability-key"
           >
-            K
+            R
           </span>
 
         </div>
@@ -732,7 +764,7 @@
             id="player1UltimateKey"
             class="ability-key"
           >
-            L
+            F
           </span>
 
         </div>
@@ -740,8 +772,6 @@
       </div>
 
 
-
-      <!-- PLAYER 2 / CPU ABILITIES -->
 
       <div class="arena-abilities p2-abilities">
 
@@ -832,27 +862,38 @@
     >
 
       <div class="keyboard-guide">
-        <span>A / D <b>MOVE</b></span>
-        <span>W / SPACE <b>JUMP</b></span>
-        <span>S <b>DUCK</b></span>
+
+        <span>
+          A / D
+          <b>MOVE</b>
+        </span>
+
+        <span>
+          W
+          <b>JUMP</b>
+        </span>
+
+        <span>
+          S
+          <b>DUCK</b>
+        </span>
+
+        <span>
+          Q
+          <b>BLOCK</b>
+        </span>
+
       </div>
 
-      <div class="action-buttons">
 
-        <button
-          id="onePlayerBlockButton"
-          class="action-button"
-        >
-          BLOCK
-          <small>I</small>
-        </button>
+      <div class="action-buttons">
 
         <button
           id="onePlayerAttackButton"
           class="action-button"
         >
           MELEE
-          <small>J</small>
+          <small>E</small>
         </button>
 
         <button
@@ -860,7 +901,7 @@
           class="action-button special-action"
         >
           SPECIAL
-          <small>K</small>
+          <small>R</small>
         </button>
 
         <button
@@ -868,7 +909,7 @@
           class="action-button ultimate-action"
         >
           ULTIMATE
-          <small>L</small>
+          <small>F</small>
         </button>
 
       </div>
@@ -877,7 +918,7 @@
 
 
 
-    <!-- TWO PLAYER CONTROLS -->
+    <!-- TWO PLAYER -->
 
     <div
       id="twoPlayerControls"
@@ -886,28 +927,30 @@
 
       <div class="two-player-control-side">
 
-        <strong>PLAYER 1</strong>
+        <strong>
+          PLAYER 1
+        </strong>
 
         <span>
-          WASD • R BLOCK
+          WASD • Q BLOCK
         </span>
 
         <div class="two-player-action-row">
 
           <button class="two-control-button">
             MELEE
-            <small>F</small>
+            <small>E</small>
           </button>
 
           <button class="two-control-button special">
             SPECIAL
-            <small>G</small>
+            <small>R</small>
           </button>
 
         </div>
 
         <small class="ultimate-key-note">
-          H = ULTIMATE
+          F = ULTIMATE
         </small>
 
       </div>
@@ -915,7 +958,9 @@
 
       <div class="two-player-control-side right">
 
-        <strong>PLAYER 2</strong>
+        <strong>
+          PLAYER 2
+        </strong>
 
         <span>
           ARROWS • I BLOCK
