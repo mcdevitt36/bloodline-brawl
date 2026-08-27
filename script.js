@@ -1,6 +1,6 @@
 /* =====================================================
    BLOODLINE BRAWL
-   FULL 1P + 2P BUILD
+   QUALITY-PRESERVING BUILD
 ===================================================== */
 
 const $ = id =>
@@ -241,9 +241,6 @@ const twoPlayerControls =
   $("twoPlayerControls");
 
 
-const onePlayerBlockButton =
-  $("onePlayerBlockButton");
-
 const onePlayerAttackButton =
   $("onePlayerAttackButton");
 
@@ -255,7 +252,7 @@ const onePlayerUltimateButton =
 
 
 /* =====================================================
-   ROSTER
+   ROSTER / MAPS
 ===================================================== */
 
 const BASE_ROSTER = [
@@ -269,6 +266,7 @@ const BASE_ROSTER = [
   "sean"
 ];
 
+
 const ALL_ROSTER = [
   ...BASE_ROSTER,
   "martin"
@@ -276,6 +274,7 @@ const ALL_ROSTER = [
 
 
 const MAP_NAMES = {
+
   virginia:
     "SUBURBAN VIRGINIA",
 
@@ -287,6 +286,7 @@ const MAP_NAMES = {
 
   madrid:
     "MADRID"
+
 };
 
 
@@ -381,7 +381,7 @@ const STATS = {
 
 
 /* =====================================================
-   GLOBAL GAME STATE
+   STATE
 ===================================================== */
 
 let gameMode =
@@ -446,73 +446,85 @@ const keys = {};
 
 
 /* =====================================================
-   PLAYER STATE OBJECTS
+   PLAYER OBJECTS
 ===================================================== */
 
-const P1 = {
+function createPlayer(
+  side,
+  fighter
+) {
 
-  side: 1,
+  return {
 
-  character: null,
+    side,
+    fighter,
 
-  fighter: player1Fighter,
+    character:
+      null,
 
-  health: 100,
+    health:
+      100,
 
-  maxHealth: 100,
+    maxHealth:
+      100,
 
-  ultimate: 0,
+    ultimate:
+      0,
 
-  x: 100,
+    x:
+      side === 1
+        ? 100
+        : 700,
 
-  jumping: false,
+    y:
+      0,
 
-  crouching: false,
+    vy:
+      0,
 
-  blocking: false,
+    facing:
+      side === 1
+        ? 1
+        : -1,
 
-  stunned: false,
+    jumping:
+      false,
 
-  attackCooldown: false,
+    crouching:
+      false,
 
-  specialCooldown: false,
+    blocking:
+      false,
 
-  specialReadyAt: 0
+    stunned:
+      false,
 
-};
+    attackCooldown:
+      false,
+
+    specialCooldown:
+      false,
+
+    specialReadyAt:
+      0
+
+  };
+
+}
 
 
-const P2 = {
+const P1 =
+  createPlayer(
+    1,
+    player1Fighter
+  );
 
-  side: 2,
 
-  character: null,
-
-  fighter: player2Fighter,
-
-  health: 100,
-
-  maxHealth: 100,
-
-  ultimate: 0,
-
-  x: 700,
-
-  jumping: false,
-
-  crouching: false,
-
-  blocking: false,
-
-  stunned: false,
-
-  attackCooldown: false,
-
-  specialCooldown: false,
-
-  specialReadyAt: 0
-
-};
+const P2 =
+  createPlayer(
+    2,
+    player2Fighter
+  );
 
 
 /* =====================================================
@@ -585,6 +597,7 @@ function unlockMartin() {
     "true"
   );
 
+
   updateMartinUI();
 
 }
@@ -646,12 +659,12 @@ function characterHTML(
 
         <div class="arm left-arm"></div>
 
-        <div class="arm right-arm">
+        <div class="arm right-arm weapon-arm">
           <div class="golf-club"></div>
         </div>
 
-        <div class="leg left-leg khaki"></div>
-        <div class="leg right-leg khaki"></div>
+        <div class="khaki leg left-leg"></div>
+        <div class="khaki leg right-leg"></div>
 
         <div class="white-shoe left-shoe"></div>
         <div class="white-shoe right-shoe"></div>
@@ -683,20 +696,23 @@ function characterHTML(
 
         <div class="orange-hat"></div>
         <div class="orange-brim"></div>
-        <div class="hat-letter">S</div>
+
+        <div class="hat-letter">
+          S
+        </div>
 
         <div class="grandaddy-shirt"></div>
 
         <div class="arm left-arm"></div>
 
-        <div class="arm right-arm">
+        <div class="arm right-arm weapon-arm">
           <div class="hammer">
             <div class="hammer-square"></div>
           </div>
         </div>
 
-        <div class="leg left-leg black-pants"></div>
-        <div class="leg right-leg black-pants"></div>
+        <div class="black-pants leg left-leg"></div>
+        <div class="black-pants leg right-leg"></div>
 
         <div class="white-shoe left-shoe"></div>
         <div class="white-shoe right-shoe"></div>
@@ -728,12 +744,12 @@ function characterHTML(
 
         <div class="arm left-arm"></div>
 
-        <div class="arm right-arm">
+        <div class="arm right-arm weapon-arm">
           <div class="paintbrush"></div>
         </div>
 
-        <div class="leg left-leg gray-pants"></div>
-        <div class="leg right-leg gray-pants"></div>
+        <div class="gray-pants leg left-leg"></div>
+        <div class="gray-pants leg right-leg"></div>
 
         <div class="dark-shoe left-shoe"></div>
         <div class="dark-shoe right-shoe"></div>
@@ -763,12 +779,12 @@ function characterHTML(
 
         <div class="arm left-arm"></div>
 
-        <div class="arm right-arm">
+        <div class="arm right-arm weapon-arm">
           <div class="hairbrush"></div>
         </div>
 
-        <div class="leg left-leg blue-jeans"></div>
-        <div class="leg right-leg blue-jeans"></div>
+        <div class="blue-jeans leg left-leg"></div>
+        <div class="blue-jeans leg right-leg"></div>
 
         <div class="white-shoe left-shoe"></div>
         <div class="white-shoe right-shoe"></div>
@@ -798,12 +814,16 @@ function characterHTML(
 
         <div class="arm left-arm"></div>
 
-        <div class="arm right-arm">
-          <div class="syringe"></div>
+        <div class="arm right-arm weapon-arm">
+
+          <div class="syringe">
+            <div class="syringe-plunger"></div>
+          </div>
+
         </div>
 
-        <div class="leg left-leg shannan-pants"></div>
-        <div class="leg right-leg shannan-pants"></div>
+        <div class="shannan-pants leg left-leg"></div>
+        <div class="shannan-pants leg right-leg"></div>
 
         <div class="dark-shoe left-shoe"></div>
         <div class="dark-shoe right-shoe"></div>
@@ -833,12 +853,12 @@ function characterHTML(
 
         <div class="arm left-arm"></div>
 
-        <div class="arm right-arm">
+        <div class="arm right-arm weapon-arm">
           <div class="rugby-ball"></div>
         </div>
 
-        <div class="leg left-leg liam-blue-pants"></div>
-        <div class="leg right-leg liam-blue-pants"></div>
+        <div class="liam-blue-pants leg left-leg"></div>
+        <div class="liam-blue-pants leg right-leg"></div>
 
         <div class="white-shoe left-shoe"></div>
         <div class="white-shoe right-shoe"></div>
@@ -868,12 +888,12 @@ function characterHTML(
 
         <div class="arm left-arm"></div>
 
-        <div class="arm right-arm">
+        <div class="arm right-arm weapon-arm">
           <div class="spatula"></div>
         </div>
 
-        <div class="leg left-leg grandmommy-pants"></div>
-        <div class="leg right-leg grandmommy-pants"></div>
+        <div class="grandmommy-pants leg left-leg"></div>
+        <div class="grandmommy-pants leg right-leg"></div>
 
         <div class="dark-shoe left-shoe"></div>
         <div class="dark-shoe right-shoe"></div>
@@ -909,12 +929,12 @@ function characterHTML(
 
         <div class="arm left-arm"></div>
 
-        <div class="arm right-arm">
+        <div class="arm right-arm weapon-arm">
           <div class="baseball-bat"></div>
         </div>
 
-        <div class="leg left-leg sean-pants"></div>
-        <div class="leg right-leg sean-pants"></div>
+        <div class="sean-pants leg left-leg"></div>
+        <div class="sean-pants leg right-leg"></div>
 
         <div class="dark-shoe left-shoe"></div>
         <div class="dark-shoe right-shoe"></div>
@@ -1046,7 +1066,7 @@ function ultimateIconHTML(
 
 
 /* =====================================================
-   SCREEN CONTROL
+   SCREENS / PREVIEWS
 ===================================================== */
 
 function showScreen(
@@ -1071,10 +1091,6 @@ function showScreen(
 
 }
 
-
-/* =====================================================
-   PREVIEWS
-===================================================== */
 
 function renderPreviews() {
 
@@ -1101,10 +1117,6 @@ function renderPreviews() {
 
 }
 
-
-/* =====================================================
-   TITLE MATCHUP
-===================================================== */
 
 function generateTitleMatchup() {
 
@@ -1212,7 +1224,7 @@ twoPlayerButton.onclick =
 
 
 /* =====================================================
-   CHARACTER SELECT RESET
+   CHARACTER SELECT
 ===================================================== */
 
 function resetSelection() {
@@ -1259,10 +1271,6 @@ function resetSelection() {
 }
 
 
-/* =====================================================
-   TITLE START
-===================================================== */
-
 startButton.onclick =
   () => {
 
@@ -1287,10 +1295,6 @@ backToTitleButton.onclick =
 
   };
 
-
-/* =====================================================
-   CHARACTER CARDS
-===================================================== */
 
 fighterCards.forEach(
   card => {
@@ -1343,10 +1347,6 @@ fighterCards.forEach(
           );
 
 
-          selectionPrompt.textContent =
-            "FIGHTER SELECTED";
-
-
           selectionText.textContent =
             "PLAYER 1: " +
             displayName(c);
@@ -1360,8 +1360,6 @@ fighterCards.forEach(
 
         }
 
-
-        /* TWO PLAYER */
 
         if (
           selectionStage ===
@@ -1444,7 +1442,7 @@ fighterCards.forEach(
 
 
 /* =====================================================
-   MAP
+   MAP SELECT
 ===================================================== */
 
 mapSelectButton.onclick =
@@ -1626,11 +1624,10 @@ function renderChallengeChoices() {
           selectedMap =
             "virginia";
 
+
           fightButton.textContent =
             "FIGHT MARTIN";
 
-          mapModeLabel.textContent =
-            "MARTIN'S CHALLENGE";
 
           showScreen(
             mapScreen
@@ -1650,7 +1647,7 @@ function renderChallengeChoices() {
 
 
 /* =====================================================
-   CPU CHOICE
+   CPU
 ===================================================== */
 
 function chooseCPU() {
@@ -1675,7 +1672,7 @@ function chooseCPU() {
 
 
 /* =====================================================
-   FIGHT START
+   BEGIN MATCH
 ===================================================== */
 
 fightButton.onclick =
@@ -1743,6 +1740,7 @@ function beginMatch() {
       P1.character
     ].hp;
 
+
   P2.maxHealth =
     STATS[
       P2.character
@@ -1788,15 +1786,18 @@ function beginMatch() {
       P1.character
     );
 
+
   player2SpecialIcon.innerHTML =
     specialIconHTML(
       P2.character
     );
 
+
   player1UltimateIcon.innerHTML =
     ultimateIconHTML(
       P1.character
     );
+
 
   player2UltimateIcon.innerHTML =
     ultimateIconHTML(
@@ -1810,10 +1811,10 @@ function beginMatch() {
   ) {
 
     player1SpecialKey.textContent =
-      "G";
+      "R";
 
     player1UltimateKey.textContent =
-      "H";
+      "F";
 
     player2SpecialKey.textContent =
       "K";
@@ -1826,6 +1827,7 @@ function beginMatch() {
       "hidden"
     );
 
+
     twoPlayerControls.classList.remove(
       "hidden"
     );
@@ -1835,10 +1837,10 @@ function beginMatch() {
   else {
 
     player1SpecialKey.textContent =
-      "K";
+      "R";
 
     player1UltimateKey.textContent =
-      "L";
+      "F";
 
     player2SpecialKey.textContent =
       "CPU";
@@ -1851,6 +1853,7 @@ function beginMatch() {
       "hidden"
     );
 
+
     twoPlayerControls.classList.add(
       "hidden"
     );
@@ -1861,12 +1864,6 @@ function beginMatch() {
   arena.className =
     "arena map-" +
     selectedMap;
-
-
-  battleMapName.textContent =
-    MAP_NAMES[
-      selectedMap
-    ];
 
 
   showScreen(
@@ -1890,7 +1887,7 @@ function beginMatch() {
 
 
 /* =====================================================
-   ROUND RESET
+   PLAYER RESET
 ===================================================== */
 
 function resetPlayerState(
@@ -1901,6 +1898,12 @@ function resetPlayerState(
     p.maxHealth;
 
   p.ultimate =
+    0;
+
+  p.y =
+    0;
+
+  p.vy =
     0;
 
   p.jumping =
@@ -1927,11 +1930,16 @@ function resetPlayerState(
 
   p.fighter.classList.remove(
     "walking",
-    "jumping",
     "crouching",
+    "blocking",
     "stunned",
-    "ko-loser"
+    "ko-loser",
+    "face-left"
   );
+
+
+  p.fighter.style.bottom =
+    "25px";
 
 
   const model =
@@ -1952,6 +1960,10 @@ function resetPlayerState(
 
 }
 
+
+/* =====================================================
+   ROUND START
+===================================================== */
 
 function startRound() {
 
@@ -1979,6 +1991,7 @@ function startRound() {
     P1
   );
 
+
   resetPlayerState(
     P2
   );
@@ -2001,9 +2014,18 @@ function startRound() {
     );
 
 
+  P1.facing =
+    1;
+
+  P2.facing =
+    -1;
+
+
   effects.innerHTML =
     "";
 
+
+  updateFacing();
 
   updatePositions();
 
@@ -2021,6 +2043,12 @@ function startRound() {
   roundLabel.textContent =
     "ROUND " +
     currentRound;
+
+
+  battleMapName.textContent =
+    MAP_NAMES[
+      selectedMap
+    ];
 
 
   battleIntroRound.textContent =
@@ -2150,6 +2178,7 @@ function updateHUD(
       p1Percent +
       "%";
 
+
     player2DamageTrail.style.width =
       p2Percent +
       "%";
@@ -2164,6 +2193,7 @@ function updateHUD(
         player1DamageTrail.style.width =
           p1Percent +
           "%";
+
 
         player2DamageTrail.style.width =
           p2Percent +
@@ -2195,7 +2225,53 @@ function updateHUD(
 
 
 /* =====================================================
-   POSITION
+   FACING
+===================================================== */
+
+function updateFacing() {
+
+  if (
+    P1.x <
+    P2.x
+  ) {
+
+    P1.facing =
+      1;
+
+    P2.facing =
+      -1;
+
+  }
+
+  else {
+
+    P1.facing =
+      -1;
+
+    P2.facing =
+      1;
+
+  }
+
+
+  P1.fighter.classList.toggle(
+    "face-left",
+    P1.facing ===
+      -1
+  );
+
+
+  P2.fighter.classList.toggle(
+    "face-left",
+    P2.facing ===
+      -1
+  );
+
+}
+
+
+/* =====================================================
+   POSITIONS / COLLISION
 ===================================================== */
 
 function updatePositions() {
@@ -2225,26 +2301,43 @@ function updatePositions() {
     );
 
 
+  /*
+    Grounded fighters cannot walk through each other.
+    Airborne fighter can cross.
+  */
+
+  const bothGrounded =
+    !P1.jumping &&
+    !P2.jumping;
+
+
   if (
-    P1.x + 62 >
-    P2.x
+    bothGrounded &&
+    Math.abs(
+      P1.x -
+      P2.x
+    ) <
+    62
   ) {
 
-    const middle =
-      (
-        P1.x +
-        P2.x
-      ) /
-      2;
+    if (
+      P1.x <
+      P2.x
+    ) {
 
+      P1.x =
+        P2.x -
+        62;
 
-    P1.x =
-      middle -
-      32;
+    }
 
-    P2.x =
-      middle +
-      32;
+    else {
+
+      P1.x =
+        P2.x +
+        62;
+
+    }
 
   }
 
@@ -2258,14 +2351,43 @@ function updatePositions() {
     P2.x +
     "px";
 
+
+  P1.fighter.style.bottom =
+    25 +
+    P1.y +
+    "px";
+
+
+  P2.fighter.style.bottom =
+    25 +
+    P2.y +
+    "px";
+
+
+  updateFacing();
+
 }
 
 
-function fighterDistance() {
+/* =====================================================
+   DISTANCE
+===================================================== */
+
+function horizontalDistance() {
 
   return Math.abs(
     P2.x -
     P1.x
+  );
+
+}
+
+
+function verticalDistance() {
+
+  return Math.abs(
+    P2.y -
+    P1.y
   );
 
 }
@@ -2320,6 +2442,10 @@ function movePlayer(
 }
 
 
+/* =====================================================
+   PHYSICS JUMP
+===================================================== */
+
 function jump(
   p
 ) {
@@ -2327,7 +2453,8 @@ function jump(
   if (
     !canAct(p) ||
     p.jumping ||
-    p.crouching
+    p.crouching ||
+    p.blocking
   ) {
 
     return;
@@ -2339,27 +2466,74 @@ function jump(
     true;
 
 
-  p.fighter.classList.add(
-    "jumping"
+  p.vy =
+    13.5;
+
+}
+
+
+/* =====================================================
+   PHYSICS LOOP
+===================================================== */
+
+function physicsLoop() {
+
+  [
+    P1,
+    P2
+  ].forEach(
+    p => {
+
+      if (
+        p.jumping
+      ) {
+
+        p.vy -=
+          0.72;
+
+
+        p.y +=
+          p.vy;
+
+
+        if (
+          p.y <=
+          0
+        ) {
+
+          p.y =
+            0;
+
+          p.vy =
+            0;
+
+          p.jumping =
+            false;
+
+        }
+
+      }
+
+    }
   );
 
 
-  setTimeout(
-    () => {
+  updatePositions();
 
-      p.fighter.classList.remove(
-        "jumping"
-      );
 
-      p.jumping =
-        false;
-
-    },
-    620
+  requestAnimationFrame(
+    physicsLoop
   );
 
 }
 
+
+physicsLoop();
+
+
+/* =====================================================
+   CROUCH
+===================================================== */
 
 function crouch(
   p,
@@ -2368,7 +2542,11 @@ function crouch(
 
   if (
     on &&
-    !canAct(p)
+    (
+      !canAct(p) ||
+      p.jumping ||
+      p.blocking
+    )
   ) {
 
     return;
@@ -2388,6 +2566,10 @@ function crouch(
 }
 
 
+/* =====================================================
+   BLOCK
+===================================================== */
+
 function block(
   p,
   on
@@ -2395,7 +2577,10 @@ function block(
 
   if (
     on &&
-    !canAct(p)
+    (
+      !canAct(p) ||
+      p.jumping
+    )
   ) {
 
     return;
@@ -2405,6 +2590,99 @@ function block(
 
   p.blocking =
     on;
+
+
+  p.fighter.classList.toggle(
+    "blocking",
+    on
+  );
+
+}
+
+
+/* =====================================================
+   DIRECTIONAL BLOCK
+===================================================== */
+
+function isFacingAttacker(
+  target,
+  attacker
+) {
+
+  if (
+    target.facing ===
+      1
+  ) {
+
+    return (
+      attacker.x >
+      target.x
+    );
+
+  }
+
+
+  return (
+    attacker.x <
+    target.x
+  );
+
+}
+
+
+/* =====================================================
+   DODGE CHECKS
+===================================================== */
+
+function targetCanBeHitByGroundAttack(
+  target
+) {
+
+  /*
+    Jumping high enough means low melee/projectiles miss.
+  */
+
+  return (
+    target.y <
+    45
+  );
+
+}
+
+
+function projectileCanHit(
+  target,
+  projectileHeight =
+    "mid"
+) {
+
+  if (
+    projectileHeight ===
+    "low"
+  ) {
+
+    return (
+      target.y <
+      55
+    );
+
+  }
+
+
+  if (
+    projectileHeight ===
+    "mid"
+  ) {
+
+    return (
+      target.y <
+      95
+    );
+
+  }
+
+
+  return true;
 
 }
 
@@ -2418,7 +2696,7 @@ function addComicText(
   colorClass =
     "yellow-text",
   duration =
-    1500
+    1600
 ) {
 
   const el =
@@ -2454,7 +2732,9 @@ function addComicText(
 
 
 function hitSpark(
-  target
+  target,
+  type =
+    "normal"
 ) {
 
   const spark =
@@ -2464,7 +2744,14 @@ function hitSpark(
 
 
   spark.className =
-    "effect hit-spark";
+    "effect " +
+    (
+      type === "ultimate"
+        ? "hit-spark-ultimate"
+        : type === "special"
+          ? "hit-spark-special"
+          : "hit-spark-normal"
+    );
 
 
   spark.style.left =
@@ -2474,7 +2761,9 @@ function hitSpark(
 
 
   spark.style.bottom =
-    "100px";
+    105 +
+    target.y +
+    "px";
 
 
   effects.appendChild(
@@ -2485,7 +2774,7 @@ function hitSpark(
   setTimeout(
     () =>
       spark.remove(),
-    360
+    350
   );
 
 }
@@ -2499,7 +2788,7 @@ function dealDamage(
   attacker,
   target,
   amount,
-  ignoreBlock = false
+  options = {}
 ) {
 
   if (
@@ -2516,20 +2805,51 @@ function dealDamage(
     amount;
 
 
-  if (
+  const type =
+    options.type ||
+    "normal";
+
+
+  const blockable =
+    !options.ignoreBlock;
+
+
+  const validBlock =
     target.blocking &&
-    !ignoreBlock
+    blockable &&
+    isFacingAttacker(
+      target,
+      attacker
+    );
+
+
+  if (
+    validBlock
   ) {
 
-    damage *=
-      0.25;
+    if (
+      type === "special"
+    ) {
+
+      damage *=
+        0.5;
+
+    }
+
+    else {
+
+      damage *=
+        0.25;
+
+    }
 
   }
 
   else {
 
     hitSpark(
-      target
+      target,
+      type
     );
 
   }
@@ -2612,16 +2932,29 @@ function basicAttack(
   setTimeout(
     () => {
 
+      const inRange =
+        horizontalDistance() <=
+        stats.range;
+
+
+      const correctVertical =
+        verticalDistance() <
+        75;
+
+
       if (
-        fighterDistance() <=
-          stats.range &&
-        !target.jumping
+        inRange &&
+        correctVertical
       ) {
 
         dealDamage(
           attacker,
           target,
-          stats.basic
+          stats.basic,
+          {
+            type:
+              "normal"
+          }
         );
 
       }
@@ -2713,6 +3046,7 @@ function beginSpecialCooldown(
 
       p.specialCooldown =
         false;
+
 
       p.specialReadyAt =
         0;
@@ -2821,6 +3155,116 @@ function specialAttack(
 
 
 /* =====================================================
+   PROJECTILE HELPER
+===================================================== */
+
+function moveProjectile(
+  element,
+  attacker,
+  target,
+  speed,
+  hitDistance,
+  onHit,
+  projectileHeight =
+    "mid"
+) {
+
+  let x =
+    attacker.x +
+    (
+      attacker.facing ===
+        1
+        ? 60
+        : -10
+    );
+
+
+  const direction =
+    attacker.facing;
+
+
+  element.style.left =
+    x +
+    "px";
+
+
+  effects.appendChild(
+    element
+  );
+
+
+  const loop =
+    setInterval(
+      () => {
+
+        x +=
+          speed *
+          direction;
+
+
+        element.style.left =
+          x +
+          "px";
+
+
+        if (
+          Math.abs(
+            x -
+            target.x
+          ) <
+          hitDistance
+        ) {
+
+          if (
+            projectileCanHit(
+              target,
+              projectileHeight
+            )
+          ) {
+
+            clearInterval(
+              loop
+            );
+
+
+            element.remove();
+
+
+            onHit();
+
+
+            return;
+
+          }
+
+        }
+
+
+        if (
+          x <
+            -150 ||
+          x >
+            arena.clientWidth +
+            150
+        ) {
+
+          clearInterval(
+            loop
+          );
+
+
+          element.remove();
+
+        }
+
+      },
+      28
+    );
+
+}
+
+
+/* =====================================================
    BRENDAN SPECIAL
 ===================================================== */
 
@@ -2832,7 +3276,7 @@ function bigDrive(
   addComicText(
     "BIG DRIVE!",
     "yellow-text",
-    1500
+    1600
   );
 
 
@@ -2846,79 +3290,36 @@ function bigDrive(
     "effect golf-ball";
 
 
-  let x =
-    attacker.x +
-    (
-      attacker.side === 1
-        ? 70
-        : 0
-    );
-
-
-  const direction =
-    attacker.side === 1
-      ? 1
-      : -1;
-
-
-  ball.style.left =
-    x +
-    "px";
-
-
   ball.style.bottom =
-    "70px";
-
-
-  effects.appendChild(
-    ball
-  );
+    70 +
+    attacker.y +
+    "px";
 
 
   setTimeout(
     () => {
 
-      const loop =
-        setInterval(
-          () => {
+      moveProjectile(
+        ball,
+        attacker,
+        target,
+        14,
+        28,
+        () => {
 
-            x +=
-              14 *
-              direction;
-
-
-            ball.style.left =
-              x +
-              "px";
-
-
-            if (
-              Math.abs(
-                x -
-                target.x
-              ) <
-              30
-            ) {
-
-              clearInterval(
-                loop
-              );
-
-
-              ball.remove();
-
-
-              dealDamage(
-                attacker,
-                target,
-                12
-              );
-
+          dealDamage(
+            attacker,
+            target,
+            12,
+            {
+              type:
+                "special"
             }
+          );
 
-          },
-          24
-        );
+        },
+        "low"
+      );
 
     },
     350
@@ -2928,7 +3329,7 @@ function bigDrive(
 
 
 /* =====================================================
-   GRANDADDY SPECIAL
+   GRANDADDY LADDER
 ===================================================== */
 
 function ladderAttack(
@@ -2943,7 +3344,7 @@ function ladderAttack(
   addComicText(
     "HOLD THIS LADDER!",
     "yellow-text",
-    1600
+    1700
   );
 
 
@@ -2972,7 +3373,9 @@ function ladderAttack(
 
 
   ladder.style.bottom =
-    "20px";
+    20 +
+    target.y +
+    "px";
 
 
   effects.appendChild(
@@ -2983,11 +3386,22 @@ function ladderAttack(
   setTimeout(
     () => {
 
-      dealDamage(
-        attacker,
-        target,
-        12
-      );
+      if (
+        target.y <
+        55
+      ) {
+
+        dealDamage(
+          attacker,
+          target,
+          12,
+          {
+            type:
+              "special"
+          }
+        );
+
+      }
 
 
       ladder.animate(
@@ -2998,12 +3412,12 @@ function ladderAttack(
           },
           {
             transform:
-              "rotate(80deg)"
+              "rotate(78deg)"
           }
         ],
         {
           duration:
-            600,
+            550,
           fill:
             "forwards"
         }
@@ -3019,6 +3433,7 @@ function ladderAttack(
 
       ladder.remove();
 
+
       actionLock =
         false;
 
@@ -3030,8 +3445,27 @@ function ladderAttack(
 
 
 /* =====================================================
-   CONNOR SPECIAL
+   CONNOR SPECIAL — RESTORED PAINT BEAST
 ===================================================== */
+
+function dinosaurHTML() {
+
+  return `
+    <div class="pixel-dino-tail"></div>
+    <div class="pixel-dino-body"></div>
+    <div class="pixel-dino-head"></div>
+    <div class="pixel-dino-eye"></div>
+    <div class="pixel-dino-teeth"></div>
+    <div class="pixel-dino-arm"></div>
+    <div class="pixel-dino-leg-one"></div>
+    <div class="pixel-dino-leg-two"></div>
+    <div class="pixel-dino-paint-one"></div>
+    <div class="pixel-dino-paint-two"></div>
+    <div class="pixel-dino-paint-three"></div>
+  `;
+
+}
+
 
 function paintBeast(
   attacker,
@@ -3041,7 +3475,7 @@ function paintBeast(
   addComicText(
     "PAINT BEAST!",
     "blue-text",
-    1600
+    1700
   );
 
 
@@ -3062,7 +3496,9 @@ function paintBeast(
 
 
   splash.style.bottom =
-    "105px";
+    100 +
+    attacker.y +
+    "px";
 
 
   effects.appendChild(
@@ -3086,27 +3522,17 @@ function paintBeast(
         "effect pixel-dino";
 
 
-      let x =
-        attacker.x;
-
-
-      const direction =
-        attacker.side === 1
-          ? 1
-          : -1;
-
-
-      dino.style.left =
-        x +
-        "px";
+      dino.innerHTML =
+        dinosaurHTML();
 
 
       dino.style.bottom =
-        "45px";
+        "44px";
 
 
       if (
-        attacker.side === 2
+        attacker.facing ===
+        -1
       ) {
 
         dino.style.transform =
@@ -3115,56 +3541,27 @@ function paintBeast(
       }
 
 
-      effects.appendChild(
-        dino
-      );
+      moveProjectile(
+        dino,
+        attacker,
+        target,
+        10,
+        38,
+        () => {
 
-
-      const loop =
-        setInterval(
-          () => {
-
-            x +=
-              9 *
-              direction;
-
-
-            dino.style.left =
-              x +
-              "px";
-
-
-            if (
-              Math.abs(
-                x -
-                target.x
-              ) <
-              40
-            ) {
-
-              clearInterval(
-                loop
-              );
-
-
-              dealDamage(
-                attacker,
-                target,
-                14
-              );
-
-
-              setTimeout(
-                () =>
-                  dino.remove(),
-                300
-              );
-
+          dealDamage(
+            attacker,
+            target,
+            14,
+            {
+              type:
+                "special"
             }
+          );
 
-          },
-          38
-        );
+        },
+        "low"
+      );
 
     },
     800
@@ -3174,7 +3571,7 @@ function paintBeast(
 
 
 /* =====================================================
-   ERIN SPECIAL
+   ERIN PIMPLE PATCH — RESTORED
 ===================================================== */
 
 function pimplePatch(
@@ -3185,7 +3582,7 @@ function pimplePatch(
   addComicText(
     "PIMPLE PATCH ATTACK",
     "pink-text",
-    1700
+    1800
   );
 
 
@@ -3199,74 +3596,64 @@ function pimplePatch(
     "effect pimple-projectile";
 
 
-  let x =
-    attacker.x +
-    45;
-
-
-  const direction =
-    attacker.side === 1
-      ? 1
-      : -1;
-
-
-  patch.style.left =
-    x +
-    "px";
-
-
   patch.style.bottom =
-    "110px";
-
-
-  effects.appendChild(
-    patch
-  );
+    110 +
+    attacker.y +
+    "px";
 
 
   setTimeout(
     () => {
 
-      const loop =
-        setInterval(
-          () => {
+      moveProjectile(
+        patch,
+        attacker,
+        target,
+        13,
+        30,
+        () => {
 
-            x +=
-              13 *
-              direction;
-
-
-            patch.style.left =
-              x +
-              "px";
-
-
-            if (
-              Math.abs(
-                x -
-                target.x
-              ) <
-              30
-            ) {
-
-              clearInterval(
-                loop
-              );
+          const stuck =
+            document.createElement(
+              "div"
+            );
 
 
-              patch.remove();
+          stuck.className =
+            "effect pimple-stuck";
 
 
-              stunTarget(
-                target,
-                2500
-              );
+          stuck.style.left =
+            target.x +
+            "px";
 
-            }
 
-          },
-          28
-        );
+          stuck.style.bottom =
+            65 +
+            target.y +
+            "px";
+
+
+          effects.appendChild(
+            stuck
+          );
+
+
+          stunTarget(
+            target,
+            2500
+          );
+
+
+          setTimeout(
+            () =>
+              stuck.remove(),
+            2500
+          );
+
+        },
+        "mid"
+      );
 
     },
     350
@@ -3276,7 +3663,7 @@ function pimplePatch(
 
 
 /* =====================================================
-   SHANNAN SPECIAL
+   SHANNAN BRAINROT
 ===================================================== */
 
 function brainrot(
@@ -3287,7 +3674,7 @@ function brainrot(
   addComicText(
     "BRAINROT",
     "red-text",
-    1900
+    1950
   );
 
 
@@ -3308,14 +3695,18 @@ function brainrot(
   phone.style.left =
     Math.max(
       10,
-      target.x -
-      25
+      Math.min(
+        arena.clientWidth -
+        160,
+        target.x -
+        20
+      )
     ) +
     "px";
 
 
   phone.style.top =
-    "95px";
+    "90px";
 
 
   effects.appendChild(
@@ -3327,26 +3718,26 @@ function brainrot(
     [
       {
         transform:
-          "scale(.2)",
+          "scale(.2) rotate(-10deg)",
         opacity:
           0
       },
       {
         transform:
-          "scale(1.08)",
+          "scale(1.05) rotate(3deg)",
         opacity:
           1
       },
       {
         transform:
-          "scale(1)",
+          "scale(1) rotate(-2deg)",
         opacity:
           1
       }
     ],
     {
       duration:
-        750,
+        700,
       fill:
         "forwards"
     }
@@ -3369,7 +3760,7 @@ function brainrot(
 
 
 /* =====================================================
-   LIAM SPECIAL
+   LIAM RUGBY PASS
 ===================================================== */
 
 function rugbyPass(
@@ -3380,7 +3771,7 @@ function rugbyPass(
   addComicText(
     "RUGBY PASS!",
     "blue-text",
-    1500
+    1600
   );
 
 
@@ -3410,96 +3801,53 @@ function rugbyPass(
     "effect rugby-projectile";
 
 
-  let x =
-    attacker.x +
-    50;
-
-
-  const direction =
-    attacker.side === 1
-      ? 1
-      : -1;
-
-
-  ball.style.left =
-    x +
-    "px";
-
-
   ball.style.bottom =
-    "105px";
-
-
-  effects.appendChild(
-    ball
-  );
+    105 +
+    attacker.y +
+    "px";
 
 
   setTimeout(
     () => {
 
-      const loop =
-        setInterval(
-          () => {
+      moveProjectile(
+        ball,
+        attacker,
+        target,
+        14,
+        32,
+        () => {
 
-            x +=
-              14 *
-              direction;
-
-
-            ball.style.left =
-              x +
-              "px";
-
-
-            ball.style.transform =
-              `rotate(${x * 2}deg)`;
-
-
-            if (
-              Math.abs(
-                x -
-                target.x
-              ) <
-              32
-            ) {
-
-              clearInterval(
-                loop
-              );
-
-
-              ball.remove();
-
-
-              dealDamage(
-                attacker,
-                target,
-                11
-              );
-
-
-              if (
-                handBall
-              ) {
-
-                setTimeout(
-                  () => {
-
-                    handBall.style.visibility =
-                      "visible";
-
-                  },
-                  300
-                );
-
-              }
-
+          dealDamage(
+            attacker,
+            target,
+            11,
+            {
+              type:
+                "special"
             }
+          );
 
-          },
-          27
-        );
+
+          if (
+            handBall
+          ) {
+
+            setTimeout(
+              () => {
+
+                handBall.style.visibility =
+                  "visible";
+
+              },
+              300
+            );
+
+          }
+
+        },
+        "mid"
+      );
 
     },
     400
@@ -3509,7 +3857,7 @@ function rugbyPass(
 
 
 /* =====================================================
-   GRANDMOMMY SPECIAL
+   GRANDMOMMY DON ASSIST
 ===================================================== */
 
 function donAssist(
@@ -3524,7 +3872,7 @@ function donAssist(
   addComicText(
     "DON, GET OVER HERE!",
     "red-text",
-    1700
+    1800
   );
 
 
@@ -3545,16 +3893,15 @@ function donAssist(
 
 
   let x =
-    attacker.side === 1
+    attacker.facing ===
+      1
       ? -120
       : arena.clientWidth +
         120;
 
 
   const direction =
-    attacker.side === 1
-      ? 1
-      : -1;
+    attacker.facing;
 
 
   assist.style.left =
@@ -3567,7 +3914,8 @@ function donAssist(
 
 
   if (
-    attacker.side === 2
+    direction ===
+    -1
   ) {
 
     assist.style.transform =
@@ -3611,17 +3959,29 @@ function donAssist(
               );
 
 
-              dealDamage(
-                attacker,
-                target,
-                13
-              );
+              if (
+                target.y <
+                60
+              ) {
+
+                dealDamage(
+                  attacker,
+                  target,
+                  13,
+                  {
+                    type:
+                      "special"
+                  }
+                );
+
+              }
 
 
               setTimeout(
                 () => {
 
                   assist.remove();
+
 
                   actionLock =
                     false;
@@ -3644,7 +4004,7 @@ function donAssist(
 
 
 /* =====================================================
-   SEAN SPECIAL
+   SEAN DADDY'S HUNGRY
 ===================================================== */
 
 function daddyHungry(
@@ -3655,7 +4015,7 @@ function daddyHungry(
   addComicText(
     "DADDY'S HUNGRY",
     "red-text",
-    1800
+    1900
   );
 
 
@@ -3663,7 +4023,12 @@ function daddyHungry(
     4;
 
 
-  [0,1,2].forEach(
+  [
+    0,
+    1,
+    2
+  ]
+  .forEach(
     index => {
 
       setTimeout(
@@ -3679,80 +4044,34 @@ function daddyHungry(
             "effect flying-dish";
 
 
-          let x =
-            attacker.x +
-            45;
-
-
-          const direction =
-            attacker.side === 1
-              ? 1
-              : -1;
-
-
-          dish.style.left =
-            x +
-            "px";
-
-
           dish.style.bottom =
             90 +
             index *
-            24 +
+            22 +
             "px";
 
 
-          effects.appendChild(
-            dish
-          );
+          moveProjectile(
+            dish,
+            attacker,
+            target,
+            12,
+            30,
+            () => {
 
-
-          const loop =
-            setInterval(
-              () => {
-
-                /* deliberately slower */
-                x +=
-                  12 *
-                  direction;
-
-
-                dish.style.left =
-                  x +
-                  "px";
-
-
-                dish.style.transform =
-                  `rotate(${x * 3}deg)`;
-
-
-                if (
-                  Math.abs(
-                    x -
-                    target.x
-                  ) <
-                  30
-                ) {
-
-                  clearInterval(
-                    loop
-                  );
-
-
-                  dish.remove();
-
-
-                  dealDamage(
-                    attacker,
-                    target,
-                    damagePerPlate
-                  );
-
+              dealDamage(
+                attacker,
+                target,
+                damagePerPlate,
+                {
+                  type:
+                    "special"
                 }
+              );
 
-              },
-              30
-            );
+            },
+            "mid"
+          );
 
         },
         400 +
@@ -3767,7 +4086,7 @@ function daddyHungry(
 
 
 /* =====================================================
-   MARTIN SPECIAL
+   MARTIN DOG BREATH
 ===================================================== */
 
 function dogBreath(
@@ -3778,7 +4097,7 @@ function dogBreath(
   addComicText(
     "DOG BREATH!",
     "green-text",
-    1700
+    1800
   );
 
 
@@ -3793,7 +4112,8 @@ function dogBreath(
 
 
   gas.style.left =
-    attacker.side === 1
+    attacker.facing ===
+      1
       ? attacker.x +
         40 +
         "px"
@@ -3803,7 +4123,9 @@ function dogBreath(
 
 
   gas.style.bottom =
-    "55px";
+    55 +
+    attacker.y +
+    "px";
 
 
   effects.appendChild(
@@ -3839,8 +4161,10 @@ function dogBreath(
     () => {
 
       if (
-        fighterDistance() <=
-        185
+        horizontalDistance() <=
+          185 &&
+        target.y <
+          80
       ) {
 
         stunTarget(
@@ -3963,7 +4287,7 @@ function ultimateAttack(
 
 
 /* =====================================================
-   BRENDAN ULTIMATE - 24
+   BRENDAN IPO — RESTORED GRAPHICS / NEW TIMING
 ===================================================== */
 
 function ipo(
@@ -3976,7 +4300,11 @@ function ipo(
 
 
   const hits =
-    [7,8,9];
+    [
+      7,
+      8,
+      9
+    ];
 
 
   const labels =
@@ -3987,19 +4315,55 @@ function ipo(
     ];
 
 
+  const icons =
+    [
+      "📱",
+      "📈",
+      "💰"
+    ];
+
+
   hits.forEach(
     (
       damage,
-      i
+      index
     ) => {
 
       setTimeout(
         () => {
 
-          addComicText(
-            labels[i],
-            "yellow-text",
-            1100
+          const card =
+            document.createElement(
+              "div"
+            );
+
+
+          card.className =
+            "effect ipo-card";
+
+
+          card.innerHTML =
+            icons[index] +
+            "<br>" +
+            labels[index];
+
+
+          card.style.left =
+            38 +
+            index *
+            8 +
+            "%";
+
+
+          card.style.top =
+            80 +
+            index *
+            35 +
+            "px";
+
+
+          effects.appendChild(
+            card
           );
 
 
@@ -4007,12 +4371,24 @@ function ipo(
             attacker,
             target,
             damage,
-            true
+            {
+              type:
+                "ultimate",
+              ignoreBlock:
+                true
+            }
+          );
+
+
+          setTimeout(
+            () =>
+              card.remove(),
+            850
           );
 
         },
         300 +
-        i *
+        index *
         700
       );
 
@@ -4027,14 +4403,14 @@ function ipo(
         false;
 
     },
-    2600
+    2700
   );
 
 }
 
 
 /* =====================================================
-   GRANDADDY ULTIMATE
+   GRANDADDY YAP ALERT
 ===================================================== */
 
 function yapAlert(
@@ -4099,12 +4475,14 @@ function yapAlert(
         siren1.className =
           "effect yap-siren";
 
+
         siren2.className =
           "effect yap-siren";
 
 
         siren1.style.left =
           "10%";
+
 
         siren2.style.right =
           "10%";
@@ -4113,6 +4491,7 @@ function yapAlert(
         siren1.style.top =
           "95px";
 
+
         siren2.style.top =
           "95px";
 
@@ -4120,6 +4499,7 @@ function yapAlert(
         effects.appendChild(
           siren1
         );
+
 
         effects.appendChild(
           siren2
@@ -4150,6 +4530,7 @@ function yapAlert(
     150
   );
 
+
   alertWave(
     1150
   );
@@ -4175,7 +4556,7 @@ function yapAlert(
 
 
 /* =====================================================
-   CONNOR ULTIMATE
+   CONNOR FRIED CHICKEN
 ===================================================== */
 
 function friedChicken(
@@ -4189,39 +4570,38 @@ function friedChicken(
   addComicText(
     "FRIED CHICKEN FEAST!",
     "yellow-text",
-    1800
+    1900
   );
 
 
-  const chicken =
+  const bucket =
     document.createElement(
       "div"
     );
 
 
-  chicken.className =
-    "effect";
+  bucket.className =
+    "effect chicken-bucket";
 
 
-  chicken.textContent =
-    "🍗 🍗 🍗";
+  bucket.textContent =
+    "🍗 🍗";
 
 
-  chicken.style.fontSize =
-    "50px";
-
-
-  chicken.style.left =
+  bucket.style.left =
     attacker.x +
+    20 +
     "px";
 
 
-  chicken.style.bottom =
-    "100px";
+  bucket.style.bottom =
+    95 +
+    attacker.y +
+    "px";
 
 
   effects.appendChild(
-    chicken
+    bucket
   );
 
 
@@ -4239,7 +4619,7 @@ function friedChicken(
       updateHUD();
 
 
-      chicken.remove();
+      bucket.remove();
 
 
       actionLock =
@@ -4253,7 +4633,7 @@ function friedChicken(
 
 
 /* =====================================================
-   ERIN ULTIMATE - 26
+   ERIN LAUNDRY — KEEP CURRENT
 ===================================================== */
 
 function laundry(
@@ -4268,7 +4648,7 @@ function laundry(
   addComicText(
     "LAUNDRY AVALANCHE!",
     "pink-text",
-    1800
+    1900
   );
 
 
@@ -4281,14 +4661,19 @@ function laundry(
     ];
 
 
-  const damageHits =
-    [5,5,7,9];
+  const damages =
+    [
+      5,
+      5,
+      7,
+      9
+    ];
 
 
   clothes.forEach(
     (
       item,
-      i
+      index
     ) => {
 
       setTimeout(
@@ -4301,21 +4686,18 @@ function laundry(
 
 
           cloth.className =
-            "effect";
+            "effect laundry-item";
 
 
           cloth.textContent =
             item;
 
 
-          cloth.style.fontSize =
-            "70px";
-
-
           cloth.style.left =
             target.x +
             (
-              i % 2 === 0
+              index % 2 ===
+                0
                 ? -10
                 : 30
             ) +
@@ -4357,8 +4739,13 @@ function laundry(
               dealDamage(
                 attacker,
                 target,
-                damageHits[i],
-                true
+                damages[index],
+                {
+                  type:
+                    "ultimate",
+                  ignoreBlock:
+                    true
+                }
               );
 
             },
@@ -4373,7 +4760,7 @@ function laundry(
           );
 
         },
-        i *
+        index *
         420
       );
 
@@ -4388,14 +4775,14 @@ function laundry(
         false;
 
     },
-    2600
+    2700
   );
 
 }
 
 
 /* =====================================================
-   SHANNAN ULTIMATE - 24
+   SHANNAN CONSPIRACY
 ===================================================== */
 
 function conspiracy(
@@ -4410,7 +4797,7 @@ function conspiracy(
   addComicText(
     "CONSPIRACY",
     "green-text",
-    1900
+    2000
   );
 
 
@@ -4424,12 +4811,21 @@ function conspiracy(
     "effect ufo";
 
 
+  ufo.innerHTML = `
+    <div class="ufo-dome"></div>
+    <div class="ufo-body"></div>
+    <div class="ufo-light one"></div>
+    <div class="ufo-light two"></div>
+    <div class="ufo-light three"></div>
+  `;
+
+
   ufo.style.left =
-    "-220px";
+    "-210px";
 
 
   ufo.style.top =
-    "40px";
+    "35px";
 
 
   effects.appendChild(
@@ -4440,8 +4836,12 @@ function conspiracy(
   const destination =
     Math.max(
       40,
-      target.x -
-      45
+      Math.min(
+        arena.clientWidth -
+        200,
+        target.x -
+        45
+      )
     );
 
 
@@ -4453,7 +4853,7 @@ function conspiracy(
       },
       {
         transform:
-          `translateX(${destination + 220}px)`
+          `translateX(${destination + 210}px)`
       }
     ],
     {
@@ -4485,7 +4885,7 @@ function conspiracy(
 
 
       beam.style.top =
-        "95px";
+        "90px";
 
 
       effects.appendChild(
@@ -4500,18 +4900,23 @@ function conspiracy(
             attacker,
             target,
             24,
-            true
+            {
+              type:
+                "ultimate",
+              ignoreBlock:
+                true
+            }
           );
 
         },
-        450
+        350
       );
 
 
       setTimeout(
         () =>
           beam.remove(),
-        1150
+        1000
       );
 
     },
@@ -4524,6 +4929,7 @@ function conspiracy(
 
       ufo.remove();
 
+
       actionLock =
         false;
 
@@ -4535,7 +4941,7 @@ function conspiracy(
 
 
 /* =====================================================
-   LIAM ULTIMATE - 26
+   LIAM SPLASH ZONE
 ===================================================== */
 
 function splashZone(
@@ -4550,7 +4956,7 @@ function splashZone(
   addComicText(
     "SPLASH ZONE",
     "blue-text",
-    1900
+    2000
   );
 
 
@@ -4582,13 +4988,20 @@ function splashZone(
 
 
   const damages =
-    [4,4,4,4,5,5];
+    [
+      4,
+      4,
+      4,
+      4,
+      5,
+      5
+    ];
 
 
   foods.forEach(
     (
       food,
-      i
+      index
     ) => {
 
       setTimeout(
@@ -4608,114 +5021,76 @@ function splashZone(
             food;
 
 
-          let x =
-            attacker.x +
-            45;
-
-
-          const direction =
-            attacker.side === 1
-              ? 1
-              : -1;
-
-
-          projectile.style.left =
-            x +
-            "px";
-
-
           projectile.style.bottom =
             80 +
             (
-              i %
+              index %
               3
             ) *
             28 +
             "px";
 
 
-          effects.appendChild(
-            projectile
-          );
+          moveProjectile(
+            projectile,
+            attacker,
+            target,
+            14,
+            35,
+            () => {
+
+              const splat =
+                document.createElement(
+                  "div"
+                );
 
 
-          const loop =
-            setInterval(
-              () => {
-
-                x +=
-                  14 *
-                  direction;
+              splat.className =
+                "effect food-splat";
 
 
-                projectile.style.left =
-                  x +
-                  "px";
+              splat.style.left =
+                target.x +
+                "px";
 
 
-                if (
-                  Math.abs(
-                    x -
-                    target.x
-                  ) <
-                  35
-                ) {
-
-                  clearInterval(
-                    loop
-                  );
+              splat.style.bottom =
+                100 +
+                target.y +
+                "px";
 
 
-                  projectile.remove();
+              effects.appendChild(
+                splat
+              );
 
 
-                  const splat =
-                    document.createElement(
-                      "div"
-                    );
+              setTimeout(
+                () =>
+                  splat.remove(),
+                350
+              );
 
 
-                  splat.className =
-                    "effect food-splat";
-
-
-                  splat.style.left =
-                    target.x +
-                    "px";
-
-
-                  splat.style.bottom =
-                    "100px";
-
-
-                  effects.appendChild(
-                    splat
-                  );
-
-
-                  setTimeout(
-                    () =>
-                      splat.remove(),
-                    350
-                  );
-
-
-                  dealDamage(
-                    attacker,
-                    target,
-                    damages[i],
+              dealDamage(
+                attacker,
+                target,
+                damages[index],
+                {
+                  type:
+                    "ultimate",
+                  ignoreBlock:
                     true
-                  );
-
                 }
+              );
 
-              },
-              26
-            );
+            },
+            "high"
+          );
 
         },
         350 +
-        i *
+        index *
         330
       );
 
@@ -4740,14 +5115,14 @@ function splashZone(
         false;
 
     },
-    2900
+    3000
   );
 
 }
 
 
 /* =====================================================
-   GRANDMOMMY ULTIMATE - 30
+   GRANDMOMMY CHAIR YOGA — RESTORED VISUAL
 ===================================================== */
 
 function chairYoga(
@@ -4762,7 +5137,7 @@ function chairYoga(
   addComicText(
     "CHAIR YOGA",
     "purple-text",
-    2000
+    2100
   );
 
 
@@ -4774,6 +5149,12 @@ function chairYoga(
 
   chair.className =
     "effect yoga-chair";
+
+
+  chair.innerHTML = `
+    <div class="yoga-chair-back"></div>
+    <div class="yoga-chair-seat"></div>
+  `;
 
 
   chair.style.left =
@@ -4790,38 +5171,42 @@ function chairYoga(
   );
 
 
-  attacker.fighter
-    .querySelector(
+  const visual =
+    attacker.fighter.querySelector(
       ".visual-layer"
-    )
-    .animate(
-      [
-        {
-          transform:
-            "translateY(0)"
-        },
-        {
-          transform:
-            "translateY(20px) scaleY(.8)"
-        },
-        {
-          transform:
-            "translateY(20px) rotate(-8deg) scaleY(.8)"
-        },
-        {
-          transform:
-            "translateY(20px) rotate(8deg) scaleY(.8)"
-        },
-        {
-          transform:
-            "translateY(0)"
-        }
-      ],
-      {
-        duration:
-          1900
-      }
     );
+
+
+  visual.animate(
+    [
+      {
+        transform:
+          "translateY(0)"
+      },
+      {
+        transform:
+          "translateY(18px) scaleY(.82)"
+      },
+      {
+        transform:
+          "translateY(18px) rotate(-7deg) scaleY(.82)"
+      },
+      {
+        transform:
+          "translateY(18px) rotate(7deg) scaleY(.82)"
+      },
+      {
+        transform:
+          "translateY(0)"
+      }
+    ],
+    {
+      duration:
+        1800,
+      fill:
+        "forwards"
+    }
+  );
 
 
   setTimeout(
@@ -4832,9 +5217,7 @@ function chairYoga(
 
 
       const direction =
-        attacker.side === 1
-          ? 1
-          : -1;
+        attacker.facing;
 
 
       const loop =
@@ -4875,7 +5258,12 @@ function chairYoga(
                 attacker,
                 target,
                 30,
-                true
+                {
+                  type:
+                    "ultimate",
+                  ignoreBlock:
+                    true
+                }
               );
 
             }
@@ -4885,7 +5273,7 @@ function chairYoga(
         );
 
     },
-    2000
+    1900
   );
 
 
@@ -4903,8 +5291,27 @@ function chairYoga(
 
 
 /* =====================================================
-   SEAN ULTIMATE - 26
+   SEAN ZOMBIE DEER — RESTORED QUALITY
 ===================================================== */
+
+function deerHTML() {
+
+  return `
+    <div class="deer-body"></div>
+
+    <div class="deer-head">
+      <div class="deer-eye left"></div>
+      <div class="deer-eye right"></div>
+    </div>
+
+    <div class="deer-leg one"></div>
+    <div class="deer-leg two"></div>
+    <div class="deer-leg three"></div>
+    <div class="deer-leg four"></div>
+  `;
+
+}
+
 
 function zombieDeer(
   attacker,
@@ -4918,12 +5325,15 @@ function zombieDeer(
   addComicText(
     "ZOMBIE DEER",
     "green-text",
-    1800
+    1900
   );
 
 
-  [0,1].forEach(
-    i => {
+  [
+    0,
+    1
+  ].forEach(
+    index => {
 
       const grave =
         document.createElement(
@@ -4932,7 +5342,7 @@ function zombieDeer(
 
 
       grave.className =
-        "effect grave";
+        "effect deer-grave";
 
 
       grave.textContent =
@@ -4940,13 +5350,14 @@ function zombieDeer(
 
 
       const start =
-        attacker.side === 1
+        attacker.facing ===
+          1
           ? 70 +
-            i *
+            index *
             100
           : arena.clientWidth -
             260 +
-            i *
+            index *
             100;
 
 
@@ -4977,14 +5388,16 @@ function zombieDeer(
             "effect zombie-deer";
 
 
+          deer.innerHTML =
+            deerHTML();
+
+
           let x =
             start;
 
 
           const direction =
-            attacker.side === 1
-              ? 1
-              : -1;
+            attacker.facing;
 
 
           deer.style.left =
@@ -4993,11 +5406,12 @@ function zombieDeer(
 
 
           deer.style.bottom =
-            "40px";
+            "30px";
 
 
           if (
-            attacker.side === 2
+            direction ===
+            -1
           ) {
 
             deer.style.transform =
@@ -5038,12 +5452,24 @@ function zombieDeer(
                   );
 
 
-                  dealDamage(
-                    attacker,
-                    target,
-                    13,
-                    true
-                  );
+                  if (
+                    target.y <
+                    60
+                  ) {
+
+                    dealDamage(
+                      attacker,
+                      target,
+                      13,
+                      {
+                        type:
+                          "ultimate",
+                        ignoreBlock:
+                          true
+                      }
+                    );
+
+                  }
 
 
                   setTimeout(
@@ -5060,7 +5486,7 @@ function zombieDeer(
 
         },
         700 +
-        i *
+        index *
         200
       );
 
@@ -5089,8 +5515,40 @@ function zombieDeer(
 
 
 /* =====================================================
-   MARTIN ULTIMATE - 32
+   CLYDE — RESTORED QUALITY
 ===================================================== */
+
+function clydeHTML() {
+
+  return `
+    <div class="clyde-tail"></div>
+
+    <div class="clyde-body">
+      <div class="clyde-zombie-side"></div>
+    </div>
+
+    <div class="clyde-head">
+
+      <div class="clyde-face-light"></div>
+
+      <div class="clyde-eye normal-eye"></div>
+      <div class="clyde-eye zombie-eye"></div>
+
+      <div class="clyde-nose"></div>
+
+      <div class="clyde-ear left"></div>
+      <div class="clyde-ear right"></div>
+
+    </div>
+
+    <div class="clyde-leg one"></div>
+    <div class="clyde-leg two"></div>
+    <div class="clyde-leg three"></div>
+    <div class="clyde-leg four"></div>
+  `;
+
+}
+
 
 function clydeReturns(
   attacker,
@@ -5104,7 +5562,7 @@ function clydeReturns(
   addComicText(
     "CLYDE RETURNS!",
     "green-text",
-    1800
+    1900
   );
 
 
@@ -5124,7 +5582,12 @@ function clydeReturns(
 
   grave.style.left =
     attacker.x +
-    60 +
+    (
+      attacker.facing ===
+        1
+        ? 60
+        : -70
+    ) +
     "px";
 
 
@@ -5150,15 +5613,22 @@ function clydeReturns(
         "effect clyde-model";
 
 
+      clyde.innerHTML =
+        clydeHTML();
+
+
       let x =
         attacker.x +
-        50;
+        (
+          attacker.facing ===
+            1
+            ? 50
+            : -45
+        );
 
 
       const direction =
-        attacker.side === 1
-          ? 1
-          : -1;
+        attacker.facing;
 
 
       clyde.style.left =
@@ -5168,6 +5638,17 @@ function clydeReturns(
 
       clyde.style.bottom =
         "45px";
+
+
+      if (
+        direction ===
+        -1
+      ) {
+
+        clyde.style.transform =
+          "scaleX(-1)";
+
+      }
 
 
       effects.appendChild(
@@ -5202,12 +5683,24 @@ function clydeReturns(
               );
 
 
-              dealDamage(
-                attacker,
-                target,
-                32,
-                true
-              );
+              if (
+                target.y <
+                70
+              ) {
+
+                dealDamage(
+                  attacker,
+                  target,
+                  32,
+                  {
+                    type:
+                      "ultimate",
+                    ignoreBlock:
+                      true
+                  }
+                );
+
+              }
 
 
               setTimeout(
@@ -5231,6 +5724,7 @@ function clydeReturns(
     () => {
 
       grave.remove();
+
 
       actionLock =
         false;
@@ -5280,6 +5774,7 @@ function cpuLoop(
       160
     );
 
+
     return;
 
   }
@@ -5291,8 +5786,8 @@ function cpuLoop(
     ];
 
 
-  const d =
-    fighterDistance();
+  const distance =
+    horizontalDistance();
 
 
   const roll =
@@ -5305,7 +5800,26 @@ function cpuLoop(
       "martin";
 
 
+  /*
+    Dodge sometimes when opponent is attacking.
+  */
+
   if (
+    P1.attackCooldown &&
+    distance <
+      150 &&
+    roll <
+      0.18
+  ) {
+
+    jump(
+      P2
+    );
+
+  }
+
+
+  else if (
     P2.character ===
       "connor" &&
     P2.ultimate >=
@@ -5343,16 +5857,19 @@ function cpuLoop(
 
 
   else if (
-    d >
+    distance >
     stats.range +
     12
   ) {
 
     movePlayer(
       P2,
-      boss
-        ? -32
-        : -27
+      P2.facing *
+      (
+        boss
+          ? 32
+          : 27
+      )
     );
 
   }
@@ -5387,7 +5904,7 @@ function cpuLoop(
 
   else if (
     roll <
-    0.91
+      0.91
   ) {
 
     block(
@@ -5436,7 +5953,7 @@ function cpuLoop(
 
 
 /* =====================================================
-   KO / ROUND
+   KO
 ===================================================== */
 
 function checkKO() {
@@ -5491,7 +6008,8 @@ function finishRound(
 
 
   if (
-    winner === P1
+    winner ===
+    P1
   ) {
 
     player1Wins++;
@@ -5741,7 +6259,7 @@ newGameButton.onclick =
 
 
 /* =====================================================
-   1P BUTTON CONTROLS
+   ONSCREEN BUTTONS
 ===================================================== */
 
 onePlayerAttackButton.onclick =
@@ -5765,22 +6283,6 @@ onePlayerUltimateButton.onclick =
     ultimateAttack(
       P1,
       P2
-    );
-
-
-onePlayerBlockButton.onpointerdown =
-  () =>
-    block(
-      P1,
-      true
-    );
-
-
-onePlayerBlockButton.onpointerup =
-  () =>
-    block(
-      P1,
-      false
     );
 
 
@@ -5828,9 +6330,10 @@ document.addEventListener(
     }
 
 
-    /* =======================
+    /* =================================================
        ONE PLAYER
-    ======================= */
+       WASD + Q/E/R/F
+    ================================================= */
 
     if (
       gameMode ===
@@ -5838,11 +6341,7 @@ document.addEventListener(
     ) {
 
       if (
-        (
-          key === "w" ||
-          key === "arrowup" ||
-          key === " "
-        ) &&
+        key === "w" &&
         !event.repeat
       ) {
 
@@ -5854,8 +6353,7 @@ document.addEventListener(
 
 
       if (
-        key === "s" ||
-        key === "arrowdown"
+        key === "s"
       ) {
 
         crouch(
@@ -5867,7 +6365,7 @@ document.addEventListener(
 
 
       if (
-        key === "i"
+        key === "q"
       ) {
 
         block(
@@ -5879,7 +6377,7 @@ document.addEventListener(
 
 
       if (
-        key === "j" &&
+        key === "e" &&
         !event.repeat
       ) {
 
@@ -5892,7 +6390,7 @@ document.addEventListener(
 
 
       if (
-        key === "k" &&
+        key === "r" &&
         !event.repeat
       ) {
 
@@ -5905,7 +6403,7 @@ document.addEventListener(
 
 
       if (
-        key === "l" &&
+        key === "f" &&
         !event.repeat
       ) {
 
@@ -5922,10 +6420,10 @@ document.addEventListener(
     }
 
 
-    /* =======================
-       TWO PLAYER — PLAYER 1
-       WASD + R/F/G/H
-    ======================= */
+    /* =================================================
+       TWO PLAYER P1
+       WASD + Q/E/R/F
+    ================================================= */
 
     if (
       key === "w" &&
@@ -5952,7 +6450,7 @@ document.addEventListener(
 
 
     if (
-      key === "r"
+      key === "q"
     ) {
 
       block(
@@ -5964,7 +6462,7 @@ document.addEventListener(
 
 
     if (
-      key === "f" &&
+      key === "e" &&
       !event.repeat
     ) {
 
@@ -5977,7 +6475,7 @@ document.addEventListener(
 
 
     if (
-      key === "g" &&
+      key === "r" &&
       !event.repeat
     ) {
 
@@ -5990,7 +6488,7 @@ document.addEventListener(
 
 
     if (
-      key === "h" &&
+      key === "f" &&
       !event.repeat
     ) {
 
@@ -6002,10 +6500,10 @@ document.addEventListener(
     }
 
 
-    /* =======================
-       TWO PLAYER — PLAYER 2
+    /* =================================================
+       TWO PLAYER P2
        ARROWS + I/J/K/L
-    ======================= */
+    ================================================= */
 
     if (
       key === "arrowup" &&
@@ -6103,8 +6601,7 @@ document.addEventListener(
     ) {
 
       if (
-        key === "s" ||
-        key === "arrowdown"
+        key === "s"
       ) {
 
         crouch(
@@ -6116,7 +6613,7 @@ document.addEventListener(
 
 
       if (
-        key === "i"
+        key === "q"
       ) {
 
         block(
@@ -6145,7 +6642,7 @@ document.addEventListener(
 
 
     if (
-      key === "r"
+      key === "q"
     ) {
 
       block(
@@ -6209,6 +6706,7 @@ function movementLoop() {
         -6
       );
 
+
       p1Moving =
         true;
 
@@ -6223,6 +6721,7 @@ function movementLoop() {
         P1,
         6
       );
+
 
       p1Moving =
         true;
@@ -6247,6 +6746,7 @@ function movementLoop() {
         -6
       );
 
+
       p2Moving =
         true;
 
@@ -6261,6 +6761,7 @@ function movementLoop() {
         P2,
         6
       );
+
 
       p2Moving =
         true;
@@ -6297,7 +6798,7 @@ movementLoop();
 
 
 /* =====================================================
-   ABILITY ORB LOOP
+   ABILITY ORBS
 ===================================================== */
 
 function orbLoop() {
@@ -6366,6 +6867,16 @@ function orbLoop() {
 
 
 orbLoop();
+
+
+/* =====================================================
+   RESIZE
+===================================================== */
+
+window.addEventListener(
+  "resize",
+  updatePositions
+);
 
 
 /* =====================================================
