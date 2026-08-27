@@ -6376,30 +6376,31 @@ document.addEventListener(
       }
 
 
-      if (
-        key === "e" &&
-        !event.repeat
-      ) {
+     if (
+  key === "r" &&
+  !event.repeat
+) {
 
-        basicAttack(
-          P1,
-          P2
-        );
+  basicAttack(
+    P1,
+    P2
+  );
 
-      }
+}
 
 
-      if (
-        key === "r" &&
-        !event.repeat
-      ) {
+if (
+  key === "e" &&
+  !event.repeat
+) {
 
-        specialAttack(
-          P1,
-          P2
-        );
+  specialAttack(
+    P1,
+    P2
+  );
 
-      }
+}
+
 
 
       if (
