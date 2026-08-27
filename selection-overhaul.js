@@ -53,6 +53,24 @@
               document.body.appendChild(
                 finishing
               );
+
+              finishing.addEventListener(
+                "load",
+                () => {
+                  const cleanup =
+                    document.createElement("script");
+
+                  cleanup.src =
+                    "map-cleanup.js?v=1";
+
+                  document.body.appendChild(
+                    cleanup
+                  );
+                },
+                {
+                  once: true
+                }
+              );
             },
             {
               once: true
