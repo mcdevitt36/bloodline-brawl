@@ -9,11 +9,12 @@
 html,
 body {
   margin: 0;
+  width: 100%;
   min-height: 100%;
 }
 
 body {
-  background: #070b11;
+  background: #080c13;
   color: white;
 
   font-family:
@@ -21,8 +22,8 @@ body {
     Helvetica,
     sans-serif;
 
-  overflow-x: hidden;
   user-select: none;
+  overflow-x: hidden;
 }
 
 button {
@@ -31,23 +32,23 @@ button {
 
 #game {
   width: 100%;
-  max-width: 1280px;
+  max-width: 1260px;
   margin: auto;
 }
 
 .screen {
   display: none;
 
+  width: 100%;
   min-height: 100vh;
 
   padding:
     18px
     22px;
 
+  flex-direction: column;
   align-items: center;
   justify-content: center;
-
-  flex-direction: column;
 }
 
 .screen.active {
@@ -64,77 +65,78 @@ button {
 ===================================================== */
 
 .big-button {
-  min-width: 220px;
+  min-width: 210px;
 
   padding:
-    13px
+    12px
     34px;
+
+  background: #ffd52a;
+  color: #111;
 
   border:
     4px solid #111;
 
   border-radius: 8px;
 
-  background: #ffd529;
-
-  color: #111;
+  box-shadow:
+    0 6px 0 #111;
 
   font-size: 21px;
-
   font-weight: 1000;
 
   cursor: pointer;
-
-  box-shadow:
-    0 6px 0 #111;
 }
 
 .big-button:disabled {
-  filter: grayscale(1);
   opacity: 0.45;
-  cursor: default;
+  filter: grayscale(1);
 }
 
 .secondary-button {
   min-width: 120px;
 
   padding:
-    12px
-    22px;
+    12px 22px;
+
+  background: #18222d;
+  color: white;
 
   border:
-    3px solid #788492;
+    3px solid #7b8792;
 
   border-radius: 7px;
 
-  background: #16202a;
-
-  color: white;
-
   font-weight: 900;
-
   cursor: pointer;
 }
 
 
 /* =====================================================
-   TITLE SCREEN
+   TITLE SCREEN — FITS NORMAL LAPTOP
 ===================================================== */
 
 .title-screen {
-  height: 100vh;
-  min-height: 720px;
-
   position: relative;
+
+  width: 100%;
+
+  height: 100vh;
+  height: 100dvh;
+
+  min-height: 0;
+
+  padding:
+    8px 18px;
 
   overflow: hidden;
 
   background:
     linear-gradient(
-      #198bcf 0%,
-      #65bcea 55%,
-      #4b9637 56%,
-      #2d741f 100%
+      #258fd3 0%,
+      #64bce8 55%,
+      #4b9636 56%,
+      #2c731f 100%
     );
 }
 
@@ -142,116 +144,110 @@ button {
   content: "";
 
   position: absolute;
-
   inset: 0;
 
   background:
     repeating-conic-gradient(
-      from -15deg at 50% 40%,
-      rgba(255,255,255,0.05) 0deg 8deg,
-      transparent 8deg 16deg
+      from -15deg at 50% 39%,
+      rgba(255,255,255,0.05) 0deg 9deg,
+      transparent 9deg 18deg
     );
 }
 
 .title-content {
-  width: 100%;
-
   position: relative;
   z-index: 5;
+
+  width: 100%;
+  height: 100%;
 
   display: flex;
 
   flex-direction: column;
 
   align-items: center;
-}
-
-.studio-name {
-  font-family:
-    "Arial Black",
-    Impact,
-    sans-serif;
-
-  font-size: 25px;
-
-  letter-spacing: 7px;
-
-  text-shadow:
-    4px 4px #111;
-}
-
-.presents {
-  font-size: 10px;
-
-  letter-spacing: 7px;
-
-  font-weight: 1000;
-
-  margin-top: 3px;
+  justify-content: center;
 }
 
 .game-logo {
   margin:
-    8px
+    0
     0
     0;
-
-  font-family:
-    Impact,
-    "Arial Black",
-    sans-serif;
 
   line-height: 0.78;
 
   text-align: center;
 
+  font-family:
+    Impact,
+    "Arial Black",
+    sans-serif;
+
   font-size:
     clamp(
-      70px,
-      8vw,
-      110px
+      58px,
+      7vw,
+      94px
     );
 
-  color: #ffd126;
+  letter-spacing: 2px;
+
+  color: #ffd129;
 
   text-shadow:
-    8px 8px #111;
+    7px 7px 0 #000;
 }
 
 .game-logo span {
   display: block;
-  color: #ec372e;
+  color: #ef352b;
 }
 
 .tagline {
-  margin-top: 22px;
+  margin-top: 15px;
 
   padding:
-    9px 28px;
+    8px
+    24px;
 
-  background: #080808;
+  background: #070707;
+
+  font-size:
+    clamp(
+      11px,
+      1.2vw,
+      16px
+    );
 
   font-weight: 1000;
-
   letter-spacing: 4px;
 }
 
 .title-versus-panel {
+  width: 100%;
+
   display: grid;
 
   grid-template-columns:
-    220px
-    120px
-    220px;
+    200px
+    95px
+    200px;
 
   align-items: center;
+  justify-content: center;
 
-  gap: 22px;
+  column-gap: 18px;
 
-  margin-top: 20px;
+  margin:
+    13px
+    auto
+    5px;
 }
 
 .title-fighter {
+  width: 200px;
+
   display: flex;
 
   flex-direction: column;
@@ -260,8 +256,8 @@ button {
 }
 
 .title-character-space {
-  width: 160px;
-  height: 205px;
+  width: 145px;
+  height: 175px;
 
   display: flex;
 
@@ -274,13 +270,17 @@ button {
 .title-character-space
 .martin-model {
   transform:
-    scale(1.05);
+    scale(0.92);
 
   transform-origin:
     bottom center;
 }
 
-.title-vs {
+.title-name {
+  width: 100%;
+
+  margin-top: 2px;
+
   text-align: center;
 
   font-family:
@@ -288,11 +288,30 @@ button {
     "Arial Black",
     sans-serif;
 
-  font-size: 66px;
+  font-size: 20px;
+
+  text-shadow:
+    3px 3px #111;
+}
+
+.title-vs {
+  width: 95px;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  font-family:
+    Impact,
+    "Arial Black",
+    sans-serif;
+
+  font-size: 55px;
 
   font-style: italic;
 
-  color: #ffd529;
+  color: #ffd52a;
 
   -webkit-text-stroke:
     3px #111;
@@ -301,47 +320,32 @@ button {
     5px 5px #111;
 }
 
-.title-name {
-  margin-top: 9px;
-
-  font-family:
-    Impact,
-    sans-serif;
-
-  font-size: 23px;
-
-  text-shadow:
-    3px 3px #111;
-}
-
 .mode-title {
-  margin-top: 12px;
+  margin-top: 5px;
 
-  color: #fff;
-
-  font-size: 11px;
+  font-size: 10px;
 
   font-weight: 1000;
-
   letter-spacing: 4px;
 }
 
 .mode-buttons {
   display: flex;
 
-  gap: 10px;
+  gap: 8px;
 
   margin:
-    8px
+    6px
     0
-    12px;
+    7px;
 }
 
 .mode-button {
-  min-width: 150px;
+  min-width: 135px;
 
   padding:
-    10px 18px;
+    7px
+    14px;
 
   background:
     rgba(8,15,23,0.88);
@@ -353,7 +357,7 @@ button {
 
   border-radius: 7px;
 
-  font-size: 15px;
+  font-size: 13px;
 
   font-weight: 1000;
 
@@ -363,9 +367,9 @@ button {
 .mode-button small {
   display: block;
 
-  margin-top: 3px;
+  margin-top: 2px;
 
-  font-size: 8px;
+  font-size: 7px;
 
   color: #aeb8c1;
 
@@ -376,23 +380,36 @@ button {
   border-color: #ffd529;
 
   box-shadow:
-    0 0 17px rgba(255,213,41,0.65);
+    0 0 16px rgba(255,213,41,0.65);
+}
+
+.title-start {
+  padding:
+    9px
+    34px;
+
+  font-size: 19px;
 }
 
 .challenge-button {
-  margin-top: 10px;
+  margin-top: 7px;
 
   padding:
-    8px 20px;
+    6px
+    18px;
 
-  background: #351010;
+  color: #fff;
+
+  background:
+    linear-gradient(
+      #4e1515,
+      #250b0b
+    );
 
   border:
-    3px solid #ffd529;
+    3px solid #ffcc38;
 
   border-radius: 7px;
-
-  color: white;
 
   font-weight: 1000;
 
@@ -403,7 +420,7 @@ button {
 
 
 /* =====================================================
-   SELECT SCREENS
+   SELECT
 ===================================================== */
 
 .select-screen,
@@ -412,8 +429,8 @@ button {
   background:
     radial-gradient(
       circle at top,
-      #213e5d,
-      #070b11 70%
+      #213c58,
+      #070c13 68%
     );
 }
 
@@ -421,7 +438,7 @@ button {
 .challenge-kicker {
   margin-bottom: 6px;
 
-  color: #ffd529;
+  color: #ffd52a;
 
   font-size: 11px;
 
@@ -431,37 +448,41 @@ button {
 }
 
 .challenge-kicker {
-  color: #ff6558;
+  color: #ff6055;
 }
 
 .screen-heading {
-  margin-bottom: 15px;
+  margin-bottom: 16px;
 
   font-family:
     Impact,
+    "Arial Black",
     sans-serif;
 
   font-size:
     clamp(
-      35px,
+      34px,
       5vw,
       58px
     );
+
+  text-align: center;
 
   text-shadow:
     4px 4px #000;
 }
 
 .selection-prompt {
-  margin-bottom: 18px;
+  margin-bottom: 15px;
 
   padding:
-    8px 18px;
+    7px
+    18px;
 
-  background: #111922;
+  background: #111820;
 
   border:
-    2px solid #566574;
+    2px solid #566575;
 
   font-weight: 1000;
 
@@ -477,19 +498,32 @@ button {
   grid-template-columns:
     repeat(
       3,
-      minmax(215px,1fr)
+      minmax(220px,1fr)
     );
 
-  gap: 14px;
+  gap: 16px;
 }
 
 .fighter-card {
   position: relative;
 
-  min-height: 320px;
+  min-height: 330px;
 
   padding:
-    15px 10px;
+    18px 12px;
+
+  background:
+    linear-gradient(
+      #172432,
+      #101720
+    );
+
+  color: white;
+
+  border:
+    4px solid #57626d;
+
+  border-radius: 10px;
 
   display: flex;
 
@@ -498,40 +532,27 @@ button {
   align-items: center;
   justify-content: flex-end;
 
-  background:
-    linear-gradient(
-      #172432,
-      #101820
-    );
-
-  color: white;
-
-  border:
-    4px solid #53616e;
-
-  border-radius: 9px;
-
   cursor: pointer;
 
   overflow: hidden;
 }
 
 .fighter-card.p1-selected {
-  border-color: #43afff;
+  border-color: #40aaff;
 
   box-shadow:
-    0 0 20px rgba(67,175,255,0.5);
+    0 0 28px rgba(64,170,255,0.5);
 }
 
 .fighter-card.p2-selected {
-  border-color: #ff5858;
+  border-color: #ff5b55;
 
   box-shadow:
-    0 0 20px rgba(255,88,88,0.5);
+    0 0 28px rgba(255,91,85,0.5);
 }
 
 .card-model-holder {
-  height: 215px;
+  height: 220px;
 
   display: flex;
 
@@ -544,24 +565,23 @@ button {
 .card-model-holder
 .martin-model {
   transform:
-    scale(1);
+    scale(1.03);
 
   transform-origin:
     bottom center;
 }
 
 .fighter-card strong {
-  margin-top: 10px;
-
-  font-size: 20px;
+  margin-top: 13px;
+  font-size: 21px;
 }
 
 .fighter-card small {
-  margin-top: 5px;
+  min-height: 34px;
 
-  min-height: 32px;
+  margin-top: 7px;
 
-  color: #aeb8c1;
+  color: #abb5bf;
 
   font-size: 11px;
 }
@@ -573,10 +593,10 @@ button {
 
   inset: 0;
 
-  z-index: 50;
+  z-index: 60;
 
   background:
-    rgba(0,0,0,0.67);
+    rgba(0,0,0,0.6);
 
   align-items: center;
   justify-content: center;
@@ -589,15 +609,9 @@ button {
   display: flex;
 }
 
-.lock-overlay strong {
-  color: #ffd529;
-
-  font-size: 26px;
-}
-
 .selection-summary {
   margin:
-    18px
+    17px
     0;
 
   font-size: 17px;
@@ -607,447 +621,12 @@ button {
 
 .screen-button-row {
   display: flex;
-
   gap: 12px;
-
-  align-items: center;
 }
 
 
 /* =====================================================
-   CHALLENGE
-===================================================== */
-
-.challenge-layout {
-  width: 100%;
-  max-width: 950px;
-
-  display: grid;
-
-  grid-template-columns:
-    300px
-    1fr;
-
-  gap: 24px;
-
-  margin-bottom: 18px;
-}
-
-.challenge-boss-panel {
-  padding: 18px;
-
-  background:
-    linear-gradient(
-      #351111,
-      #150707
-    );
-
-  border:
-    5px solid #ffd529;
-
-  border-radius: 10px;
-
-  display: flex;
-
-  flex-direction: column;
-
-  align-items: center;
-  justify-content: center;
-}
-
-.boss-label {
-  color: #ff6157;
-
-  font-size: 11px;
-
-  font-weight: 1000;
-
-  letter-spacing: 5px;
-}
-
-.challenge-martin-preview {
-  height: 190px;
-
-  display: flex;
-
-  align-items: flex-end;
-}
-
-.challenge-martin-preview
-.martin-model {
-  transform:
-    scale(1.35);
-
-  transform-origin:
-    bottom center;
-}
-
-.boss-name {
-  margin-top: 12px;
-
-  font-family:
-    Impact,
-    sans-serif;
-
-  font-size: 34px;
-}
-
-.boss-stats {
-  color: #ffd529;
-
-  font-size: 12px;
-
-  font-weight: 1000;
-}
-
-.challenge-picker {
-  padding: 15px;
-
-  background: #101820;
-
-  border:
-    3px solid #526170;
-
-  border-radius: 10px;
-}
-
-.challenge-prompt {
-  margin-bottom: 12px;
-
-  text-align: center;
-
-  font-weight: 1000;
-
-  letter-spacing: 3px;
-}
-
-.challenge-fighter-grid {
-  display: grid;
-
-  grid-template-columns:
-    repeat(
-      4,
-      minmax(110px,1fr)
-    );
-
-  gap: 10px;
-}
-
-.challenge-choice-card {
-  min-height: 205px;
-
-  background: #182633;
-
-  color: white;
-
-  border:
-    3px solid #596978;
-
-  border-radius: 7px;
-
-  cursor: pointer;
-}
-
-.challenge-choice-model {
-  height: 165px;
-
-  display: flex;
-
-  align-items: flex-end;
-  justify-content: center;
-}
-
-.challenge-choice-model
-.pixel-person {
-  transform:
-    scale(0.75);
-
-  transform-origin:
-    bottom center;
-}
-
-
-/* =====================================================
-   MAP SELECT
-===================================================== */
-
-.map-grid {
-  width: 100%;
-  max-width: 1000px;
-
-  display: grid;
-
-  grid-template-columns:
-    repeat(
-      2,
-      minmax(260px,1fr)
-    );
-
-  gap: 18px;
-}
-
-.map-card {
-  padding: 10px;
-
-  background: #121a23;
-
-  color: white;
-
-  border:
-    4px solid #56616c;
-
-  border-radius: 9px;
-
-  cursor: pointer;
-}
-
-.map-card.selected {
-  border-color: #ffd529;
-}
-
-.map-card strong {
-  display: block;
-
-  margin-top: 8px;
-
-  font-size: 18px;
-}
-
-.map-card small {
-  display: block;
-
-  margin-top: 5px;
-
-  color: #abb6c0;
-}
-
-.map-preview {
-  position: relative;
-
-  width: 100%;
-  height: 140px;
-
-  overflow: hidden;
-
-  border:
-    2px solid #111;
-
-  border-radius: 5px;
-}
-
-.virginia-preview {
-  background:
-    linear-gradient(
-      #82c9e9 0 47%,
-      #56a443 48%,
-      #368029 100%
-    );
-}
-
-.preview-estate {
-  position: absolute;
-
-  width: 185px;
-  height: 72px;
-
-  left: 50%;
-  bottom: 30px;
-
-  transform:
-    translateX(-50%);
-
-  background: #e7dfd0;
-
-  border:
-    4px solid #5a5148;
-}
-
-.preview-estate::before {
-  content: "";
-
-  position: absolute;
-
-  width: 200px;
-  height: 50px;
-
-  left: -12px;
-  top: -42px;
-
-  background: #55504c;
-
-  clip-path:
-    polygon(
-      7% 100%,
-      20% 20%,
-      50% 0,
-      80% 20%,
-      93% 100%
-    );
-}
-
-.preview-lawn {
-  position: absolute;
-
-  left: 0;
-  right: 0;
-  bottom: 0;
-
-  height: 23px;
-
-  background: #297121;
-}
-
-.westhampton-preview {
-  background:
-    linear-gradient(
-      #82cef0 0 42%,
-      #268fc4 43% 61%,
-      #e9cf8e 62%
-    );
-}
-
-.preview-ocean {
-  position: absolute;
-
-  left: 0;
-  right: 0;
-
-  top: 62px;
-
-  height: 4px;
-
-  background: white;
-
-  box-shadow:
-    0 12px 0 rgba(255,255,255,0.5);
-}
-
-.preview-icecream {
-  position: absolute;
-
-  left: 20px;
-  bottom: 15px;
-
-  width: 90px;
-  height: 48px;
-
-  background: #f3e3c7;
-
-  border:
-    3px solid #654936;
-
-  color: #654936;
-
-  display: flex;
-
-  align-items: center;
-  justify-content: center;
-
-  font-size: 8px;
-
-  font-weight: 1000;
-}
-
-.newcanaan-preview {
-  background:
-    linear-gradient(
-      #86c7e5 0 43%,
-      #c1bbb0 44% 68%,
-      #545454 69%
-    );
-}
-
-.preview-shop {
-  position: absolute;
-
-  bottom: 44px;
-
-  height: 75px;
-
-  border:
-    3px solid #4b3428;
-}
-
-.preview-shop.red {
-  left: 5%;
-
-  width: 29%;
-
-  background: #a4433b;
-}
-
-.preview-shop.white {
-  left: 35%;
-
-  width: 29%;
-
-  background: #e7dfd0;
-}
-
-.preview-shop.brick {
-  right: 5%;
-
-  width: 29%;
-
-  background: #a65c45;
-}
-
-.madrid-preview {
-  background:
-    linear-gradient(
-      #74c3e6 0 46%,
-      #cfb17c 47%
-    );
-}
-
-.preview-madrid-left,
-.preview-madrid-right {
-  position: absolute;
-
-  bottom: 34px;
-
-  width: 44%;
-  height: 96px;
-
-  border:
-    3px solid #724c32;
-}
-
-.preview-madrid-left {
-  left: 2%;
-
-  background: #d47f5b;
-}
-
-.preview-madrid-right {
-  right: 2%;
-
-  background: #d9ae70;
-}
-
-.preview-fountain {
-  position: absolute;
-
-  width: 78px;
-  height: 27px;
-
-  left: 50%;
-  bottom: 11px;
-
-  transform:
-    translateX(-50%);
-
-  border-radius: 50%;
-
-  background: #72bdd4;
-
-  border:
-    6px solid #92816b;
-}
-
-
-/* =====================================================
-   HUMAN BASE
+   BASE HUMAN
 ===================================================== */
 
 .pixel-person {
@@ -1082,7 +661,7 @@ button {
   width: 5px;
   height: 8px;
 
-  top: 14px;
+  top: 15px;
 
   background: #111;
 }
@@ -1106,6 +685,8 @@ button {
 
   border-bottom:
     3px solid #111;
+
+  border-radius: 50%;
 }
 
 .arm {
@@ -1173,7 +754,7 @@ button {
 }
 
 .dark-shoe {
-  background: #25282b;
+  background: #292b2e;
 }
 
 .left-shoe {
@@ -1192,10 +773,10 @@ button {
 .brendan-hair {
   position: absolute;
 
-  width: 49px;
-  height: 20px;
+  width: 48px;
+  height: 19px;
 
-  left: 26px;
+  left: 27px;
   top: 17px;
 
   background: #111;
@@ -1203,7 +784,10 @@ button {
   border:
     3px solid #111;
 
-  z-index: 12;
+  border-radius:
+    7px 7px 2px 2px;
+
+  z-index: 10;
 }
 
 .brendan-shirt {
@@ -1219,10 +803,12 @@ button {
 
   border:
     3px solid #111;
+
+  z-index: 2;
 }
 
 .khaki {
-  background: #c1a167;
+  background: #c4a565;
 }
 
 .golf-club {
@@ -1232,9 +818,9 @@ button {
   height: 96px;
 
   left: 5px;
-  top: 26px;
+  top: 27px;
 
-  background: #888;
+  background: #777;
 
   border:
     2px solid #111;
@@ -1258,6 +844,9 @@ button {
 
   border:
     2px solid #111;
+
+  border-radius:
+    2px 4px 4px 2px;
 }
 
 
@@ -1268,15 +857,15 @@ button {
 .grandaddy-hair {
   position: absolute;
 
-  width: 52px;
-  height: 20px;
+  width: 54px;
+  height: 21px;
 
-  left: 25px;
+  left: 24px;
   top: 28px;
 
   background: #ddd;
 
-  z-index: 5;
+  z-index: 3;
 }
 
 .orange-hat {
@@ -1293,7 +882,10 @@ button {
   border:
     3px solid #111;
 
-  z-index: 15;
+  border-radius:
+    12px 12px 3px 3px;
+
+  z-index: 20;
 }
 
 .orange-brim {
@@ -1310,20 +902,22 @@ button {
   border:
     3px solid #111;
 
-  z-index: 16;
+  z-index: 21;
 }
 
 .hat-letter {
   position: absolute;
 
+  top: 9px;
   left: 43px;
-  top: 10px;
-
-  z-index: 18;
 
   color: navy;
 
+  font-size: 18px;
+
   font-weight: 1000;
+
+  z-index: 22;
 }
 
 .glasses,
@@ -1338,7 +932,7 @@ button {
   border:
     3px solid #111;
 
-  z-index: 20;
+  z-index: 15;
 }
 
 .glasses-left,
@@ -1363,7 +957,7 @@ button {
 
   background: #111;
 
-  z-index: 21;
+  z-index: 16;
 }
 
 .grandaddy-shirt {
@@ -1375,14 +969,14 @@ button {
   left: 19px;
   top: 70px;
 
-  background: #243f67;
+  background: #233f68;
 
   border:
     3px solid #111;
 }
 
 .black-pants {
-  background: #181818;
+  background: #161616;
 }
 
 .hammer {
@@ -1391,7 +985,7 @@ button {
   width: 6px;
   height: 68px;
 
-  left: 9px;
+  left: 10px;
   top: -26px;
 
   background: #79512f;
@@ -1411,8 +1005,8 @@ button {
   width: 30px;
   height: 14px;
 
-  left: -13px;
-  top: -9px;
+  left: -12px;
+  top: -10px;
 
   background: #777;
 
@@ -1427,14 +1021,14 @@ button {
   height: 8px;
 
   left: -1px;
-  top: -2px;
+  top: -4px;
 
   background: #aaa;
 
   border:
     2px solid #444;
 
-  z-index: 5;
+  z-index: 3;
 }
 
 
@@ -1456,7 +1050,10 @@ button {
   border:
     3px solid #111;
 
-  z-index: 12;
+  border-radius:
+    8px 8px 3px 3px;
+
+  z-index: 10;
 }
 
 .connor-stubble {
@@ -1468,19 +1065,19 @@ button {
   left: 31px;
   top: 45px;
 
+  z-index: 7;
+
   border-left:
-    3px solid rgba(103,72,50,0.8);
+    3px solid rgba(103,72,50,0.82);
 
   border-right:
-    3px solid rgba(103,72,50,0.8);
+    3px solid rgba(103,72,50,0.82);
 
   border-bottom:
-    4px solid rgba(103,72,50,0.8);
+    4px solid rgba(103,72,50,0.82);
 
   border-radius:
     0 0 14px 14px;
-
-  z-index: 9;
 }
 
 .connor-shirt {
@@ -1506,9 +1103,9 @@ button {
   position: absolute;
 
   width: 7px;
-  height: 46px;
+  height: 47px;
 
-  left: 4px;
+  left: 5px;
   top: 25px;
 
   background: #7b4b2a;
@@ -1573,13 +1170,14 @@ button {
   border:
     3px solid #111;
 
-  border-radius: 12px;
+  border-radius:
+    12px 12px 7px 7px;
 
-  z-index: 5;
+  z-index: 4;
 }
 
 .erin-model .face {
-  z-index: 8;
+  z-index: 6;
 }
 
 .erin-shirt {
@@ -1638,28 +1236,46 @@ button {
   border-radius: 8px;
 }
 
+.hairbrush::after {
+  content: "";
+
+  position: absolute;
+
+  width: 14px;
+  height: 20px;
+
+  left: -5px;
+  top: -12px;
+
+  background:
+    repeating-linear-gradient(
+      90deg,
+      #333 0 2px,
+      transparent 2px 5px
+    );
+}
+
 
 /* =====================================================
-   SHANNAN
-   FACE IS ABOVE HAIR + SYRINGE RESTORED
+   SHANNAN — FACE FIX + BETTER SYRINGE
 ===================================================== */
 
 .shannan-hair {
   position: absolute;
 
   width: 52px;
-  height: 46px;
+  height: 44px;
 
   left: 25px;
-  top: 14px;
+  top: 12px;
 
-  background: #754725;
+  background: #7b4c2c;
 
   border:
     3px solid #111;
 
   border-radius:
-    11px 11px 7px 7px;
+    12px 12px 4px 4px;
 
   z-index: 4;
 }
@@ -1671,25 +1287,27 @@ button {
   position: absolute;
 
   width: 13px;
-  height: 35px;
+  height: 36px;
 
   top: 17px;
 
-  background: #754725;
+  background: #7b4c2c;
 
   border-bottom:
     3px solid #111;
+
+  z-index: 3;
 }
 
 .shannan-hair::before {
-  left: -8px;
+  left: -7px;
 
   border-left:
     3px solid #111;
 }
 
 .shannan-hair::after {
-  right: -8px;
+  right: -7px;
 
   border-right:
     3px solid #111;
@@ -1721,13 +1339,18 @@ button {
 .syringe {
   position: absolute;
 
-  width: 11px;
-  height: 48px;
+  width: 13px;
+  height: 50px;
 
-  left: 2px;
-  top: 19px;
+  left: 1px;
+  top: 17px;
 
-  background: #d9f2f8;
+  background:
+    linear-gradient(
+      90deg,
+      #dff8ff 0 55%,
+      #87d6eb 56% 100%
+    );
 
   border:
     2px solid #111;
@@ -1735,7 +1358,7 @@ button {
   transform:
     rotate(28deg);
 
-  z-index: 20;
+  z-index: 25;
 }
 
 .syringe::before {
@@ -1744,12 +1367,12 @@ button {
   position: absolute;
 
   width: 3px;
-  height: 28px;
+  height: 30px;
 
-  left: 2px;
-  top: -27px;
+  left: 3px;
+  top: -29px;
 
-  background: #bbb;
+  background: #c5c5c5;
 
   border:
     1px solid #111;
@@ -1760,16 +1383,31 @@ button {
 
   position: absolute;
 
-  width: 18px;
-  height: 5px;
+  width: 21px;
+  height: 6px;
 
   left: -6px;
-  bottom: -5px;
+  bottom: -6px;
 
-  background: #7894a0;
+  background: #728f9b;
 
   border:
     2px solid #111;
+}
+
+.syringe-plunger {
+  position: absolute;
+
+  width: 17px;
+  height: 4px;
+
+  left: -4px;
+  bottom: 8px;
+
+  background: #e7f8fb;
+
+  border:
+    1px solid #111;
 }
 
 
@@ -1795,7 +1433,10 @@ button {
   border:
     3px solid #111;
 
-  z-index: 12;
+  border-radius:
+    10px 10px 3px 3px;
+
+  z-index: 10;
 }
 
 .liam-model .face {
@@ -1811,7 +1452,7 @@ button {
   left: 19px;
   top: 67px;
 
-  background: #111;
+  background: #101010;
 
   border:
     3px solid #111;
@@ -1840,7 +1481,7 @@ button {
   left: -7px;
   top: 31px;
 
-  background: #ebe7db;
+  background: #e9e6dc;
 
   border:
     3px solid #111;
@@ -1849,6 +1490,8 @@ button {
 
   transform:
     rotate(-18deg);
+
+  z-index: 12;
 }
 
 .rugby-ball::after {
@@ -1892,7 +1535,7 @@ button {
   border:
     3px solid #111;
 
-  z-index: 12;
+  z-index: 10;
 }
 
 .grandmommy-shirt {
@@ -1947,6 +1590,9 @@ button {
 
   border:
     3px solid #111;
+
+  border-radius:
+    3px 3px 6px 6px;
 }
 
 
@@ -1963,12 +1609,15 @@ button {
   left: 27px;
   top: 17px;
 
-  background: #111;
+  background: #101010;
 
   border:
     3px solid #111;
 
-  z-index: 12;
+  border-radius:
+    8px 8px 2px 2px;
+
+  z-index: 10;
 }
 
 .sean-shirt {
@@ -2019,11 +1668,11 @@ button {
 .guitar-back {
   position: absolute;
 
-  width: 24px;
-  height: 50px;
+  width: 23px;
+  height: 47px;
 
-  left: 63px;
-  top: 79px;
+  left: 65px;
+  top: 78px;
 
   z-index: 2;
 
@@ -2036,7 +1685,7 @@ button {
     45% 45% 55% 55%;
 
   transform:
-    rotate(-18deg);
+    rotate(-17deg);
 }
 
 .guitar-back::before {
@@ -2058,7 +1707,7 @@ button {
 
 
 /* =====================================================
-   MARTIN
+   MARTIN — BEIGE HIGHER-QUALITY
 ===================================================== */
 
 .martin-model {
@@ -2066,6 +1715,9 @@ button {
 
   width: 115px;
   height: 105px;
+
+  transform-origin:
+    bottom center;
 }
 
 .martin-body {
@@ -2079,14 +1731,15 @@ button {
 
   background:
     linear-gradient(
-      #d1bd91,
-      #bda16e
+      #cbb788,
+      #b99b68
     );
 
   border:
     4px solid #4b3825;
 
-  border-radius: 45%;
+  border-radius:
+    45% 50% 40% 40%;
 }
 
 .martin-chest {
@@ -2098,7 +1751,7 @@ button {
   left: 30px;
   top: 49px;
 
-  background: #eadcb6;
+  background: #e3d6ae;
 
   border-radius: 50%;
 }
@@ -2112,14 +1765,19 @@ button {
   left: 5px;
   top: 18px;
 
-  background: #cdbb8d;
+  background:
+    linear-gradient(
+      #cdbd91,
+      #b89b68
+    );
 
   border:
     4px solid #4b3825;
 
-  border-radius: 45%;
+  border-radius:
+    44% 46% 45% 43%;
 
-  z-index: 5;
+  z-index: 4;
 }
 
 .martin-face-light {
@@ -2131,7 +1789,7 @@ button {
   left: 10px;
   top: 17px;
 
-  background: #eee1bd;
+  background: #e9dcb8;
 
   border-radius: 50%;
 }
@@ -2148,7 +1806,7 @@ button {
 
   border-radius: 50%;
 
-  z-index: 8;
+  z-index: 6;
 }
 
 .martin-eye.left {
@@ -2171,6 +1829,8 @@ button {
   background: #111;
 
   border-radius: 50%;
+
+  z-index: 8;
 }
 
 .martin-ear {
@@ -2181,7 +1841,7 @@ button {
 
   top: -12px;
 
-  background: #bda16e;
+  background: #b59665;
 
   border:
     4px solid #4b3825;
@@ -2211,13 +1871,15 @@ button {
   right: 2px;
   top: 47px;
 
-  background: #bda16e;
+  background: #b39765;
 
   border:
     4px solid #4b3825;
 
   transform:
     rotate(-25deg);
+
+  border-radius: 30%;
 }
 
 .martin-leg {
@@ -2228,7 +1890,7 @@ button {
 
   top: 76px;
 
-  background: #d4bf91;
+  background: #d2bd8b;
 
   border:
     4px solid #4b3825;
@@ -2252,78 +1914,388 @@ button {
 
 
 /* =====================================================
-   BASIC ATTACK MOTION
+   MAP SELECT PREVIEWS
 ===================================================== */
 
-.weapon-attacking {
-  animation:
-    meleePunch
-    0.42s
-    ease-out;
+.map-grid {
+  width: 100%;
+  max-width: 1000px;
+
+  display: grid;
+
+  grid-template-columns:
+    repeat(
+      2,
+      minmax(250px,1fr)
+    );
+
+  gap: 20px;
 }
 
-@keyframes meleePunch {
+.map-card {
+  padding: 10px;
 
-  0% {
-    transform:
-      translateX(0);
-  }
+  background: #121b25;
 
-  45% {
-    transform:
-      translateX(17px)
-      rotate(5deg);
-  }
+  color: white;
 
-  100% {
-    transform:
-      translateX(0);
-  }
+  border:
+    4px solid #56616c;
 
+  border-radius: 10px;
+
+  cursor: pointer;
 }
 
-.brendan-model.weapon-attacking
-.right-arm,
-.grandaddy-model.weapon-attacking
-.right-arm,
-.connor-model.weapon-attacking
-.right-arm,
-.erin-model.weapon-attacking
-.right-arm,
-.shannan-model.weapon-attacking
-.right-arm,
-.grandmommy-model.weapon-attacking
-.right-arm,
-.sean-model.weapon-attacking
-.right-arm {
-  animation:
-    weaponSwing
-    0.42s
-    ease-out;
+.map-card.selected {
+  border-color: #ffd52a;
 }
 
-@keyframes weaponSwing {
+.map-preview {
+  position: relative;
 
-  0% {
-    transform:
-      rotate(0deg);
-  }
+  width: 100%;
+  height: 145px;
 
-  30% {
-    transform:
-      rotate(-65deg);
-  }
+  overflow: hidden;
 
-  68% {
-    transform:
-      rotate(72deg);
-  }
+  border-radius: 6px;
 
-  100% {
-    transform:
-      rotate(0deg);
-  }
+  border:
+    2px solid #050607;
+}
 
+.preview-sun {
+  position: absolute;
+
+  width: 28px;
+  height: 28px;
+
+  right: 28px;
+  top: 16px;
+
+  border-radius: 50%;
+
+  background: #ffd752;
+}
+
+.virginia-preview {
+  background:
+    linear-gradient(
+      #7fc9ea 0 48%,
+      #57a643 49%,
+      #39842d 100%
+    );
+}
+
+.virginia-estate-preview {
+  position: absolute;
+
+  left: 50%;
+  bottom: 38px;
+
+  transform:
+    translateX(-50%);
+
+  width: 170px;
+  height: 70px;
+
+  background: #e6dfd1;
+
+  border:
+    3px solid #57493e;
+}
+
+.virginia-estate-preview::before {
+  content: "";
+
+  position: absolute;
+
+  left: -7px;
+  top: -35px;
+
+  width: 178px;
+  height: 40px;
+
+  background: #55504c;
+
+  clip-path:
+    polygon(
+      7% 100%,
+      19% 20%,
+      50% 0,
+      81% 20%,
+      93% 100%
+    );
+}
+
+.preview-tree {
+  position: absolute;
+
+  bottom: 25px;
+
+  width: 14px;
+  height: 40px;
+
+  background: #6b4429;
+}
+
+.preview-tree::before {
+  content: "";
+
+  position: absolute;
+
+  width: 55px;
+  height: 55px;
+
+  left: -21px;
+  top: -36px;
+
+  border-radius: 50%;
+
+  background: #2f7c2c;
+}
+
+.preview-tree.t1 {
+  left: 8%;
+}
+
+.preview-tree.t2 {
+  right: 8%;
+}
+
+.westhampton-preview {
+  background:
+    linear-gradient(
+      #7cccf0 0 43%,
+      #2088c4 44%,
+      #2ba3d4 62%,
+      #ead291 63%,
+      #dfbe72 100%
+    );
+}
+
+.beach-sun {
+  left: 30px;
+  right: auto;
+}
+
+.preview-ocean {
+  position: absolute;
+
+  left: 0;
+  right: 0;
+
+  top: 65px;
+
+  height: 4px;
+
+  background:
+    rgba(255,255,255,0.85);
+
+  box-shadow:
+    0 10px 0 rgba(255,255,255,0.45);
+}
+
+.preview-umbrella {
+  position: absolute;
+
+  right: 42px;
+  bottom: 19px;
+
+  width: 6px;
+  height: 55px;
+
+  background: #684b37;
+}
+
+.preview-umbrella::before {
+  content: "";
+
+  position: absolute;
+
+  width: 70px;
+  height: 35px;
+
+  left: -32px;
+  top: -5px;
+
+  background:
+    repeating-linear-gradient(
+      90deg,
+      #f04848 0 14px,
+      white 14px 28px
+    );
+
+  border-radius:
+    70px 70px 5px 5px;
+}
+
+.preview-icecream {
+  position: absolute;
+
+  left: 22px;
+  bottom: 16px;
+
+  width: 92px;
+  height: 52px;
+
+  background: #f3e5c6;
+
+  border:
+    3px solid #684b37;
+
+  color: #684b37;
+
+  font-size: 8px;
+
+  font-weight: 1000;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+}
+
+.newcanaan-preview {
+  background:
+    linear-gradient(
+      #8ac9e7 0 45%,
+      #b9b3a8 46%,
+      #686868 67%,
+      #4d4d4d 100%
+    );
+}
+
+.nc-preview-building {
+  position: absolute;
+
+  bottom: 46px;
+
+  height: 75px;
+
+  padding-top: 8px;
+
+  border:
+    3px solid #36291f;
+
+  font-size: 9px;
+
+  font-weight: 1000;
+
+  color: #27201a;
+}
+
+.nc-red {
+  left: 9px;
+
+  width: 31%;
+
+  background: #a94139;
+}
+
+.nc-white {
+  left: 34.5%;
+
+  width: 30%;
+
+  background: #e8dfcf;
+}
+
+.nc-brick {
+  right: 8px;
+
+  width: 32%;
+
+  background: #a55742;
+}
+
+.preview-lamp {
+  position: absolute;
+
+  left: 50%;
+  bottom: 29px;
+
+  width: 5px;
+  height: 62px;
+
+  background: #222;
+}
+
+.madrid-preview {
+  background:
+    linear-gradient(
+      #71bee3 0 46%,
+      #d0b582 47%,
+      #b08d5f 100%
+    );
+}
+
+.madrid-preview-left,
+.madrid-preview-right {
+  position: absolute;
+
+  bottom: 43px;
+
+  width: 43%;
+  height: 96px;
+
+  border:
+    3px solid #704b31;
+}
+
+.madrid-preview-left {
+  left: 2%;
+
+  background: #d48c5f;
+}
+
+.madrid-preview-right {
+  right: 2%;
+
+  background: #d8b071;
+}
+
+.madrid-preview-balcony {
+  position: absolute;
+
+  width: 65px;
+  height: 7px;
+
+  bottom: 81px;
+
+  background: #282828;
+
+  border:
+    2px solid #111;
+}
+
+.b1 {
+  left: 10%;
+}
+
+.b2 {
+  right: 10%;
+}
+
+.preview-fountain {
+  position: absolute;
+
+  left: 50%;
+  bottom: 19px;
+
+  transform:
+    translateX(-50%);
+
+  width: 72px;
+  height: 25px;
+
+  border-radius: 50%;
+
+  background: #78bfd8;
+
+  border:
+    6px solid #95806b;
 }
 
 
@@ -2332,9 +2304,9 @@ button {
 ===================================================== */
 
 .fight-screen {
-  justify-content: flex-start;
+  background: #090d12;
 
-  background: #080c11;
+  justify-content: flex-start;
 }
 
 .hud {
@@ -2344,10 +2316,12 @@ button {
 
   grid-template-columns:
     1fr
-    150px
+    155px
     1fr;
 
   gap: 15px;
+
+  align-items: start;
 }
 
 .hud-side.right {
@@ -2365,12 +2339,13 @@ button {
 .health-bar {
   position: relative;
 
+  width: 100%;
   height: 25px;
+
+  background: #562020;
 
   border:
     3px solid white;
-
-  background: #55201f;
 
   overflow: hidden;
 }
@@ -2382,10 +2357,10 @@ button {
 
   width: 100%;
 
-  background: #df4839;
+  background: #e14838;
 
   transition:
-    width 0.6s;
+    width 0.65s ease-out;
 
   z-index: 1;
 }
@@ -2397,31 +2372,31 @@ button {
 
   width: 100%;
 
-  background: #2ed03b;
+  background: #2fd63a;
 
   transition:
-    width 0.15s;
+    width 0.16s;
 
   z-index: 2;
 }
 
 .ultimate-bar {
+  width: 100%;
+  height: 11px;
+
   margin-top: 5px;
 
-  height: 11px;
+  background: #222;
 
   border:
     2px solid white;
-
-  background: #222;
 }
 
 .ultimate-bar div {
+  width: 0;
   height: 100%;
 
-  width: 0;
-
-  background: #ffd529;
+  background: #ffd52a;
 
   transition:
     width 0.2s;
@@ -2438,13 +2413,15 @@ button {
 }
 
 .round-label {
-  margin-top: 4px;
+  margin-top: 5px;
 
   font-size: 10px;
 
-  letter-spacing: 3px;
+  color: #8d98a2;
 
-  color: #929ca5;
+  font-weight: 1000;
+
+  letter-spacing: 3px;
 }
 
 .round-text {
@@ -2452,14 +2429,16 @@ button {
 
   margin-top: 4px;
 
-  color: #ffd529;
+  color: #ffd52a;
+
+  font-size: 14px;
 
   font-weight: 1000;
 }
 
 
 /* =====================================================
-   ARENA
+   ARENA MAPS — RESTORED QUALITY
 ===================================================== */
 
 .arena {
@@ -2468,12 +2447,12 @@ button {
   width: 100%;
   height: 500px;
 
-  margin-top: 17px;
+  margin-top: 18px;
 
   overflow: hidden;
 
   border:
-    4px solid #31363b;
+    4px solid #333;
 
   isolation: isolate;
 }
@@ -2484,6 +2463,12 @@ button {
   inset: 0;
 
   z-index: -2;
+
+  pointer-events: none;
+}
+
+.map-extra {
+  display: none;
 }
 
 .map-virginia {
@@ -2495,65 +2480,139 @@ button {
     );
 }
 
-.map-virginia
-.map-decor::before {
+.map-virginia .map-decor::before {
   content: "";
 
   position: absolute;
 
-  width: 410px;
-  height: 170px;
-
   left: 50%;
-  bottom: 170px;
+  bottom: 174px;
 
   transform:
     translateX(-50%);
 
-  background: #e8e0d4;
+  width: 410px;
+  height: 170px;
+
+  background:
+    linear-gradient(
+      90deg,
+      #ddd5c8,
+      #f0eadf 50%,
+      #ddd5c8
+    );
 
   border:
     7px solid #5b5147;
 }
 
-.map-virginia
-.map-decor::after {
+.map-virginia .map-decor::after {
   content: "";
 
   position: absolute;
 
-  width: 440px;
-  height: 95px;
-
   left: 50%;
-  bottom: 330px;
+  bottom: 334px;
 
   transform:
     translateX(-50%);
 
-  background: #4d4946;
+  width: 440px;
+  height: 94px;
+
+  background: #4d4a47;
 
   clip-path:
     polygon(
-      5% 100%,
-      20% 35%,
+      6% 100%,
+      18% 35%,
+      38% 14%,
       50% 0,
-      80% 35%,
-      95% 100%
+      62% 14%,
+      82% 35%,
+      94% 100%
     );
+}
+
+.map-virginia .decor-one {
+  display: block;
+
+  position: absolute;
+
+  left: 50%;
+  bottom: 215px;
+
+  transform:
+    translateX(-50%);
+
+  width: 325px;
+  height: 74px;
+
+  background:
+    repeating-linear-gradient(
+      90deg,
+      transparent 0 24px,
+      #739cad 24px 55px,
+      #4c4b48 55px 60px,
+      transparent 60px 82px
+    );
+}
+
+.map-virginia .decor-two {
+  display: block;
+
+  position: absolute;
+
+  left: 50%;
+  bottom: 174px;
+
+  transform:
+    translateX(-50%);
+
+  width: 52px;
+  height: 95px;
+
+  background: #684934;
+
+  border:
+    5px solid #3d3027;
+}
+
+.map-virginia .decor-three {
+  display: block;
+
+  position: absolute;
+
+  left: 7%;
+  right: 7%;
+  bottom: 138px;
+
+  height: 38px;
+
+  background:
+    linear-gradient(
+      #2e7b2b,
+      #205f21
+    );
+
+  border:
+    4px solid #194d19;
+
+  border-radius: 15px;
 }
 
 .map-westhampton {
   background:
     linear-gradient(
-      #7cc9eb 0 42%,
-      #258fc6 43% 61%,
-      #ead296 62%
+      #78c9ee 0 42%,
+      #238fc9 43%,
+      #2fa3d2 60%,
+      #ead298 61%,
+      #d7b56e 100%
     );
 }
 
-.map-westhampton
-.map-decor::before {
+.map-westhampton .map-decor::before {
   content: "";
 
   position: absolute;
@@ -2561,49 +2620,107 @@ button {
   left: 0;
   right: 0;
 
-  top: 215px;
+  top: 218px;
 
   height: 5px;
 
-  background: white;
+  background:
+    rgba(255,255,255,0.9);
 
   box-shadow:
-    0 17px 0 rgba(255,255,255,0.45);
+    0 17px 0 rgba(255,255,255,0.45),
+    0 35px 0 rgba(255,255,255,0.25);
 }
 
-.map-westhampton
-.decor-one {
+.map-westhampton .map-decor::after {
+  content: "";
+
   position: absolute;
 
+  right: 12%;
+  bottom: 100px;
+
+  width: 90px;
+  height: 42px;
+
+  border-radius:
+    90px 90px 5px 5px;
+
+  background:
+    repeating-linear-gradient(
+      90deg,
+      #e44b4b 0 18px,
+      white 18px 36px
+    );
+
+  border-bottom:
+    5px solid #63452f;
+}
+
+.map-westhampton .decor-one {
   display: block;
 
-  width: 120px;
-  height: 82px;
+  position: absolute;
 
   left: 7%;
-  bottom: 75px;
+  bottom: 82px;
+
+  width: 120px;
+  height: 84px;
 
   background: #f1e4c7;
 
   border:
     5px solid #684b37;
+
+  z-index: 3;
 }
 
-.map-westhampton
-.decor-one::after {
-  content: "ICE CREAM";
+.map-westhampton .decor-one::before {
+  content: "";
 
   position: absolute;
 
-  inset:
-    20px 12px;
+  left: -8px;
+  top: -24px;
 
-  background: #69b6ce;
+  width: 126px;
+  height: 27px;
+
+  background:
+    repeating-linear-gradient(
+      90deg,
+      #ef5555 0 18px,
+      #fff4df 18px 36px
+    );
+
+  border:
+    4px solid #684b37;
+}
+
+.map-westhampton .decor-one::after {
+  content:
+    "ICE CREAM";
+
+  position: absolute;
+
+  left: 16px;
+  top: 20px;
+
+  width: 76px;
+  height: 38px;
 
   display: flex;
 
   align-items: center;
   justify-content: center;
+
+  background: #6cb7cf;
+
+  border:
+    4px solid #684b37;
+
+  color: white;
 
   font-size: 10px;
 
@@ -2614,14 +2731,14 @@ button {
   background:
     linear-gradient(
       #81c5e5 0 43%,
-      #c8c4b9 44% 61%,
+      #c8c4b9 44%,
+      #c8c4b9 61%,
       #696969 62%,
       #454545 100%
     );
 }
 
-.map-newcanaan
-.map-decor::before {
+.map-newcanaan .map-decor::before {
   content:
     "MARKET       CAFE       BOOKS       SHOPS";
 
@@ -2629,6 +2746,7 @@ button {
 
   left: 0;
   right: 0;
+
   bottom: 145px;
 
   height: 170px;
@@ -2636,18 +2754,54 @@ button {
   padding:
     18px 30px;
 
+  color: #2b2018;
+
+  font-size: 12px;
+
   font-weight: 1000;
 
-  color: #2b2018;
+  letter-spacing: 3px;
+
+  word-spacing: 50px;
 
   background:
     linear-gradient(
       90deg,
-      #aa453d 0 24%,
+      #a9473f 0 24%,
       #e1dacd 24% 49%,
       #9d543f 49% 74%,
       #c8b296 74%
     );
+
+  border-top:
+    9px solid #614737;
+
+  border-bottom:
+    8px solid #4e3b2e;
+}
+
+.map-newcanaan .map-decor::after {
+  content: "";
+
+  position: absolute;
+
+  left: 4%;
+  right: 4%;
+
+  bottom: 154px;
+
+  height: 82px;
+
+  background:
+    repeating-linear-gradient(
+      90deg,
+      #79a8ba 0 75px,
+      #3c4548 75px 81px,
+      transparent 81px 112px
+    );
+
+  border-bottom:
+    4px solid #42372f;
 }
 
 .map-madrid {
@@ -2659,14 +2813,14 @@ button {
     );
 }
 
-.map-madrid
-.map-decor::before {
+.map-madrid .map-decor::before {
   content: "";
 
   position: absolute;
 
   left: 0;
   right: 0;
+
   bottom: 142px;
 
   height: 235px;
@@ -2685,49 +2839,92 @@ button {
     10px solid #78543a;
 }
 
-.map-madrid
-.decor-two {
+.map-madrid .map-decor::after {
+  content: "";
+
+  position: absolute;
+
+  left: 3%;
+  right: 3%;
+
+  bottom: 188px;
+
+  height: 135px;
+
+  background:
+    repeating-linear-gradient(
+      90deg,
+      #3d3733 0 20px,
+      transparent 20px 58px
+    );
+}
+
+.map-madrid .decor-one {
   display: block;
 
   position: absolute;
 
-  width: 140px;
-  height: 38px;
+  left: 5%;
+  right: 5%;
+
+  bottom: 230px;
+
+  height: 9px;
+
+  background:
+    repeating-linear-gradient(
+      90deg,
+      transparent 0 25px,
+      #222 25px 78px,
+      transparent 78px 110px
+    );
+
+  box-shadow:
+    0 -67px 0 rgba(34,34,34,0.9);
+}
+
+.map-madrid .decor-two {
+  display: block;
+
+  position: absolute;
 
   left: 50%;
-  bottom: 90px;
+  bottom: 91px;
 
   transform:
     translateX(-50%);
+
+  width: 140px;
+  height: 38px;
+
+  border-radius: 50%;
 
   background: #70bcd3;
 
   border:
     8px solid #8f806c;
-
-  border-radius: 50%;
 }
 
 
 /* =====================================================
-   FIGHTERS
+   FIGHTER MOVEMENT + FACING
 ===================================================== */
 
 .fight-character {
   position: absolute;
 
+  bottom: 25px;
+
   width: 110px;
   height: 205px;
 
-  bottom: 25px;
+  transition:
+    left 0.045s linear;
 
   z-index: 20;
-
-  transition:
-    left 0.055s linear;
 }
 
-.player2-facing {
+.fight-character.face-left {
   transform:
     scaleX(-1);
 }
@@ -2742,8 +2939,7 @@ button {
     bottom center;
 }
 
-.walking
-.visual-layer {
+.walking .visual-layer {
   animation:
     walkBob
     0.22s
@@ -2752,6 +2948,7 @@ button {
 }
 
 @keyframes walkBob {
+
   from {
     transform:
       translateY(0);
@@ -2761,37 +2958,10 @@ button {
     transform:
       translateY(-4px);
   }
-}
-
-.jumping
-.motion-layer {
-  animation:
-    jumpMotion
-    0.62s
-    ease-out;
-}
-
-@keyframes jumpMotion {
-
-  0% {
-    transform:
-      translateY(0);
-  }
-
-  48% {
-    transform:
-      translateY(-130px);
-  }
-
-  100% {
-    transform:
-      translateY(0);
-  }
 
 }
 
-.crouching
-.visual-layer {
+.crouching .visual-layer {
   transform:
     scaleY(0.68);
 
@@ -2799,16 +2969,21 @@ button {
     bottom center;
 }
 
-.stunned
-.visual-layer {
+.stunned .visual-layer {
   filter:
-    saturate(0.45)
-    brightness(1.25);
+    saturate(0.5)
+    brightness(1.2);
+}
+
+.blocking .visual-layer {
+  transform:
+    translateX(-2px)
+    scaleY(0.98);
 }
 
 
 /* =====================================================
-   ABILITY ICONS
+   ABILITY HUD
 ===================================================== */
 
 .arena-abilities {
@@ -2818,9 +2993,9 @@ button {
 
   display: flex;
 
-  gap: 8px;
+  gap: 9px;
 
-  z-index: 160;
+  z-index: 150;
 }
 
 .p1-abilities {
@@ -2844,8 +3019,8 @@ button {
 
   position: relative;
 
-  width: 56px;
-  height: 56px;
+  width: 54px;
+  height: 54px;
 
   display: flex;
 
@@ -2855,11 +3030,11 @@ button {
   border-radius: 50%;
 
   border:
-    3px solid white;
+    3px solid rgba(255,255,255,0.75);
 
   overflow: hidden;
 
-  background: #131c25;
+  background: #121921;
 }
 
 .ability-orb::before {
@@ -2872,7 +3047,7 @@ button {
   background:
     conic-gradient(
       currentColor var(--fill),
-      rgba(255,255,255,0.08) 0deg
+      rgba(255,255,255,0.10) 0deg
     );
 }
 
@@ -2883,17 +3058,14 @@ button {
 
   inset: 6px;
 
+  background:
+    radial-gradient(
+      circle,
+      #25313e,
+      #111820 72%
+    );
+
   border-radius: 50%;
-
-  background: #202d39;
-}
-
-.special-orb {
-  color: #49baff;
-}
-
-.ultimate-orb {
-  color: #ffd529;
 }
 
 .ability-icon {
@@ -2914,19 +3086,25 @@ button {
   font-weight: 1000;
 }
 
+.special-orb {
+  color: #44bfff;
+}
+
+.ultimate-orb {
+  color: #ffd52a;
+}
+
 .ability-key {
   margin-top: 2px;
-
-  min-width: 28px;
 
   padding:
     2px 5px;
 
-  border-radius: 4px;
+  min-width: 28px;
 
   background: #111;
 
-  color: white;
+  border-radius: 4px;
 
   font-size: 8px;
 
@@ -2934,6 +3112,9 @@ button {
 
   text-align: center;
 }
+
+
+/* ICONS */
 
 .mini-golf-icon {
   width: 5px;
@@ -2945,33 +3126,19 @@ button {
     rotate(25deg);
 }
 
-.mini-golf-icon::after {
-  content: "";
-
-  position: absolute;
-
-  width: 15px;
-  height: 7px;
-
-  left: 0;
-  bottom: 0;
-
-  background: #999;
-}
-
 .mini-ladder-icon {
-  width: 21px;
-  height: 29px;
+  width: 23px;
+  height: 30px;
 
   border-left:
-    4px solid #d0b078;
+    4px solid #d2b27c;
 
   border-right:
-    4px solid #d0b078;
+    4px solid #d2b27c;
 
   background:
     repeating-linear-gradient(
-      #d0b078 0 3px,
+      #d2b27c 0 3px,
       transparent 3px 8px
     );
 }
@@ -3023,9 +3190,9 @@ button {
 
   background:
     linear-gradient(
-      #ff4d7f,
-      #7b4dff,
-      #45c6ff
+      #ff4d8c,
+      #754bff,
+      #49c8ff
     );
 }
 
@@ -3035,7 +3202,7 @@ button {
 
   border-radius: 60%;
 
-  background: #ebe7db;
+  background: #e7e4d8;
 
   border:
     3px solid white;
@@ -3046,28 +3213,35 @@ button {
 
 .mini-don-icon,
 .mini-ipo-icon,
-.mini-clyde-icon {
+.mini-clyde-icon,
+.mini-yap-icon {
   font-family:
     Impact,
     sans-serif;
-
-  font-size: 15px;
 }
 
 .mini-don-icon {
-  color: #ff5d52;
+  color: #ff5a4f;
 }
 
 .mini-ipo-icon {
-  color: #ffd529;
+  color: #ffd52a;
+}
+
+.mini-yap-icon {
+  color: #ff4e43;
+
+  font-size: 11px;
 }
 
 .mini-clyde-icon {
-  color: #85dc65;
+  color: #79cf63;
+
+  font-size: 24px;
 }
 
 .mini-dish-icon {
-  width: 28px;
+  width: 27px;
   height: 11px;
 
   border-radius: 50%;
@@ -3075,7 +3249,7 @@ button {
   background: white;
 
   border:
-    3px solid #91a5b3;
+    3px solid #8aa0af;
 }
 
 .mini-breath-icon {
@@ -3100,53 +3274,40 @@ button {
     );
 }
 
-.mini-yap-icon {
-  font-family:
-    Impact,
-    sans-serif;
-
-  color: #ff4d43;
-
-  font-size: 11px;
-}
-
-.mini-chicken-icon {
-  font-size: 24px;
-}
-
+.mini-chicken-icon,
 .mini-laundry-icon {
   font-size: 23px;
 }
 
 .mini-ufo-icon {
-  width: 30px;
+  width: 31px;
   height: 13px;
 
   border-radius: 50%;
 
-  background: #93999d;
+  background: #8c9094;
 
   border:
     2px solid white;
 }
 
 .mini-splash-icon {
-  width: 29px;
-  height: 23px;
+  width: 27px;
+  height: 20px;
 
-  background: #4dbbff;
+  background: #52bfff;
 
   clip-path:
     polygon(
-      0 75%,
+      0 70%,
       20% 40%,
-      36% 70%,
-      50% 15%,
-      68% 70%,
-      82% 35%,
-      100% 75%,
+      35% 70%,
+      50% 20%,
+      66% 70%,
+      80% 40%,
+      100% 70%,
       80% 100%,
-      18% 100%
+      20% 100%
     );
 }
 
@@ -3174,7 +3335,7 @@ button {
 
   inset: 0;
 
-  z-index: 70;
+  z-index: 50;
 
   pointer-events: none;
 }
@@ -3218,7 +3379,7 @@ button {
 
   animation:
     comicPop
-    1.45s
+    1.55s
     forwards;
 }
 
@@ -3240,7 +3401,7 @@ button {
       scale(1.12);
   }
 
-  75% {
+  78% {
     opacity: 1;
 
     transform:
@@ -3282,33 +3443,67 @@ button {
   color: #ffd529;
 }
 
-.hit-spark {
-  width: 45px;
-  height: 45px;
-
+.hit-spark-normal,
+.hit-spark-special,
+.hit-spark-ultimate {
   border-radius: 50%;
 
-  border:
-    5px solid white;
-
   animation:
-    burst
-    0.35s
+    genericBurst
+    0.3s
     forwards;
 }
 
-@keyframes burst {
+.hit-spark-normal {
+  width: 28px;
+  height: 28px;
+
+  border:
+    4px solid white;
+}
+
+.hit-spark-special {
+  width: 40px;
+  height: 40px;
+
+  border:
+    5px solid #4dc3ff;
+}
+
+.hit-spark-ultimate {
+  width: 54px;
+  height: 54px;
+
+  border:
+    6px solid #ffd52a;
+}
+
+@keyframes genericBurst {
+
+  from {
+    transform:
+      scale(0.5);
+
+    opacity: 1;
+  }
+
   to {
     transform:
-      scale(1.7);
+      scale(1.55);
 
     opacity: 0;
   }
+
 }
 
+
+/* =====================================================
+   BRENDAN EFFECTS — RESTORED IPO
+===================================================== */
+
 .golf-ball {
-  width: 14px;
-  height: 14px;
+  width: 13px;
+  height: 13px;
 
   background: white;
 
@@ -3316,92 +3511,222 @@ button {
     2px solid #aaa;
 
   border-radius: 50%;
+
+  box-shadow:
+    0 0 7px white;
 }
 
-.rugby-projectile {
-  width: 39px;
-  height: 23px;
+.ipo-card {
+  padding:
+    7px 14px;
 
-  border-radius: 60%;
+  background: #101821;
 
-  background: #ebe7db;
+  color: white;
 
   border:
-    3px solid #111;
+    3px solid #ffd52a;
+
+  border-radius: 8px;
+
+  font-size: 24px;
+
+  font-weight: 1000;
+
+  text-align: center;
+
+  box-shadow:
+    0 0 18px rgba(255,213,42,0.6);
+
+  animation:
+    ipoImpact
+    0.7s
+    forwards;
 }
 
-.flying-dish {
-  width: 50px;
-  height: 18px;
+@keyframes ipoImpact {
 
-  border-radius: 50%;
+  0% {
+    transform:
+      scale(0.5);
 
-  background: white;
+    opacity: 0;
+  }
 
-  border:
-    4px solid #94a6b2;
+  65% {
+    transform:
+      scale(1.25);
+
+    opacity: 1;
+  }
+
+  100% {
+    transform:
+      scale(1);
+
+    opacity: 1;
+  }
+
 }
+
+
+/* =====================================================
+   CONNOR EFFECTS — RESTORED QUALITY
+===================================================== */
 
 .paint-splash {
   width: 72px;
-  height: 45px;
+  height: 37px;
 
   border-radius: 50%;
 
   background:
     radial-gradient(
       circle,
-      #4ea6d9,
-      #d2447d 55%,
-      #e4ba42 70%
+      #4da6d9 0 40%,
+      #d2427c 41% 65%,
+      #e4ba42 66%
     );
+
+  animation:
+    paintPop
+    0.9s
+    forwards;
+}
+
+@keyframes paintPop {
+
+  0% {
+    transform:
+      scale(0.15);
+
+    opacity: 0;
+  }
+
+  65% {
+    transform:
+      scale(1.18);
+
+    opacity: 1;
+  }
+
+  100% {
+    transform:
+      scale(1);
+
+    opacity: 1;
+  }
+
 }
 
 .pixel-dino {
-  width: 105px;
-  height: 70px;
-
-  background: #4c9d4a;
-
-  border:
-    5px solid #173d20;
-
-  border-radius:
-    40% 55% 25% 35%;
-}
-
-.pixel-dino::before {
-  content: "";
-
   position: absolute;
 
-  width: 43px;
-  height: 32px;
+  width: 105px;
+  height: 72px;
 
-  right: -22px;
-  top: -15px;
+  transform-origin:
+    center center;
+
+  filter:
+    drop-shadow(
+      4px 5px 0 rgba(0,0,0,0.32)
+    );
+}
+
+.pixel-dino-body {
+  position: absolute;
+
+  width: 54px;
+  height: 31px;
+
+  left: 26px;
+  top: 25px;
+
+  background: #4b9d4b;
+
+  border:
+    4px solid #173c20;
+}
+
+.pixel-dino-head {
+  position: absolute;
+
+  width: 38px;
+  height: 30px;
+
+  left: 65px;
+  top: 9px;
 
   background: #58aa50;
 
   border:
-    5px solid #173d20;
+    4px solid #173c20;
 }
 
-.pixel-dino::after {
+.pixel-dino-head::after {
   content: "";
 
   position: absolute;
 
-  width: 45px;
+  width: 24px;
+  height: 14px;
+
+  right: -12px;
+  bottom: -5px;
+
+  background: #58aa50;
+
+  border:
+    4px solid #173c20;
+}
+
+.pixel-dino-eye {
+  position: absolute;
+
+  width: 5px;
+  height: 5px;
+
+  left: 86px;
+  top: 17px;
+
+  background: #111;
+
+  z-index: 4;
+}
+
+.pixel-dino-teeth {
+  position: absolute;
+
+  width: 19px;
+  height: 6px;
+
+  left: 92px;
+  top: 37px;
+
+  background:
+    repeating-linear-gradient(
+      90deg,
+      white 0 4px,
+      transparent 4px 7px
+    );
+
+  z-index: 5;
+}
+
+.pixel-dino-tail {
+  position: absolute;
+
+  width: 44px;
   height: 15px;
 
-  left: -36px;
-  top: 20px;
+  left: -6px;
+  top: 29px;
 
   background: #438e45;
 
   border:
-    4px solid #173d20;
+    4px solid #173c20;
 
   clip-path:
     polygon(
@@ -3411,23 +3736,175 @@ button {
     );
 }
 
+.pixel-dino-leg-one,
+.pixel-dino-leg-two {
+  position: absolute;
+
+  width: 12px;
+  height: 28px;
+
+  top: 48px;
+
+  background: #438e45;
+
+  border:
+    4px solid #173c20;
+}
+
+.pixel-dino-leg-one {
+  left: 37px;
+}
+
+.pixel-dino-leg-two {
+  left: 67px;
+}
+
+.pixel-dino-arm {
+  position: absolute;
+
+  width: 18px;
+  height: 7px;
+
+  left: 68px;
+  top: 38px;
+
+  background: #438e45;
+
+  border:
+    3px solid #173c20;
+
+  transform:
+    rotate(24deg);
+}
+
+.pixel-dino-paint-one,
+.pixel-dino-paint-two,
+.pixel-dino-paint-three {
+  position: absolute;
+
+  z-index: 6;
+
+  width: 9px;
+  height: 9px;
+}
+
+.pixel-dino-paint-one {
+  left: 34px;
+  top: 31px;
+
+  background: #3c9ad1;
+}
+
+.pixel-dino-paint-two {
+  left: 51px;
+  top: 40px;
+
+  background: #db4f81;
+}
+
+.pixel-dino-paint-three {
+  left: 72px;
+  top: 20px;
+
+  background: #e6c347;
+}
+
+.chicken-bucket {
+  padding:
+    9px 13px;
+
+  background: #e63932;
+
+  border:
+    4px solid white;
+
+  border-radius:
+    5px 5px 12px 12px;
+
+  font-size: 33px;
+
+  box-shadow:
+    4px 5px 0 #222;
+}
+
+
+/* =====================================================
+   ERIN EFFECTS — RESTORED PIMPLE PATCH
+===================================================== */
+
 .pimple-projectile {
-  width: 29px;
-  height: 29px;
+  width: 28px;
+  height: 28px;
 
   border-radius: 50%;
 
-  background: #ff9bc5;
+  background:
+    rgba(255,155,195,0.92);
 
   border:
     3px solid white;
+
+  box-shadow:
+    0 0 12px rgba(255,155,195,0.95);
 }
 
-.brainrot-phone {
-  width: 160px;
-  height: 270px;
+.pimple-stuck {
+  width: 90px;
+  height: 110px;
 
-  background: #111;
+  border-radius: 45%;
+
+  background:
+    rgba(255,155,195,0.66);
+
+  border:
+    5px solid rgba(255,235,245,0.9);
+
+  box-shadow:
+    0 0 18px rgba(255,140,185,0.8);
+
+  animation:
+    patchStretch
+    0.3s
+    infinite
+    alternate;
+}
+
+@keyframes patchStretch {
+
+  from {
+    transform:
+      scaleX(0.96);
+  }
+
+  to {
+    transform:
+      scaleX(1.07);
+  }
+
+}
+
+.laundry-item {
+  font-size: 70px;
+
+  filter:
+    drop-shadow(
+      3px 4px 0 rgba(0,0,0,0.4)
+    );
+}
+
+
+/* =====================================================
+   BRAINROT PHONE — REELS REELS RESTORED
+===================================================== */
+
+.brainrot-phone {
+  position: absolute;
+
+  width: 145px;
+  height: 250px;
+
+  background: #101010;
 
   border:
     8px solid #ddd;
@@ -3435,95 +3912,208 @@ button {
   border-radius: 20px;
 
   box-shadow:
-    0 0 30px rgba(255,70,170,0.8);
+    0 0 30px rgba(255,80,170,0.8);
+
+  overflow: hidden;
+
+  z-index: 220;
+}
+
+.brainrot-phone::before {
+  content: "";
+
+  position: absolute;
+
+  left: 50%;
+  top: 6px;
+
+  transform:
+    translateX(-50%);
+
+  width: 45px;
+  height: 8px;
+
+  border-radius: 10px;
+
+  background: #333;
 }
 
 .brainrot-screen {
   position: absolute;
 
   inset:
-    18px 8px 8px;
+    17px 8px 8px;
 
   background:
     linear-gradient(
-      #ff4c76,
+      #ff4e75,
       #824dff,
       #38c4ff
     );
+
+  overflow: hidden;
 }
 
-.dog-breath-cloud {
-  width: 195px;
-  height: 135px;
+.brainrot-screen::before {
+  content: "";
+
+  position: absolute;
+
+  width: 110px;
+  height: 110px;
+
+  left: 10px;
+  top: 30px;
 
   border-radius: 50%;
 
   background:
     radial-gradient(
       circle,
-      rgba(190,230,90,0.9),
-      rgba(105,160,60,0.75) 65%,
-      transparent 70%
+      #ffd95d,
+      #ef476f
     );
 
-  filter:
-    blur(1px);
-
-  box-shadow:
-    0 0 25px rgba(160,220,80,0.8);
+  animation:
+    reelPulse
+    0.35s
+    infinite
+    alternate;
 }
+
+.brainrot-screen::after {
+  content:
+    "REELS   REELS\A REELS   REELS";
+
+  white-space: pre;
+
+  position: absolute;
+
+  left: 8px;
+  right: 8px;
+  bottom: 15px;
+
+  color: white;
+
+  font-size: 12px;
+
+  font-weight: 1000;
+
+  line-height: 1.6;
+
+  text-align: center;
+}
+
+@keyframes reelPulse {
+
+  from {
+    transform:
+      scale(0.9)
+      rotate(-6deg);
+  }
+
+  to {
+    transform:
+      scale(1.1)
+      rotate(6deg);
+  }
+
+}
+
+
+/* =====================================================
+   UFO
+===================================================== */
 
 .ufo {
-  width: 200px;
+  width: 190px;
   height: 95px;
+
+  filter:
+    drop-shadow(
+      0 0 16px rgba(80,255,120,0.85)
+    );
 }
 
-.ufo::before {
-  content: "";
-
+.ufo-dome {
   position: absolute;
 
-  width: 95px;
-  height: 50px;
+  width: 90px;
+  height: 47px;
 
-  left: 53px;
+  left: 50px;
+  top: 1px;
 
-  background: #9be8ff;
+  background:
+    linear-gradient(
+      #bff6ff,
+      #6cc3d2
+    );
 
   border:
-    5px solid #3d4e52;
+    5px solid #3b4d50;
 
   border-radius:
-    50% 50% 25% 25%;
+    50% 50% 28% 28%;
 }
 
-.ufo::after {
-  content: "";
-
+.ufo-body {
   position: absolute;
 
-  width: 190px;
-  height: 45px;
+  width: 180px;
+  height: 48px;
 
   left: 5px;
   top: 35px;
 
-  background: #7d8387;
+  background:
+    linear-gradient(
+      #aeb3b5,
+      #575c5f
+    );
 
   border:
-    5px solid #282c2e;
+    5px solid #25292b;
 
   border-radius: 50%;
 }
 
+.ufo-light {
+  position: absolute;
+
+  width: 14px;
+  height: 14px;
+
+  top: 62px;
+
+  border-radius: 50%;
+
+  background: #6dff77;
+
+  box-shadow:
+    0 0 12px #6dff77;
+}
+
+.ufo-light.one {
+  left: 45px;
+}
+
+.ufo-light.two {
+  left: 88px;
+}
+
+.ufo-light.three {
+  right: 45px;
+}
+
 .ufo-beam {
-  width: 130px;
+  width: 120px;
   height: 340px;
 
   background:
     linear-gradient(
-      rgba(80,255,95,0.92),
-      rgba(80,255,95,0.22)
+      rgba(76,255,91,0.92),
+      rgba(127,255,142,0.28)
     );
 
   clip-path:
@@ -3535,140 +4125,144 @@ button {
     );
 }
 
-.yap-alert {
-  padding:
-    10px 22px;
 
-  background: #cc1414;
+/* =====================================================
+   DOG BREATH
+===================================================== */
 
-  border:
-    5px solid white;
-
-  font-family:
-    Impact,
-    sans-serif;
-
-  font-size: 50px;
-
-  color: white;
-
-  box-shadow:
-    0 0 30px red;
-
-  animation:
-    alarmFlash
-    0.22s
-    infinite
-    alternate;
-}
-
-@keyframes alarmFlash {
-  from {
-    filter:
-      brightness(0.75);
-  }
-
-  to {
-    filter:
-      brightness(1.5);
-  }
-}
-
-.yap-siren {
-  width: 55px;
-  height: 42px;
-
-  border:
-    4px solid #111;
-
-  border-radius:
-    50% 50% 15% 15%;
-
-  background: red;
-
-  box-shadow:
-    0 0 25px red;
-
-  animation:
-    alarmFlash
-    0.18s
-    infinite
-    alternate;
-}
-
-.food-projectile {
-  font-size: 48px;
-}
-
-.food-splat {
-  width: 80px;
-  height: 50px;
+.dog-breath-cloud {
+  width: 175px;
+  height: 120px;
 
   border-radius: 50%;
 
   background:
     radial-gradient(
-      #ffc846,
-      #e96743 65%,
-      transparent 68%
+      circle,
+      rgba(190,230,90,0.9) 0 35%,
+      rgba(120,180,60,0.8) 36% 62%,
+      rgba(80,130,50,0.35) 63%
     );
+
+  box-shadow:
+    0 0 25px rgba(150,220,80,0.8);
+
+  filter:
+    blur(1px);
 }
 
-.yoga-chair {
-  width: 80px;
-  height: 90px;
-}
-
-.yoga-chair::before {
+.dog-breath-cloud::before,
+.dog-breath-cloud::after {
   content: "";
 
   position: absolute;
 
-  width: 60px;
-  height: 52px;
+  border-radius: 50%;
 
-  left: 10px;
-
-  background: #a87547;
-
-  border:
-    4px solid #4b311f;
+  background:
+    rgba(160,215,80,0.75);
 }
 
+.dog-breath-cloud::before {
+  width: 85px;
+  height: 85px;
+
+  left: -35px;
+  top: 20px;
+}
+
+.dog-breath-cloud::after {
+  width: 105px;
+  height: 95px;
+
+  right: -40px;
+  top: 10px;
+}
+
+
+/* =====================================================
+   CHAIR YOGA — RESTORED
+===================================================== */
+
+.yoga-chair {
+  width: 80px;
+  height: 90px;
+
+  position: absolute;
+}
+
+.yoga-chair-seat {
+  position: absolute;
+
+  width: 60px;
+  height: 18px;
+
+  left: 10px;
+  top: 47px;
+
+  background: #9a6a42;
+
+  border:
+    4px solid #472f1f;
+}
+
+.yoga-chair-back {
+  position: absolute;
+
+  width: 57px;
+  height: 52px;
+
+  left: 12px;
+  top: 0;
+
+  background: #a9794b;
+
+  border:
+    4px solid #472f1f;
+}
+
+.yoga-chair::before,
 .yoga-chair::after {
   content: "";
 
   position: absolute;
 
-  width: 60px;
-  height: 17px;
+  width: 6px;
+  height: 33px;
 
-  left: 10px;
-  top: 48px;
+  bottom: 0;
 
-  background: #95633e;
+  background: #6f472d;
 
   border:
-    4px solid #4b311f;
-
-  box-shadow:
-    5px 30px 0 -3px #6f472d,
-    51px 30px 0 -3px #6f472d;
+    2px solid #352116;
 }
 
-.grave {
-  width: 80px;
-  height: 90px;
+.yoga-chair::before {
+  left: 15px;
+}
 
-  padding-top: 28px;
+.yoga-chair::after {
+  right: 15px;
+}
+
+
+/* =====================================================
+   ZOMBIE DEER — RESTORED
+===================================================== */
+
+.deer-grave,
+.grave {
+  width: 76px;
+  height: 82px;
+
+  background: #6d6d6d;
 
   border:
-    5px solid #313131;
+    5px solid #303030;
 
   border-radius:
-    35px 35px 4px 4px;
-
-  background: #777;
+    28px 28px 4px 4px;
 
   color: white;
 
@@ -3677,69 +4271,453 @@ button {
     sans-serif;
 
   text-align: center;
+
+  padding-top: 25px;
 }
 
 .zombie-deer {
-  width: 125px;
-  height: 85px;
+  width: 130px;
+  height: 110px;
 
-  background: #756749;
+  position: absolute;
+
+  filter:
+    drop-shadow(
+      4px 5px 0 rgba(0,0,0,0.35)
+    );
+}
+
+.deer-body {
+  position: absolute;
+
+  width: 75px;
+  height: 42px;
+
+  left: 35px;
+  top: 46px;
+
+  background: #716447;
 
   border:
-    5px solid #332d21;
+    4px solid #332d21;
 
   border-radius: 45%;
 }
 
-.zombie-deer::before {
+.deer-head {
+  position: absolute;
+
+  width: 40px;
+  height: 50px;
+
+  left: 8px;
+  top: 20px;
+
+  background: #786c4e;
+
+  border:
+    4px solid #332d21;
+
+  border-radius:
+    45% 45% 35% 35%;
+}
+
+.deer-head::before,
+.deer-head::after {
   content: "";
 
   position: absolute;
 
-  width: 45px;
-  height: 52px;
+  width: 18px;
+  height: 24px;
 
-  left: -24px;
-  top: -20px;
+  top: -22px;
 
-  background: #756749;
+  border-top:
+    5px solid #d0c3a5;
+
+  border-left:
+    4px solid #d0c3a5;
+}
+
+.deer-head::before {
+  left: 2px;
+
+  transform:
+    rotate(-20deg);
+}
+
+.deer-head::after {
+  right: 2px;
+
+  transform:
+    scaleX(-1)
+    rotate(-20deg);
+}
+
+.deer-eye {
+  position: absolute;
+
+  width: 7px;
+  height: 7px;
+
+  top: 34px;
+
+  border-radius: 50%;
+
+  background: #81ff62;
+
+  box-shadow:
+    0 0 8px #81ff62;
+}
+
+.deer-eye.left {
+  left: 17px;
+}
+
+.deer-eye.right {
+  left: 32px;
+}
+
+.deer-leg {
+  position: absolute;
+
+  width: 11px;
+  height: 34px;
+
+  top: 78px;
+
+  background: #5b513c;
 
   border:
-    5px solid #332d21;
+    4px solid #332d21;
+}
+
+.deer-leg.one {
+  left: 43px;
+}
+
+.deer-leg.two {
+  left: 61px;
+}
+
+.deer-leg.three {
+  left: 85px;
+}
+
+.deer-leg.four {
+  left: 103px;
+}
+
+
+/* =====================================================
+   CLYDE — RESTORED
+===================================================== */
+
+.clyde-model {
+  width: 110px;
+  height: 100px;
+
+  filter:
+    drop-shadow(
+      4px 5px 0 rgba(0,0,0,0.35)
+    );
+}
+
+.clyde-body {
+  position: absolute;
+
+  width: 70px;
+  height: 42px;
+
+  left: 25px;
+  top: 40px;
+
+  background: #b8a36f;
+
+  border:
+    4px solid #413423;
 
   border-radius: 45%;
 }
 
-.zombie-deer::after {
-  content: "Y";
-
+.clyde-zombie-side {
   position: absolute;
 
-  left: -22px;
-  top: -52px;
+  right: 0;
+  top: 0;
 
-  color: #d2c6aa;
+  width: 35px;
+  height: 100%;
 
-  font-size: 38px;
+  background: #6c8b57;
 
-  font-weight: 1000;
+  border-left:
+    3px solid #3b4d2d;
 }
 
-.clyde-model {
-  width: 105px;
-  height: 70px;
+.clyde-head {
+  position: absolute;
+
+  width: 57px;
+  height: 51px;
+
+  left: 5px;
+  top: 15px;
+
+  background: #b8a36f;
+
+  border:
+    4px solid #413423;
+
+  border-radius: 45%;
+
+  z-index: 3;
+}
+
+.clyde-face-light {
+  position: absolute;
+
+  width: 31px;
+  height: 24px;
+
+  left: 11px;
+  top: 19px;
+
+  background: #dfd0a7;
+
+  border-radius: 50%;
+}
+
+.clyde-eye {
+  position: absolute;
+
+  width: 7px;
+  height: 7px;
+
+  top: 15px;
+
+  border-radius: 50%;
+}
+
+.normal-eye {
+  left: 13px;
+
+  background: #111;
+}
+
+.zombie-eye {
+  right: 13px;
+
+  background: #88ff5d;
+
+  box-shadow:
+    0 0 8px #88ff5d;
+}
+
+.clyde-nose {
+  position: absolute;
+
+  width: 8px;
+  height: 7px;
+
+  left: 24px;
+  top: 31px;
+
+  background: #111;
+
+  border-radius: 50%;
+}
+
+.clyde-ear {
+  position: absolute;
+
+  width: 19px;
+  height: 27px;
+
+  top: -14px;
+
+  background: #9a8657;
+
+  border:
+    4px solid #413423;
+
+  clip-path:
+    polygon(
+      50% 0,
+      100% 100%,
+      0 100%
+    );
+}
+
+.clyde-ear.left {
+  left: 2px;
+}
+
+.clyde-ear.right {
+  right: 2px;
+
+  background: #66804e;
+}
+
+.clyde-tail {
+  position: absolute;
+
+  width: 39px;
+  height: 12px;
+
+  right: 1px;
+  top: 46px;
+
+  background: #8b7a50;
+
+  border:
+    4px solid #413423;
+
+  transform:
+    rotate(-24deg);
+}
+
+.clyde-leg {
+  position: absolute;
+
+  width: 13px;
+  height: 27px;
+
+  top: 73px;
+
+  background: #9f8d5d;
+
+  border:
+    4px solid #413423;
+}
+
+.clyde-leg.one {
+  left: 30px;
+}
+
+.clyde-leg.two {
+  left: 49px;
+}
+
+.clyde-leg.three {
+  left: 70px;
+
+  background: #657d50;
+}
+
+.clyde-leg.four {
+  left: 88px;
+
+  background: #657d50;
+}
+
+
+/* =====================================================
+   OTHER EFFECTS
+===================================================== */
+
+.rugby-projectile {
+  width: 38px;
+  height: 22px;
+
+  border-radius: 60%;
+
+  background: #ece9df;
+
+  border:
+    3px solid #111;
+}
+
+.flying-dish {
+  width: 47px;
+  height: 17px;
+
+  border-radius: 50%;
+
+  background: #f6f6f4;
+
+  border:
+    4px solid #8b9ba5;
+
+  box-shadow:
+    inset 0 0 0 4px #d5e2e8,
+    0 3px 5px rgba(0,0,0,0.3);
+}
+
+.food-projectile {
+  font-size: 48px;
+
+  filter:
+    drop-shadow(
+      3px 4px 0 rgba(0,0,0,0.35)
+    );
+}
+
+.food-splat {
+  width: 75px;
+  height: 45px;
+
+  border-radius: 50%;
+
+  background:
+    radial-gradient(
+      circle,
+      #ffcb43,
+      #e66745 60%,
+      transparent 62%
+    );
+}
+
+.yap-alert {
+  padding:
+    10px 24px;
+
+  background: #cc1111;
+
+  border:
+    5px solid #fff;
+
+  color: white;
+
+  font-family:
+    Impact,
+    "Arial Black",
+    sans-serif;
+
+  font-size:
+    clamp(
+      35px,
+      6vw,
+      65px
+    );
+
+  text-shadow:
+    4px 4px #111;
+
+  box-shadow:
+    0 0 30px rgba(255,0,0,0.8);
+}
+
+.yap-siren {
+  width: 55px;
+  height: 45px;
+
+  border-radius:
+    50% 50% 20% 20%;
 
   background:
     linear-gradient(
       90deg,
-      #baa66f 0 50%,
-      #698556 51%
+      #ff2424,
+      #ff8e8e
     );
 
   border:
-    5px solid #413423;
+    4px solid #111;
 
-  border-radius: 45%;
+  box-shadow:
+    0 0 30px red;
 }
 
 
@@ -3752,7 +4730,7 @@ button {
 
   inset: 0;
 
-  z-index: 500;
+  z-index: 400;
 
   display: flex;
 
@@ -3762,14 +4740,19 @@ button {
   justify-content: center;
 
   background:
-    rgba(0,0,0,0.4);
+    rgba(0,0,0,0.42);
+
+  pointer-events: none;
 }
 
 .battle-map-name {
+  margin-bottom: 9px;
+
   padding:
     7px 18px;
 
-  background: #111;
+  background:
+    rgba(0,0,0,0.82);
 
   border:
     2px solid white;
@@ -3780,34 +4763,33 @@ button {
 }
 
 .battle-intro-round {
-  margin-top: 9px;
+  margin-bottom: 7px;
 
   font-size: 35px;
 
   font-weight: 1000;
 
-  letter-spacing: 7px;
+  letter-spacing: 8px;
 }
 
 .battle-intro-word {
-  margin-top: 5px;
-
   font-family:
     Impact,
+    "Arial Black",
     sans-serif;
 
   font-size:
     clamp(
-      70px,
+      65px,
       11vw,
-      130px
+      135px
     );
 
-  color: #ffd529;
+  color: #ffd52a;
 
   text-shadow:
-    7px 7px #c52c26,
-    12px 12px #111;
+    6px 6px #c52b25,
+    11px 11px #111;
 }
 
 
@@ -3829,11 +4811,14 @@ button {
 
   align-items: center;
 
-  gap: 16px;
+  gap: 18px;
 
   background: #111820;
 
-  border-radius: 8px;
+  border:
+    1px solid #303943;
+
+  border-radius: 10px;
 }
 
 .keyboard-guide {
@@ -3841,9 +4826,13 @@ button {
 
   gap: 18px;
 
-  color: #9ca6af;
+  flex-wrap: wrap;
+
+  color: #9aa5b0;
 
   font-size: 11px;
+
+  font-weight: 800;
 }
 
 .keyboard-guide span {
@@ -3868,25 +4857,21 @@ button {
   padding:
     8px 12px;
 
-  border: 0;
+  border: none;
 
-  border-radius: 7px;
+  border-radius: 8px;
+
+  font-size: 12px;
 
   font-weight: 1000;
 }
 
-.action-button small {
-  display: block;
-
-  opacity: 0.65;
-}
-
 .special-action {
-  background: #59b1ff;
+  background: #5baeff;
 }
 
 .ultimate-action {
-  background: #ffd529;
+  background: #ffd52a;
 }
 
 .two-player-controls {
@@ -3923,12 +4908,6 @@ button {
   align-items: flex-end;
 }
 
-.two-player-control-side > span {
-  color: #9aa5ae;
-
-  font-size: 10px;
-}
-
 .two-player-action-row {
   display: flex;
 
@@ -3950,10 +4929,6 @@ button {
   background: #59b1ff;
 }
 
-.two-control-button small {
-  display: block;
-}
-
 .ultimate-key-note {
   color: #ffd529;
 
@@ -3970,7 +4945,7 @@ button {
 
   inset: 0;
 
-  z-index: 600;
+  z-index: 500;
 
   display: flex;
 
@@ -3980,17 +4955,23 @@ button {
   justify-content: center;
 
   background:
-    rgba(0,0,0,0.48);
+    rgba(0,0,0,0.43);
 }
 
 .ko-text {
   font-family:
     Impact,
+    "Arial Black",
     sans-serif;
 
-  font-size: 130px;
+  font-size:
+    clamp(
+      85px,
+      15vw,
+      150px
+    );
 
-  color: #ffd529;
+  color: #ffcf27;
 
   text-shadow:
     7px 7px #b31916,
@@ -3998,24 +4979,30 @@ button {
 }
 
 .winner-text {
-  font-size: 27px;
+  margin-top: 10px;
+
+  font-size: 28px;
 
   font-weight: 1000;
 }
 
 .match-status {
-  margin-top: 6px;
+  margin-top: 7px;
 
-  color: #ffd529;
+  color: #ffd52a;
+
+  font-size: 15px;
 
   font-weight: 1000;
+
+  letter-spacing: 3px;
 }
 
 .new-game-button {
-  margin-top: 18px;
+  margin-top: 20px;
 
   padding:
-    10px 24px;
+    11px 26px;
 
   background: #111;
 
@@ -4025,6 +5012,8 @@ button {
     3px solid white;
 
   border-radius: 6px;
+
+  font-size: 17px;
 
   font-weight: 1000;
 
@@ -4036,7 +5025,44 @@ button {
    RESPONSIVE
 ===================================================== */
 
-@media (max-width: 900px) {
+@media (max-height: 820px) {
+
+  .game-logo {
+    font-size:
+      clamp(
+        52px,
+        6vw,
+        78px
+      );
+  }
+
+  .tagline {
+    margin-top: 10px;
+  }
+
+  .title-character-space {
+    height: 150px;
+  }
+
+  .title-character-space
+  .pixel-person,
+  .title-character-space
+  .martin-model {
+    transform:
+      scale(0.8);
+  }
+
+  .title-versus-panel {
+    margin-top: 8px;
+  }
+
+  .title-vs {
+    font-size: 48px;
+  }
+
+}
+
+@media (max-width: 1000px) {
 
   .fighter-select {
     grid-template-columns:
@@ -4046,27 +5072,9 @@ button {
       );
   }
 
-  .challenge-layout {
-    grid-template-columns:
-      1fr;
-  }
-
-  .title-versus-panel {
-    grid-template-columns:
-      150px
-      70px
-      150px;
-
-    gap: 5px;
-  }
-
-  .title-vs {
-    font-size: 45px;
-  }
-
 }
 
-@media (max-width: 650px) {
+@media (max-width: 700px) {
 
   .fighter-select,
   .map-grid {
@@ -4074,16 +5082,8 @@ button {
       1fr;
   }
 
-  .challenge-fighter-grid {
-    grid-template-columns:
-      repeat(
-        2,
-        1fr
-      );
-  }
-
   .arena {
-    height: 410px;
+    height: 400px;
   }
 
   .hud {
@@ -4091,10 +5091,6 @@ button {
       1fr
       90px
       1fr;
-  }
-
-  .control-panel {
-    flex-direction: column;
   }
 
 }
