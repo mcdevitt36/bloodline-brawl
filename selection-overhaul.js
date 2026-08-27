@@ -40,6 +40,24 @@
           document.body.appendChild(
             maps
           );
+
+          maps.addEventListener(
+            "load",
+            () => {
+              const finishing =
+                document.createElement("script");
+
+              finishing.src =
+                "map-finishing.js?v=1";
+
+              document.body.appendChild(
+                finishing
+              );
+            },
+            {
+              once: true
+            }
+          );
         },
         {
           once: true
