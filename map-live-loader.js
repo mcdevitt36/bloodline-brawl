@@ -1,5 +1,5 @@
 /* =====================================================
-   BLOODLINE BRAWL — LIVE UI / VISUAL / AUDIO LOADER
+   BLOODLINE BRAWL — LIVE UI / VISUAL / AUDIO / COMBAT LOADER
 ===================================================== */
 
 (() => {
@@ -36,6 +36,16 @@
               const v5 = document.createElement("script");
               v5.src = "visual-fixes-v5.js?v=1";
               document.body.appendChild(v5);
+
+              v5.addEventListener(
+                "load",
+                () => {
+                  const combat = document.createElement("script");
+                  combat.src = "combat-smoothing.js?v=1";
+                  document.body.appendChild(combat);
+                },
+                { once: true }
+              );
             },
             { once: true }
           );
