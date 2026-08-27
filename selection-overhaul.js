@@ -1,7 +1,7 @@
 /* =====================================================
-   BLOODLINE BRAWL — SELECTION / PRESENTATION BOOTSTRAP
-   Keeps the original select overhaul intact, then loads the
-   latest presentation upgrades after it finishes.
+   BLOODLINE BRAWL — CHARACTER SELECT BOOTSTRAP
+   Stability-first loader. Keeps the working character-select
+   overhaul enabled while the newer presentation layer is disabled.
 ===================================================== */
 
 (() => {
@@ -9,27 +9,9 @@
     document.createElement("script");
 
   core.src =
-    "selection-overhaul-core.js?v=1";
+    "selection-overhaul-core.js?v=2";
 
   document.body.appendChild(
     core
-  );
-
-  core.addEventListener(
-    "load",
-    () => {
-      const presentation =
-        document.createElement("script");
-
-      presentation.src =
-        "presentation-upgrades.js?v=1";
-
-      document.body.appendChild(
-        presentation
-      );
-    },
-    {
-      once: true
-    }
   );
 })();
