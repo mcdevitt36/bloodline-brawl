@@ -1,20 +1,16 @@
 /* =====================================================
-   BLOODLINE BRAWL — PRESENTATION UPGRADES
-   Additive polish loaded after the character select overhaul.
-   - Grandaddy ladder charge
-   - Wider / stronger title screen composition
-   - Map select polish
-   - Donn Assist text cleanup
+   BLOODLINE BRAWL — SAFE PRESENTATION UPGRADES
+   Visual-only title/map polish plus Grandaddy ladder charge.
+   No global MutationObservers: this version is intentionally
+   conservative so the page remains responsive.
 ===================================================== */
 
 (() => {
-  const bbPresentationStyle =
-    document.createElement("style");
+  const style = document.createElement("style");
 
-  bbPresentationStyle.textContent = `
+  style.textContent = `
     /* ===================================================
-       TITLE SCREEN — USE THE HORIZONTAL SPACE
-       Keeps the screen locked to one viewport height.
+       TITLE SCREEN — WIDER, STILL ONE VIEWPORT TALL
     =================================================== */
 
     .title-screen {
@@ -23,10 +19,10 @@
       height: 100vh !important;
       height: 100dvh !important;
       min-height: 0 !important;
-      max-height: 100vh;
+      max-height: 100vh !important;
       margin-left: calc(50% - 50vw);
       margin-right: calc(50% - 50vw);
-      padding: 10px clamp(20px, 3vw, 48px) !important;
+      padding: 10px clamp(18px, 3vw, 46px) !important;
       overflow: hidden !important;
     }
 
@@ -36,9 +32,9 @@
       margin: 0 auto;
       display: grid !important;
       grid-template-columns:
-        minmax(145px, 1fr)
+        minmax(150px, 1fr)
         318px
-        232px
+        230px
         minmax(220px, 1fr);
       grid-template-rows:
         auto
@@ -63,8 +59,7 @@
     .title-content .tagline {
       grid-column: 1 / -1;
       grid-row: 2;
-      margin-top: 10px !important;
-      margin-bottom: 2px;
+      margin: 9px 0 2px !important;
       padding: 8px 30px;
       border-left: 5px solid #ffd52a;
       border-right: 5px solid #ef352b;
@@ -74,8 +69,8 @@
     .title-versus-panel {
       grid-column: 1 / -1;
       grid-row: 3;
-      width: min(1120px, 94vw) !important;
-      max-width: 1120px;
+      width: min(1140px, 94vw) !important;
+      max-width: 1140px;
       min-height: 220px;
       margin: 5px auto 0 !important;
       display: grid !important;
@@ -83,9 +78,10 @@
         minmax(300px, 1fr)
         140px
         minmax(300px, 1fr) !important;
-      column-gap: 40px !important;
+      column-gap: 42px !important;
       align-items: center;
       justify-content: center;
+      pointer-events: none;
     }
 
     .title-fighter {
@@ -95,7 +91,7 @@
       min-height: 224px;
       padding: 9px 18px 8px;
       justify-content: flex-end;
-      border: 3px solid rgba(9, 15, 23, .82);
+      border: 3px solid rgba(9,15,23,.82);
       border-radius: 12px;
       background:
         linear-gradient(
@@ -138,7 +134,7 @@
       min-height: 34px;
       margin-top: 3px !important;
       padding: 3px 12px 4px;
-      background: rgba(6, 10, 16, .9);
+      background: rgba(6,10,16,.9);
       border: 2px solid rgba(255,255,255,.3);
       border-radius: 4px;
       font-size: 24px !important;
@@ -148,9 +144,11 @@
     }
 
     .title-vs {
-      position: relative;
       width: 126px !important;
       height: 126px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
       border-radius: 50%;
       background:
         radial-gradient(
@@ -171,17 +169,12 @@
       grid-row: 4;
       justify-self: end;
       margin: 0 10px 0 0 !important;
-      padding: 0;
-      font-size: 10px;
-      letter-spacing: 4px;
       white-space: nowrap;
     }
 
     .mode-buttons {
       grid-column: 2;
       grid-row: 4;
-      align-self: center;
-      justify-self: center;
       margin: 0 !important;
       gap: 8px !important;
     }
@@ -189,7 +182,6 @@
     .mode-button {
       min-width: 150px !important;
       padding: 9px 14px !important;
-      border-width: 3px;
       box-shadow: 0 4px 0 rgba(0,0,0,.22);
     }
 
@@ -207,6 +199,9 @@
       margin: 0 !important;
       padding: 11px 26px !important;
       font-size: 20px !important;
+      position: relative;
+      z-index: 20;
+      pointer-events: auto;
     }
 
     .challenge-button {
@@ -217,11 +212,21 @@
       margin: 0 0 0 10px !important;
       padding: 9px 18px !important;
       box-shadow: 0 4px 0 rgba(0,0,0,.22);
+      position: relative;
+      z-index: 20;
+      pointer-events: auto;
+    }
+
+    .mode-buttons,
+    .mode-buttons button {
+      position: relative;
+      z-index: 20;
+      pointer-events: auto;
     }
 
 
     /* ===================================================
-       MAP SELECT — CLEANER CARD DEPTH / BETTER TYPOGRAPHY
+       MAP SELECT POLISH
     =================================================== */
 
     .map-screen .screen-heading {
@@ -312,7 +317,6 @@
       filter: saturate(1.07) contrast(1.03) brightness(1.02);
     }
 
-    /* New Canaan storefront lettering was too spread out. */
     .newcanaan-preview .nc-preview-building {
       display: flex !important;
       align-items: flex-start;
@@ -330,7 +334,7 @@
 
 
     /* ===================================================
-       GRANDADDY — CSS-DRAWN LADDER CHARGE
+       GRANDADDY LADDER CHARGE
     =================================================== */
 
     .bb-ladder-rig {
@@ -348,41 +352,22 @@
       left: 0;
       width: 190px;
       height: 9px;
-      background:
-        linear-gradient(
-          #eef2f4 0%,
-          #aeb7bd 52%,
-          #7f8b92 100%
-        );
+      background: linear-gradient(#eef2f4, #aeb7bd 52%, #7f8b92);
       border: 3px solid #111;
       border-radius: 2px;
     }
 
-    .bb-ladder-rail.top {
-      top: 2px;
-    }
-
-    .bb-ladder-rail.bottom {
-      bottom: 2px;
-    }
+    .bb-ladder-rail.top { top: 2px; }
+    .bb-ladder-rail.bottom { bottom: 2px; }
 
     .bb-ladder-rung {
       position: absolute;
       top: 8px;
       width: 9px;
       height: 40px;
-      background:
-        linear-gradient(
-          90deg,
-          #dce2e5,
-          #929da4
-        );
+      background: linear-gradient(90deg, #dce2e5, #929da4);
       border: 2px solid #111;
       border-radius: 1px;
-    }
-
-    .bb-ladder-rig.bb-ladder-rebound {
-      animation: bbLadderRebound 340ms ease-out 1 forwards;
     }
 
     .fight-character.bb-ladder-windup .visual-layer {
@@ -390,7 +375,7 @@
     }
 
     .fight-character.bb-ladder-charging .visual-layer {
-      animation: bbGrandaddyCharge 590ms cubic-bezier(.2,.75,.25,1) 1;
+      animation: bbGrandaddyCharge 560ms cubic-bezier(.2,.75,.25,1) 1;
     }
 
     .fight-character.bb-ladder-hit .motion-layer {
@@ -431,99 +416,38 @@
       transform: rotate(90deg);
     }
 
-    .arena.bb-ladder-screen-hit {
-      animation: bbLadderArenaHit 125ms linear 1;
-    }
-
     @keyframes bbGrandaddyWindup {
-      0% {
-        transform: translateX(0) rotate(0deg);
-      }
-      60% {
-        transform: translateX(var(--bb-ladder-windup-x, -7px)) rotate(-2deg);
-      }
-      100% {
-        transform: translateX(0) rotate(0deg);
-      }
+      0% { transform: translateX(0) rotate(0deg); }
+      60% { transform: translateX(var(--bb-ladder-windup-x,-7px)) rotate(-2deg); }
+      100% { transform: translateX(0) rotate(0deg); }
     }
 
     @keyframes bbGrandaddyCharge {
-      0% {
-        transform: translateX(0) rotate(0deg);
-      }
-      68% {
-        transform: translateX(var(--bb-ladder-charge-x, 22px)) rotate(2deg);
-      }
-      100% {
-        transform: translateX(var(--bb-ladder-charge-end-x, 16px)) rotate(1deg);
-      }
+      0% { transform: translateX(0) rotate(0deg); }
+      70% { transform: translateX(var(--bb-ladder-charge-x,22px)) rotate(2deg); }
+      100% { transform: translateX(var(--bb-ladder-charge-end-x,16px)) rotate(1deg); }
     }
 
     @keyframes bbLadderTargetRecoil {
-      0% {
-        transform: translateX(0);
-        filter: brightness(1.5);
-      }
-      42% {
-        transform: translateX(var(--bb-ladder-recoil-x, 11px));
-        filter: brightness(1.22);
-      }
-      100% {
-        transform: translateX(0);
-        filter: brightness(1);
-      }
+      0% { transform: translateX(0); filter: brightness(1.5); }
+      42% { transform: translateX(var(--bb-ladder-recoil-x,11px)); filter: brightness(1.22); }
+      100% { transform: translateX(0); filter: brightness(1); }
     }
 
     @keyframes bbLadderImpact {
-      0% {
-        transform: translate(-50%, -50%) scale(.35) rotate(0deg);
-        opacity: 0;
-      }
-      30% {
-        transform: translate(-50%, -50%) scale(1.18) rotate(8deg);
-        opacity: 1;
-      }
-      100% {
-        transform: translate(-50%, -50%) scale(.75) rotate(18deg);
-        opacity: 0;
-      }
-    }
-
-    @keyframes bbLadderRebound {
-      0% {
-        filter: drop-shadow(0 5px 0 rgba(0,0,0,.22));
-      }
-      45% {
-        transform: translateX(var(--bb-ladder-rebound-x, -20px)) rotate(var(--bb-ladder-rebound-rot, -6deg));
-      }
-      100% {
-        transform: translateX(var(--bb-ladder-rebound-x-small, -8px)) rotate(0deg);
-        opacity: .82;
-      }
-    }
-
-    @keyframes bbLadderArenaHit {
-      0%   { transform: translateX(0); }
-      25%  { transform: translateX(-2px); }
-      50%  { transform: translateX(2px); }
-      75%  { transform: translateX(-1px); }
-      100% { transform: translateX(0); }
+      0% { transform: translate(-50%,-50%) scale(.35) rotate(0deg); opacity: 0; }
+      30% { transform: translate(-50%,-50%) scale(1.18) rotate(8deg); opacity: 1; }
+      100% { transform: translate(-50%,-50%) scale(.75) rotate(18deg); opacity: 0; }
     }
 
 
     /* ===================================================
-       RESPONSIVE / SHORT-VIEWPORT PROTECTION
+       SHORT / NARROW VIEWPORT PROTECTION
     =================================================== */
 
     @media (max-height: 760px) and (min-width: 981px) {
       .title-content .game-logo {
         font-size: clamp(54px, 5vw, 74px) !important;
-      }
-
-      .title-content .tagline {
-        margin-top: 7px !important;
-        padding-top: 6px;
-        padding-bottom: 6px;
       }
 
       .title-versus-panel {
@@ -545,7 +469,7 @@
       }
 
       .title-content {
-        grid-template-rows: auto auto minmax(0, 1fr) 68px;
+        grid-template-rows: auto auto minmax(0,1fr) 68px;
       }
     }
 
@@ -593,82 +517,37 @@
         font-size: 48px !important;
       }
 
-      .mode-title {
-        margin: 4px 0 0 !important;
-      }
-
-      .mode-buttons {
-        margin: 5px 0 6px !important;
-      }
-
-      .title-start {
-        margin: 0 !important;
-      }
-
-      .challenge-button {
-        margin: 6px 0 0 !important;
-      }
+      .mode-title { margin: 4px 0 0 !important; }
+      .mode-buttons { margin: 5px 0 6px !important; }
+      .title-start { margin: 0 !important; }
+      .challenge-button { margin: 6px 0 0 !important; }
     }
   `;
 
-  document.head.appendChild(
-    bbPresentationStyle
-  );
+  document.head.appendChild(style);
 
 
   /* ===================================================
-     GRANDMOMMY — MAKE "DONN ASSIST" CONSISTENT EVERYWHERE
+     DONN ASSIST — SAFE ONE-TIME TEXT CLEANUP
   =================================================== */
 
-  function bbFixDonnAssistLabels() {
-    document
-      .querySelectorAll(
-        '[data-character="grandmommy"] small'
-      )
-      .forEach(
-        label => {
-          label.textContent =
-            label.textContent.replace(
-              /\bDon Assist\b/g,
-              "Donn Assist"
-            );
-        }
-      );
-  }
-
-  bbFixDonnAssistLabels();
-
-  const bbDonnLabelObserver =
-    new MutationObserver(
-      () => {
-        bbFixDonnAssistLabels();
+  document
+    .querySelectorAll('[data-character="grandmommy"] small')
+    .forEach(label => {
+      const next = label.textContent.replace(/\bDon Assist\b/g, "Donn Assist");
+      if (next !== label.textContent) {
+        label.textContent = next;
       }
-    );
-
-  bbDonnLabelObserver.observe(
-    document.body,
-    {
-      childList: true,
-      subtree: true
-    }
-  );
+    });
 
 
   /* ===================================================
      GRANDADDY — LADDER CHARGE
-     Replaces only the visual/sequence of the old ladder special.
-     Damage stays 12, jump dodge threshold stays y < 55,
-     and total action lock stays 1700ms.
   =================================================== */
 
-  function bbCreatePixelLadder() {
-    const ladder =
-      document.createElement(
-        "div"
-      );
-
-    ladder.className =
-      "effect bb-ladder-rig";
+  function createLadder() {
+    const ladder = document.createElement("div");
+    ladder.className = "effect bb-ladder-rig";
 
     ladder.innerHTML = `
       <div class="bb-ladder-rail top"></div>
@@ -685,105 +564,37 @@
     return ladder;
   }
 
-
-  function bbLadderImpact(
-    attacker,
-    target
-  ) {
-    const burst =
-      document.createElement(
-        "div"
-      );
-
-    burst.className =
-      "effect bb-ladder-impact";
-
+  function showLadderImpact(attacker, target) {
+    const burst = document.createElement("div");
+    burst.className = "effect bb-ladder-impact";
     burst.style.left =
-      (
-        target.x +
-        (
-          attacker.facing === 1
-            ? 12
-            : 48
-        )
-      ) +
-      "px";
-
-    burst.style.bottom =
-      (
-        115 +
-        target.y
-      ) +
-      "px";
-
-    effects.appendChild(
-      burst
-    );
+      (target.x + (attacker.facing === 1 ? 12 : 48)) + "px";
+    burst.style.bottom = (115 + target.y) + "px";
+    effects.appendChild(burst);
 
     target.fighter.style.setProperty(
       "--bb-ladder-recoil-x",
-      (
-        attacker.facing *
-        11
-      ) +
-      "px"
+      (attacker.facing * 11) + "px"
     );
 
-    target.fighter.classList.remove(
-      "bb-ladder-hit"
-    );
-
-    arena.classList.remove(
-      "bb-ladder-screen-hit"
-    );
-
+    target.fighter.classList.remove("bb-ladder-hit");
     void target.fighter.offsetWidth;
+    target.fighter.classList.add("bb-ladder-hit");
 
-    target.fighter.classList.add(
-      "bb-ladder-hit"
-    );
-
-    arena.classList.add(
-      "bb-ladder-screen-hit"
-    );
-
-    setTimeout(
-      () => {
-        burst.remove();
-
-        target.fighter.classList.remove(
-          "bb-ladder-hit"
-        );
-
-        arena.classList.remove(
-          "bb-ladder-screen-hit"
-        );
-      },
-      240
-    );
+    setTimeout(() => {
+      burst.remove();
+      target.fighter.classList.remove("bb-ladder-hit");
+    }, 240);
   }
 
+  const originalLadderAttack = ladderAttack;
 
-  const bbOriginalLadderAttack =
-    ladderAttack;
-
-  ladderAttack = function(
-    attacker,
-    target
-  ) {
-    if (
-      !attacker ||
-      !target ||
-      roundOver
-    ) {
-      return bbOriginalLadderAttack(
-        attacker,
-        target
-      );
+  ladderAttack = function(attacker, target) {
+    if (!attacker || !target || roundOver) {
+      return originalLadderAttack(attacker, target);
     }
 
-    actionLock =
-      true;
+    actionLock = true;
 
     addComicText(
       "HOLD THIS LADDER!",
@@ -792,257 +603,144 @@
     );
 
     const direction =
-      attacker.facing ||
-      (
-        target.x >= attacker.x
-          ? 1
-          : -1
-      );
+      attacker.facing || (target.x >= attacker.x ? 1 : -1);
 
     const hammer =
-      attacker.fighter.querySelector(
-        ".hammer"
-      );
+      attacker.fighter.querySelector(".hammer");
 
-    const previousHammerVisibility =
-      hammer
-        ? hammer.style.visibility
-        : "";
+    const oldHammerVisibility =
+      hammer ? hammer.style.visibility : "";
 
-    if (
-      hammer
-    ) {
-      hammer.style.visibility =
-        "hidden";
+    if (hammer) {
+      hammer.style.visibility = "hidden";
     }
 
     attacker.fighter.style.setProperty(
       "--bb-ladder-windup-x",
-      (
-        direction *
-        -7
-      ) +
-      "px"
+      (direction * -7) + "px"
     );
 
     attacker.fighter.style.setProperty(
       "--bb-ladder-charge-x",
-      (
-        direction *
-        22
-      ) +
-      "px"
+      (direction * 22) + "px"
     );
 
     attacker.fighter.style.setProperty(
       "--bb-ladder-charge-end-x",
-      (
-        direction *
-        16
-      ) +
-      "px"
+      (direction * 16) + "px"
     );
 
-    attacker.fighter.classList.add(
-      "bb-ladder-windup"
-    );
+    attacker.fighter.classList.add("bb-ladder-windup");
 
-    const ladder =
-      bbCreatePixelLadder();
+    const ladder = createLadder();
 
     const startX =
-      attacker.x +
-      (
-        direction === 1
-          ? 54
-          : -154
-      );
+      attacker.x + (direction === 1 ? 54 : -154);
 
     const startBottom =
-      76 +
-      attacker.y;
+      76 + attacker.y;
 
-    ladder.style.left =
-      startX +
-      "px";
-
-    ladder.style.bottom =
-      startBottom +
-      "px";
-
-    ladder.style.opacity =
-      "0";
-
-    effects.appendChild(
-      ladder
-    );
+    ladder.style.left = startX + "px";
+    ladder.style.bottom = startBottom + "px";
+    ladder.style.opacity = "0";
+    effects.appendChild(ladder);
 
     ladder.animate(
       [
         {
           opacity: 0,
-          transform:
-            `scaleX(${direction}) scale(.48) rotate(-8deg)`
+          transform: `scaleX(${direction}) scale(.48) rotate(-8deg)`
         },
         {
           opacity: 1,
-          transform:
-            `scaleX(${direction}) scale(.82) rotate(-3deg)`
+          transform: `scaleX(${direction}) scale(.82) rotate(-3deg)`
         },
         {
           opacity: 1,
-          transform:
-            `scaleX(${direction}) scale(1) rotate(0deg)`
+          transform: `scaleX(${direction}) scale(1) rotate(0deg)`
         }
       ],
       {
         duration: 340,
         fill: "forwards",
-        easing:
-          "cubic-bezier(.18,.78,.24,1)"
+        easing: "cubic-bezier(.18,.78,.24,1)"
       }
     );
 
-    setTimeout(
-      () => {
-        attacker.fighter.classList.remove(
-          "bb-ladder-windup"
-        );
+    setTimeout(() => {
+      attacker.fighter.classList.remove("bb-ladder-windup");
+      attacker.fighter.classList.add("bb-ladder-charging");
 
-        attacker.fighter.classList.add(
-          "bb-ladder-charging"
-        );
+      const endX =
+        target.x + (direction === 1 ? -134 : 34);
 
-        const endX =
-          target.x +
-          (
-            direction === 1
-              ? -134
-              : 34
-          );
+      const endBottom =
+        58 + Math.min(target.y, 28);
 
-        const endBottom =
-          58 +
-          Math.min(
-            target.y,
-            28
-          );
-
-        ladder.animate(
-          [
-            {
-              left:
-                startX +
-                "px",
-              bottom:
-                startBottom +
-                "px",
-              transform:
-                `scaleX(${direction}) scale(1) rotate(0deg)`
-            },
-            {
-              left:
-                endX +
-                "px",
-              bottom:
-                endBottom +
-                "px",
-              transform:
-                `scaleX(${direction}) scale(1) rotate(${direction * 1.5}deg)`
-            }
-          ],
+      ladder.animate(
+        [
           {
-            duration: 560,
-            fill: "forwards",
-            easing:
-              "cubic-bezier(.2,.76,.23,1)"
+            left: startX + "px",
+            bottom: startBottom + "px",
+            transform: `scaleX(${direction}) scale(1) rotate(0deg)`
+          },
+          {
+            left: endX + "px",
+            bottom: endBottom + "px",
+            transform: `scaleX(${direction}) scale(1) rotate(${direction * 1.5}deg)`
           }
-        );
-      },
-      335
-    );
-
-    setTimeout(
-      () => {
-        if (
-          !roundOver &&
-          target.y <
-            55
-        ) {
-          dealDamage(
-            attacker,
-            target,
-            12,
-            {
-              type:
-                "special"
-            }
-          );
-
-          bbLadderImpact(
-            attacker,
-            target
-          );
+        ],
+        {
+          duration: 560,
+          fill: "forwards",
+          easing: "cubic-bezier(.2,.76,.23,1)"
         }
+      );
+    }, 335);
 
-        attacker.fighter.classList.remove(
-          "bb-ladder-charging"
+    setTimeout(() => {
+      if (!roundOver && target.y < 55) {
+        dealDamage(
+          attacker,
+          target,
+          STATS.grandaddy.specialDamage,
+          { type: "special" }
         );
 
-        ladder.style.setProperty(
-          "--bb-ladder-rebound-x",
-          (
-            direction *
-            -20
-          ) +
-          "px"
-        );
+        showLadderImpact(attacker, target);
+      }
 
-        ladder.style.setProperty(
-          "--bb-ladder-rebound-x-small",
-          (
-            direction *
-            -8
-          ) +
-          "px"
-        );
+      attacker.fighter.classList.remove("bb-ladder-charging");
 
-        ladder.style.setProperty(
-          "--bb-ladder-rebound-rot",
-          (
-            direction *
-            -6
-          ) +
-          "deg"
-        );
-
-        ladder.classList.add(
-          "bb-ladder-rebound"
-        );
-      },
-      900
-    );
-
-    setTimeout(
-      () => {
-        ladder.remove();
-
-        attacker.fighter.classList.remove(
-          "bb-ladder-windup",
-          "bb-ladder-charging"
-        );
-
-        if (
-          hammer
-        ) {
-          hammer.style.visibility =
-            previousHammerVisibility;
+      ladder.animate(
+        [
+          { opacity: 1 },
+          {
+            opacity: .75,
+            transform: `scaleX(${direction}) translateX(${-direction * 16}px) rotate(${-direction * 5}deg)`
+          }
+        ],
+        {
+          duration: 320,
+          fill: "forwards",
+          easing: "ease-out"
         }
+      );
+    }, 900);
 
-        actionLock =
-          false;
-      },
-      1700
-    );
+    setTimeout(() => {
+      ladder.remove();
+
+      attacker.fighter.classList.remove(
+        "bb-ladder-windup",
+        "bb-ladder-charging"
+      );
+
+      if (hammer) {
+        hammer.style.visibility = oldHammerVisibility;
+      }
+
+      actionLock = false;
+    }, 1700);
   };
 })();
