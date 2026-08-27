@@ -1,7 +1,7 @@
 /* =====================================================
-   BLOODLINE BRAWL — CHARACTER SELECT BOOTSTRAP
-   Stability-first loader. Keeps the working character-select
-   overhaul enabled while the newer presentation layer is disabled.
+   BLOODLINE BRAWL — SELECTION / PRESENTATION BOOTSTRAP
+   Loads the stable character-select overhaul first, then the
+   safe presentation layer after it finishes.
 ===================================================== */
 
 (() => {
@@ -13,5 +13,23 @@
 
   document.body.appendChild(
     core
+  );
+
+  core.addEventListener(
+    "load",
+    () => {
+      const presentation =
+        document.createElement("script");
+
+      presentation.src =
+        "presentation-upgrades.js?v=3";
+
+      document.body.appendChild(
+        presentation
+      );
+    },
+    {
+      once: true
+    }
   );
 })();
