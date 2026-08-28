@@ -3,4 +3,5 @@ import './warfare-map-polish-v5.js?v=1';
 import './warfare-interactive-v7.js?v=1';
 import './warfare-character-polish-v8.js?v=1';
 import './warfare-specials-v9.js?v=1';
+import './warfare-hub-polish-v10.js?v=1';
 import './warfare-v4.js?v=2';
