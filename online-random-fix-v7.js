@@ -1,14 +1,16 @@
 /* =====================================================
    BLOODLINE BRAWL — ONLINE RANDOM FIGHTER FIX V7
-   Online/private-match only.
-   Reuse the exact RANDOM button handler already used by 1P / local 2P.
+   Private-match only.
+   Replicates the original ui-random-title.js Random-card logic exactly,
+   but runs at WINDOW capture so it executes before online-mode's DOCUMENT
+   capture handler can mistake data-character="random" for a real fighter.
 ===================================================== */
 
 (() => {
   if (window.__bbOnlineRandomFixV7Loaded) return;
   window.__bbOnlineRandomFixV7Loaded = true;
 
-  let replayingThroughBaseRandomHandler = false;
+  let rolling = false;
 
   const isOnlineSelect = () =>
     document.body.classList.contains("bb-online-active") &&
@@ -16,43 +18,93 @@
     selectScreen &&
     selectScreen.classList.contains("active");
 
-  document.addEventListener(
+  window.addEventListener(
     "click",
     event => {
       if (!isOnlineSelect()) return;
 
-      const randomCard = event.target.closest(".bb-random-card");
-      if (!randomCard) return;
+      const card = event.target.closest(".bb-random-card");
+      if (!card) return;
 
-      /* The replayed click is allowed to continue normally. It reaches the
-         original ui-random-title.js card listener — the same Random logic
-         used by 1P and local 2P. That existing handler rolls the roster and
-         eventually clicks a REAL fighter card. The normal online selector
-         then receives only that real fighter and syncs it to the opponent. */
-      if (replayingThroughBaseRandomHandler) {
-        replayingThroughBaseRandomHandler = false;
-        return;
-      }
-
-      /* Stop this first online click before the online document selector can
-         ever interpret data-character="random" as a fighter id. */
+      /* This must happen on window capture. online-mode-v1.js owns fighter
+         clicks on document capture, so any later document listener loses.
+         Taking RANDOM here guarantees only the final REAL fighter click
+         reaches the online selection/sync handler. */
       event.preventDefault();
       event.stopPropagation();
       event.stopImmediatePropagation();
 
-      replayingThroughBaseRandomHandler = true;
+      if (rolling) return;
 
-      setTimeout(() => {
-        try {
-          randomCard.click();
-        } finally {
-          /* If the synthetic click was blocked for any unusual reason,
-             never leave the bypass armed for a future user click. */
-          setTimeout(() => {
-            replayingThroughBaseRandomHandler = false;
-          }, 0);
+      const grid = card.closest(".fighter-select");
+      if (!grid) return;
+
+      /* Same candidate logic used by the original 1P / 2P Random button. */
+      const candidates = Array.from(
+        grid.querySelectorAll(
+          '.fighter-card[data-character]:not(.bb-random-card)'
+        )
+      ).filter(candidate => {
+        const character = candidate.dataset.character;
+
+        if (!character) return false;
+        if (candidate.classList.contains("locked")) return false;
+
+        if (
+          character === "martin" &&
+          typeof isMartinUnlocked === "function" &&
+          !isMartinUnlocked()
+        ) {
+          return false;
         }
-      }, 0);
+
+        return true;
+      });
+
+      if (!candidates.length) return;
+
+      rolling = true;
+      card.classList.add("bb-random-rolling");
+
+      let flashes = 0;
+      const totalFlashes = 5;
+
+      /* Same 5-flash / 78ms roll cadence as ui-random-title.js. */
+      const flashTimer = window.setInterval(() => {
+        const flashCard =
+          candidates[Math.floor(Math.random() * candidates.length)];
+
+        candidates.forEach(candidate => {
+          candidate.classList.remove("bb-random-flash");
+        });
+
+        flashCard.style.outline = "3px solid #ffd52a";
+        flashCard.style.outlineOffset = "-3px";
+
+        window.setTimeout(() => {
+          flashCard.style.outline = "";
+          flashCard.style.outlineOffset = "";
+        }, 72);
+
+        flashes += 1;
+
+        if (flashes >= totalFlashes) {
+          window.clearInterval(flashTimer);
+
+          const chosen =
+            candidates[Math.floor(Math.random() * candidates.length)];
+
+          window.setTimeout(() => {
+            card.classList.remove("bb-random-rolling");
+            rolling = false;
+
+            /* chosen is a normal fighter card. Its new click starts at
+               window again, this handler ignores it, and online-mode's
+               document-capture selector receives the real character id. */
+            chosen.click();
+          }, 85);
+        }
+      }, 78);
     },
     true
   );
