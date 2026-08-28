@@ -60,4 +60,14 @@
   const v10 = document.createElement("script");
   v10.src = "title-art-polish-v10.js?v=1";
   document.body.appendChild(v10);
+
+  v10.addEventListener(
+    "load",
+    () => {
+      const connorStubblePolish = document.createElement("script");
+      connorStubblePolish.src = "connor-stubble-polish-v1.js?v=1";
+      document.body.appendChild(connorStubblePolish);
+    },
+    { once: true }
+  );
 })();
