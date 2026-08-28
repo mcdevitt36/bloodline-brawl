@@ -1,58 +1,20 @@
 /* =====================================================
    BLOODLINE BRAWL — ONLINE RANDOM FIGHTER FIX V7
    Online/private-match only.
-   - Random never gets submitted as a literal character id
-   - Host and guest both resolve RANDOM to a real unlocked fighter
-   - Offline 1P / local 2P random behavior remains untouched
+   Reuse the exact RANDOM button handler already used by 1P / local 2P.
 ===================================================== */
 
 (() => {
   if (window.__bbOnlineRandomFixV7Loaded) return;
   window.__bbOnlineRandomFixV7Loaded = true;
 
-  let rolling = false;
+  let replayingThroughBaseRandomHandler = false;
 
   const isOnlineSelect = () =>
     document.body.classList.contains("bb-online-active") &&
     typeof selectScreen !== "undefined" &&
     selectScreen &&
     selectScreen.classList.contains("active");
-
-  const getCandidates = randomCard => {
-    const grid = randomCard.closest(".fighter-select");
-    if (!grid) return [];
-
-    return Array.from(
-      grid.querySelectorAll('.fighter-card[data-character]:not(.bb-random-card)')
-    ).filter(card => {
-      const character = card.dataset.character;
-      if (!character || character === "random") return false;
-      if (card.classList.contains("locked")) return false;
-
-      if (
-        character === "martin" &&
-        typeof isMartinUnlocked === "function" &&
-        !isMartinUnlocked()
-      ) {
-        return false;
-      }
-
-      return true;
-    });
-  };
-
-  const flashCard = card => {
-    if (!card) return;
-    const oldOutline = card.style.outline;
-    const oldOffset = card.style.outlineOffset;
-    card.style.outline = "3px solid #ffd52a";
-    card.style.outlineOffset = "-3px";
-
-    setTimeout(() => {
-      card.style.outline = oldOutline;
-      card.style.outlineOffset = oldOffset;
-    }, 72);
-  };
 
   document.addEventListener(
     "click",
@@ -62,46 +24,35 @@
       const randomCard = event.target.closest(".bb-random-card");
       if (!randomCard) return;
 
-      /* Beat the older online document handler before it can submit
-         character: "random" over the network. */
+      /* The replayed click is allowed to continue normally. It reaches the
+         original ui-random-title.js card listener — the same Random logic
+         used by 1P and local 2P. That existing handler rolls the roster and
+         eventually clicks a REAL fighter card. The normal online selector
+         then receives only that real fighter and syncs it to the opponent. */
+      if (replayingThroughBaseRandomHandler) {
+        replayingThroughBaseRandomHandler = false;
+        return;
+      }
+
+      /* Stop this first online click before the online document selector can
+         ever interpret data-character="random" as a fighter id. */
       event.preventDefault();
       event.stopPropagation();
       event.stopImmediatePropagation();
 
-      if (rolling) return;
+      replayingThroughBaseRandomHandler = true;
 
-      const candidates = getCandidates(randomCard);
-      if (!candidates.length) return;
-
-      rolling = true;
-      randomCard.classList.add("bb-random-rolling");
-
-      let flashes = 0;
-      const totalFlashes = 5;
-
-      const timer = setInterval(() => {
-        flashCard(
-          candidates[Math.floor(Math.random() * candidates.length)]
-        );
-
-        flashes += 1;
-
-        if (flashes >= totalFlashes) {
-          clearInterval(timer);
-
-          const chosen =
-            candidates[Math.floor(Math.random() * candidates.length)];
-
+      setTimeout(() => {
+        try {
+          randomCard.click();
+        } finally {
+          /* If the synthetic click was blocked for any unusual reason,
+             never leave the bypass armed for a future user click. */
           setTimeout(() => {
-            randomCard.classList.remove("bb-random-rolling");
-            rolling = false;
-
-            /* This is now a real roster card, so the normal online
-               selection/sync path handles it for host or guest. */
-            chosen.click();
-          }, 85);
+            replayingThroughBaseRandomHandler = false;
+          }, 0);
         }
-      }, 78);
+      }, 0);
     },
     true
   );
