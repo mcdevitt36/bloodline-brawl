@@ -70,4 +70,8 @@
     },
     { once: true }
   );
+
+  const singlePlayerControls = document.createElement("script");
+  singlePlayerControls.src = "single-player-controls-v1.js?v=1";
+  document.body.appendChild(singlePlayerControls);
 })();
