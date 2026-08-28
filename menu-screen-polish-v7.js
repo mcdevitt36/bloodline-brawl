@@ -62,6 +62,10 @@
         setTimeout(pinFightToTop, 420);
       }
 
+      setTimeout(syncMenuMusic, 0);
+      setTimeout(syncMenuMusic, 80);
+      setTimeout(syncMenuMusic, 180);
+
       return result;
     };
 
@@ -337,8 +341,4 @@
     },
     true
   );
-
-  /* Small bounded-frequency sync. It also immediately silences any old
-     base menu track if its own screen watcher tried to restart it. */
-  setInterval(syncMenuMusic, 220);
 })();
