@@ -9,6 +9,7 @@ import './warfare-scroll-lock-v12.js?v=1';
 import './warfare-smoothing-v13.js?v=1';
 import './warfare-crouch-v14.js?v=1';
 import './warfare-loot-cover-v15.js?v=1';
+import './warfare-stability-v17.js?v=1';
 import './warfare-vertical-combat-v16.js?v=1';
 import './warfare-gameplay-v12.js?v=1';
 import './warfare-v4.js?v=2';
