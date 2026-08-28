@@ -2,7 +2,7 @@
    BLOODLINE BRAWL — AUDIO POLISH V5
    Additive only.
    - Donn voice is fully muted; on-screen DONN, GET OVER HERE! text stays unchanged
-   - Title music gets a strong lift; character/map selection get a smaller lift
+   - Title, character select, challenge select, and map select music run at max
 ===================================================== */
 
 (() => {
@@ -46,8 +46,8 @@
 
   /* ===================================================
      MENU MUSIC GAIN
-     Keep the user's normal battle music preference, but give the
-     title/character/map screens their own stronger minimum levels.
+     Force all non-fight menu screens to the maximum music level.
+     Fight music still returns to the user's saved music preference.
   =================================================== */
 
   const savedMusicRaw = localStorage.getItem("bbMusic");
@@ -84,7 +84,7 @@
       input.dispatchEvent(new Event("input", { bubbles:true }));
     }
 
-    /* The boost is screen-specific, not a permanent rewrite of the user's slider. */
+    /* The menu boost is temporary; preserve the user's saved fight music level. */
     if (remembered === null) localStorage.removeItem("bbMusic");
     else localStorage.setItem("bbMusic", remembered);
 
@@ -103,17 +103,13 @@
 
     let level = savedMusic;
 
-    /* Big lift for the opening/title screen. */
-    if (id === "titleScreen") {
-      level = Math.max(savedMusic, .84);
-    }
-    /* Smaller but noticeable lift for fighter/challenge selection. */
-    else if (id === "selectScreen" || id === "challengeScreen") {
-      level = Math.max(savedMusic, .62);
-    }
-    /* Same smaller lift for map selection. */
-    else if (id === "mapScreen") {
-      level = Math.max(savedMusic, .62);
+    if (
+      id === "titleScreen" ||
+      id === "selectScreen" ||
+      id === "challengeScreen" ||
+      id === "mapScreen"
+    ) {
+      level = 1;
     }
 
     if (setInternalMusic(level)) {
