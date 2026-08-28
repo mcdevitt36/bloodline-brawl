@@ -1,9 +1,8 @@
 /* =====================================================
    BLOODLINE BRAWL — AUDIO POLISH V5
    Additive only.
-   - Donn call speaks ONLY "Donnnnn" in a slower/lower older-woman style
-   - Prevent the old duplicate/fallback Donn yell while keeping the text unchanged
-   - Menu music is substantially louder than battle music, especially title
+   - Donn voice is fully muted; on-screen DONN, GET OVER HERE! text stays unchanged
+   - Menu music remains substantially louder than battle music, especially title
 ===================================================== */
 
 (() => {
@@ -11,118 +10,39 @@
   window.__bbAudioPolishV5Loaded = true;
 
   /* ===================================================
-     GRANDMOMMY — VOICE CONTENT / DELIVERY ONLY
-     The on-screen text still visually reads DONN, GET OVER HERE!
+     GRANDMOMMY — REMOVE DONN VOICE COMPLETELY
+     Audio V4 can trigger the Donn call from both keys and effects.
+     Suppress only that speech utterance so the visual sequence/text
+     and the rest of the game's sounds stay untouched.
   =================================================== */
 
   try {
-    const NativeUtterance = window.SpeechSynthesisUtterance;
+    const synth = window.speechSynthesis;
 
-    if (NativeUtterance && !window.__bbDonnUtteranceWrapped) {
-      window.__bbDonnUtteranceWrapped = true;
+    if (synth && !synth.__bbDonnMuted) {
+      synth.__bbDonnMuted = true;
+      const nativeSpeak = synth.speak.bind(synth);
 
-      function BloodlineUtterance(text = "") {
-        const source = String(text ?? "");
-        const replaced = /Donn!?\s*Get over here!?/i.test(source)
-          ? "Donnnnn!"
-          : source;
+      synth.speak = function(utterance) {
+        const text = String(utterance?.text || "");
 
-        return new NativeUtterance(replaced);
-      }
+        if (/^Donn/i.test(text)) {
+          return;
+        }
 
-      BloodlineUtterance.prototype = NativeUtterance.prototype;
-      try { Object.setPrototypeOf(BloodlineUtterance, NativeUtterance); } catch (_) {}
-      window.SpeechSynthesisUtterance = BloodlineUtterance;
-
-      const synth = window.speechSynthesis;
-      if (synth && !synth.__bbDonnSpeakWrapped) {
-        synth.__bbDonnSpeakWrapped = true;
-        const nativeSpeak = synth.speak.bind(synth);
-
-        synth.speak = function(utterance) {
-          try {
-            if (/^Donn/i.test(utterance?.text || "")) {
-              const voices = synth.getVoices();
-              const preferred = [
-                "Moira",
-                "Karen",
-                "Victoria",
-                "Tessa",
-                "Fiona",
-                "Samantha",
-                "Serena",
-                "Ava"
-              ];
-
-              const olderWomanVoice =
-                preferred
-                  .map(name => voices.find(v => v.name.includes(name)))
-                  .find(Boolean) ||
-                voices.find(v => /female|woman/i.test(v.name)) ||
-                utterance.voice ||
-                voices[0] ||
-                null;
-
-              if (olderWomanVoice) utterance.voice = olderWomanVoice;
-
-              /* Slower and lower than the previous bright/high delivery. */
-              utterance.rate = .68;
-              utterance.pitch = .82;
-              utterance.volume = 1;
-            }
-          } catch (_) {}
-
-          return nativeSpeak(utterance);
-        };
-      }
+        return nativeSpeak(utterance);
+      };
     }
   } catch (_) {}
 
-  /* Audio V4 used both the F/L key listener AND an effects observer to call Donn,
-     which could produce a second synthetic fallback yell. Keep only one call.
-     A zero-width character leaves the comic text visually identical while keeping
-     the old effects observer from interpreting it as another voice trigger. */
-  let recentGrandmommyKeyAt = -Infinity;
-
-  document.addEventListener("keydown", event => {
-    if (event.repeat) return;
-    const key = event.key.toLowerCase();
-
+  /* Keep the public helper silent too for any late-loaded callers. */
+  setTimeout(() => {
     try {
-      if (
-        (key === "f" && P1?.character === "grandmommy") ||
-        (key === "l" && P2?.character === "grandmommy")
-      ) {
-        recentGrandmommyKeyAt = performance.now();
+      if (window.BloodlineAudio) {
+        window.BloodlineAudio.grandmommyCall = () => {};
       }
     } catch (_) {}
-  }, true);
-
-  if (typeof addComicText === "function" && !window.__bbDonnComicTextWrapped) {
-    window.__bbDonnComicTextWrapped = true;
-    const previousAddComicText = addComicText;
-
-    addComicText = function(text, ...rest) {
-      if (/^DONN, GET OVER HERE!$/i.test(String(text || ""))) {
-        const triggeredByRecentKey = performance.now() - recentGrandmommyKeyAt < 350;
-
-        /* Visually identical, but the old observer regex no longer matches. */
-        const visualText = "DONN, GET O\u200bVER HERE!";
-        const result = previousAddComicText(visualText, ...rest);
-
-        /* CPU / on-screen-button Grandmommy still needs the one voice call. */
-        if (!triggeredByRecentKey) {
-          setTimeout(() => {
-            try { window.BloodlineAudio?.grandmommyCall?.(); } catch (_) {}
-          }, 0);
-        }
-
-        return result;
-      }
-
-      return previousAddComicText(text, ...rest);
-    };
-  }
+  }, 0);
 
   /* ===================================================
      MENU MUSIC GAIN
@@ -183,7 +103,6 @@
 
     let level = savedMusic;
 
-    /* The first/title screen gets the largest lift. */
     if (id === "titleScreen") {
       level = Math.max(savedMusic, .68);
     }
@@ -219,6 +138,5 @@
     setTimeout(() => applyMenuLevel(false), 80);
   }, true);
 
-  /* Screen changes are infrequent; a light read-only check is safer than a DOM observer. */
   setInterval(() => applyMenuLevel(false), 350);
 })();
