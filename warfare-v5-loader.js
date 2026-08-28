@@ -14,5 +14,6 @@ import './warfare-vertical-combat-v16.js?v=1';
 import './warfare-sky-v18.js?v=1';
 import './warfare-hub-amenities-v19.js?v=1';
 import './warfare-gameplay-audio-v20.js?v=1';
+import './warfare-combat-feedback-v21.js?v=1';
 import './warfare-gameplay-v12.js?v=1';
 import './warfare-v4.js?v=2';
