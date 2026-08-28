@@ -1,5 +1,5 @@
 /* =====================================================
-   BLOODLINE BRAWL — CONNOR LIGHT BEARD POLISH V4
+   BLOODLINE BRAWL — CONNOR LIGHT BEARD POLISH V5
    Visual-only additive patch.
    Uses Connor's existing beard element so the same beard appears
    anywhere characterHTML("connor") is rendered: title, select,
@@ -7,8 +7,8 @@
 ===================================================== */
 
 (() => {
-  if (window.__bbConnorBeardPolishV4Loaded) return;
-  window.__bbConnorBeardPolishV4Loaded = true;
+  if (window.__bbConnorBeardPolishV5Loaded) return;
+  window.__bbConnorBeardPolishV5Loaded = true;
 
   const style = document.createElement("style");
 
@@ -20,8 +20,8 @@
     }
 
     /*
-      Short connected beard, now clearly darker than V3 without
-      becoming a thick/full beard.
+      Same short connected beard shape, darkened roughly two visual
+      steps from V4 while staying brown rather than near-black.
     */
     .connor-model .connor-stubble {
       display: block !important;
@@ -37,19 +37,19 @@
       background:
         linear-gradient(
           180deg,
-          rgba(67,43,31,.32) 0%,
-          rgba(67,43,31,.48) 42%,
-          rgba(61,38,28,.61) 100%
+          rgba(50,32,24,.46) 0%,
+          rgba(50,32,24,.62) 42%,
+          rgba(44,28,21,.76) 100%
         ) !important;
 
-      border-left: 2px solid rgba(57,35,26,.66) !important;
-      border-right: 2px solid rgba(57,35,26,.66) !important;
-      border-bottom: 2px solid rgba(57,35,26,.74) !important;
+      border-left: 2px solid rgba(42,26,20,.78) !important;
+      border-right: 2px solid rgba(42,26,20,.78) !important;
+      border-bottom: 2px solid rgba(42,26,20,.86) !important;
       border-top: 0 !important;
       border-radius: 0 0 13px 13px !important;
     }
 
-    /* Sideburns stay connected directly into the jaw beard. */
+    /* Sideburns remain connected directly into the jaw beard. */
     .connor-model .connor-stubble::before,
     .connor-model .connor-stubble::after {
       content: "" !important;
@@ -60,8 +60,8 @@
       background:
         linear-gradient(
           180deg,
-          rgba(62,39,28,.72),
-          rgba(62,39,28,.56)
+          rgba(46,29,22,.86),
+          rgba(46,29,22,.70)
         ) !important;
       border-radius: 2px 2px 1px 1px !important;
     }
