@@ -13,6 +13,16 @@
       const audioPolish = document.createElement("script");
       audioPolish.src = "audio-polish-v5.js?v=5";
       document.body.appendChild(audioPolish);
+
+      audioPolish.addEventListener(
+        "load",
+        () => {
+          const menuScreenPolish = document.createElement("script");
+          menuScreenPolish.src = "menu-screen-polish-v7.js?v=1";
+          document.body.appendChild(menuScreenPolish);
+        },
+        { once: true }
+      );
     },
     { once: true }
   );
