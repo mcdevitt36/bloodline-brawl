@@ -109,6 +109,16 @@
                                                   const toddlerPolish = document.createElement("script");
                                                   toddlerPolish.src = "toddler-ui-polish-v2.js?v=1";
                                                   document.body.appendChild(toddlerPolish);
+
+                                                  toddlerPolish.addEventListener(
+                                                    "load",
+                                                    () => {
+                                                      const toddlerGroundBearPolish = document.createElement("script");
+                                                      toddlerGroundBearPolish.src = "toddler-ground-bear-polish-v3.js?v=1";
+                                                      document.body.appendChild(toddlerGroundBearPolish);
+                                                    },
+                                                    { once: true }
+                                                  );
                                                 },
                                                 { once: true }
                                               );
