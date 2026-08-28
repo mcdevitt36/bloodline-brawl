@@ -11,7 +11,7 @@
     "load",
     () => {
       const audioPolish = document.createElement("script");
-      audioPolish.src = "audio-polish-v5.js?v=2";
+      audioPolish.src = "audio-polish-v5.js?v=3";
       document.body.appendChild(audioPolish);
     },
     { once: true }
@@ -93,7 +93,7 @@
                                         "load",
                                         () => {
                                           const finalPolishV6 = document.createElement("script");
-                                          finalPolishV6.src = "final-polish-v6.js?v=1";
+                                          finalPolishV6.src = "final-polish-v6.js?v=2";
                                           document.body.appendChild(finalPolishV6);
                                         },
                                         { once: true }
