@@ -19,63 +19,97 @@
   if (window.__bbOnlineControlLabelsV8Loaded) return;
   window.__bbOnlineControlLabelsV8Loaded = true;
 
-  const p1SpecialKey = document.getElementById("player1SpecialKey");
-  const p1UltimateKey = document.getElementById("player1UltimateKey");
-  const p2SpecialKey = document.getElementById("player2SpecialKey");
-  const p2UltimateKey = document.getElementById("player2UltimateKey");
-
-  const onePlayerPanel = document.getElementById("onePlayerControls");
-  const twoPlayerPanel = document.getElementById("twoPlayerControls");
-  const p1Side = twoPlayerPanel?.querySelector(".two-player-control-side:not(.right)") || null;
-  const p2Side = twoPlayerPanel?.querySelector(".two-player-control-side.right") || null;
-
-  const oneAttack = onePlayerPanel?.querySelector("#onePlayerAttackButton small") || null;
-  const oneSpecial = onePlayerPanel?.querySelector("#onePlayerSpecialButton small") || null;
-  const oneUltimate = onePlayerPanel?.querySelector("#onePlayerUltimateButton small") || null;
-
-  const p1Movement = p1Side?.querySelector(":scope > span") || null;
-  const p1Melee = p1Side?.querySelector(".two-player-action-row .two-control-button:first-child small") || null;
-  const p1Special = p1Side?.querySelector(".two-player-action-row .two-control-button.special small") || null;
-  const p1Ultimate = p1Side?.querySelector(".ultimate-key-note") || null;
-
-  const p2Movement = p2Side?.querySelector(":scope > span") || null;
-  const p2Melee = p2Side?.querySelector(".two-player-action-row .two-control-button:first-child small") || null;
-  const p2Special = p2Side?.querySelector(".two-player-action-row .two-control-button.special small") || null;
-  const p2Ultimate = p2Side?.querySelector(".ultimate-key-note") || null;
-
   const isOnline = () =>
     document.body.classList.contains("bb-online-active");
+
+  const isGuest = () =>
+    isOnline() && document.body.classList.contains("bb-online-guest");
 
   const setText = (element, value) => {
     if (!element) return;
     if (element.textContent.trim() !== value) element.textContent = value;
   };
 
+  /* Resolve the CURRENT nodes on every pass. Some late fight/UI polish can
+     rebuild control markup after ONLINE first loads; cached node references
+     would then point at detached elements and leave a visible J behind. */
+  function currentNodes() {
+    const onePlayerPanel = document.getElementById("onePlayerControls");
+    const twoPlayerPanel = document.getElementById("twoPlayerControls");
+    const p1Side = twoPlayerPanel?.querySelector(".two-player-control-side:not(.right)") || null;
+    const p2Side = twoPlayerPanel?.querySelector(".two-player-control-side.right") || null;
+
+    const actionKey = (side, label) => {
+      if (!side) return null;
+      const buttons = Array.from(side.querySelectorAll(".two-control-button"));
+      const button = buttons.find(el =>
+        el.textContent.toUpperCase().includes(label)
+      );
+      return button?.querySelector("small") || null;
+    };
+
+    return {
+      p1SpecialKey: document.getElementById("player1SpecialKey"),
+      p1UltimateKey: document.getElementById("player1UltimateKey"),
+      p2SpecialKey: document.getElementById("player2SpecialKey"),
+      p2UltimateKey: document.getElementById("player2UltimateKey"),
+
+      oneAttack: onePlayerPanel?.querySelector("#onePlayerAttackButton small") || null,
+      oneSpecial: onePlayerPanel?.querySelector("#onePlayerSpecialButton small") || null,
+      oneUltimate: onePlayerPanel?.querySelector("#onePlayerUltimateButton small") || null,
+
+      p1Movement: p1Side?.querySelector(":scope > span") || null,
+      p1Melee: actionKey(p1Side, "MELEE"),
+      p1Special: actionKey(p1Side, "SPECIAL"),
+      p1Ultimate: p1Side?.querySelector(".ultimate-key-note") || null,
+
+      p2Movement: p2Side?.querySelector(":scope > span") || null,
+      p2Melee: actionKey(p2Side, "MELEE"),
+      p2Special: actionKey(p2Side, "SPECIAL"),
+      p2Ultimate: p2Side?.querySelector(".ultimate-key-note") || null
+    };
+  }
+
   function applyOnlineLabels() {
     if (!isOnline()) return;
 
-    /* Arena HUD ability letters: BOTH online fighters use E / F on their
-       own computer. The base 2P engine otherwise resets P2 to K / L. */
-    setText(p1SpecialKey, "E");
-    setText(p1UltimateKey, "F");
-    setText(p2SpecialKey, "E");
-    setText(p2UltimateKey, "F");
+    const n = currentNodes();
 
-    /* Any control panel that becomes visible during an online match must
-       also show the exact physical private-match keys. */
-    setText(oneAttack, "R");
-    setText(oneSpecial, "E");
-    setText(oneUltimate, "F");
+    /* Arena HUD ability letters. */
+    setText(n.p1SpecialKey, "E");
+    setText(n.p1UltimateKey, "F");
+    setText(n.p2SpecialKey, "E");
+    setText(n.p2UltimateKey, "F");
 
-    setText(p1Movement, "A/D OR ARROWS • Q BLOCK");
-    setText(p1Melee, "R");
-    setText(p1Special, "E");
-    setText(p1Ultimate, "F = ULTIMATE");
+    /* Private-match action controls. Actual melee input is R. */
+    setText(n.oneAttack, "R");
+    setText(n.oneSpecial, "E");
+    setText(n.oneUltimate, "F");
 
-    setText(p2Movement, "A/D OR ARROWS • Q BLOCK");
-    setText(p2Melee, "R");
-    setText(p2Special, "E");
-    setText(p2Ultimate, "F = ULTIMATE");
+    setText(n.p1Movement, "A/D OR ARROWS • Q BLOCK");
+    setText(n.p1Melee, "R");
+    setText(n.p1Special, "E");
+    setText(n.p1Ultimate, "F = ULTIMATE");
+
+    setText(n.p2Movement, "A/D OR ARROWS • Q BLOCK");
+    setText(n.p2Melee, "R");
+    setText(n.p2Special, "E");
+    setText(n.p2Ultimate, "F = ULTIMATE");
+
+    /* Extra guest-only guard: find the currently rendered P2 MELEE button
+       by its label, not its position, and never allow local-2P J to remain. */
+    if (isGuest()) {
+      const p2Side = document.querySelector(
+        "#twoPlayerControls .two-player-control-side.right"
+      );
+
+      if (p2Side) {
+        Array.from(p2Side.querySelectorAll(".two-control-button")).forEach(button => {
+          if (!button.textContent.toUpperCase().includes("MELEE")) return;
+          setText(button.querySelector("small"), "R");
+        });
+      }
+    }
 
     const guide = document.querySelector(".bb-online-fight-guide");
     if (guide) {
@@ -100,34 +134,33 @@
   function restoreOfflineLabels() {
     if (isOnline()) return;
 
-    setText(p1SpecialKey, "E");
-    setText(p1UltimateKey, "F");
-    setText(oneAttack, "R");
-    setText(oneSpecial, "E");
-    setText(oneUltimate, "F");
+    const n = currentNodes();
 
-    setText(p1Movement, "WASD • Q BLOCK");
-    setText(p1Melee, "R");
-    setText(p1Special, "E");
-    setText(p1Ultimate, "F = ULTIMATE");
+    setText(n.p1SpecialKey, "E");
+    setText(n.p1UltimateKey, "F");
+    setText(n.oneAttack, "R");
+    setText(n.oneSpecial, "E");
+    setText(n.oneUltimate, "F");
 
-    setText(p2Movement, "ARROWS • I BLOCK");
-    setText(p2Melee, "J");
-    setText(p2Special, "K");
-    setText(p2Ultimate, "L = ULTIMATE");
+    setText(n.p1Movement, "WASD • Q BLOCK");
+    setText(n.p1Melee, "R");
+    setText(n.p1Special, "E");
+    setText(n.p1Ultimate, "F = ULTIMATE");
+
+    setText(n.p2Movement, "ARROWS • I BLOCK");
+    setText(n.p2Melee, "J");
+    setText(n.p2Special, "K");
+    setText(n.p2Ultimate, "L = ULTIMATE");
 
     if (typeof gameMode !== "undefined" && gameMode === "1P") {
-      setText(p2SpecialKey, "CPU");
-      setText(p2UltimateKey, "CPU");
+      setText(n.p2SpecialKey, "CPU");
+      setText(n.p2UltimateKey, "CPU");
     } else {
-      setText(p2SpecialKey, "K");
-      setText(p2UltimateKey, "L");
+      setText(n.p2SpecialKey, "K");
+      setText(n.p2UltimateKey, "L");
     }
   }
 
-  /* beginMatch runs through the normal 2P engine for online play, which is
-     exactly where K / L get written back onto P2. Wrap it last and reassert
-     the real online mapping immediately and after late UI passes. */
   const previousBeginMatchOnlineLabelsV8 = beginMatch;
   beginMatch = function() {
     const result = previousBeginMatchOnlineLabelsV8.apply(this, arguments);
@@ -139,6 +172,7 @@
       setTimeout(applyOnlineLabels, 300);
       setTimeout(applyOnlineLabels, 750);
       setTimeout(applyOnlineLabels, 1200);
+      setTimeout(applyOnlineLabels, 2000);
     } else {
       restoreOfflineLabels();
     }
@@ -146,8 +180,6 @@
     return result;
   };
 
-  /* Catch role changes and any late text reset without watching style/class
-     animation churn. Text-only observation is enough for these labels. */
   const roleObserver = new MutationObserver(() => {
     if (isOnline()) applyOnlineLabels();
     else restoreOfflineLabels();
