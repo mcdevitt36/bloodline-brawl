@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Bloodline Brawl — Warfare</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/mcdevitt36/bloodline-brawl@2a1e3ac8d70ff9037922b66f85aaffd5838515a5/warfare.css">
+</head>
+<body>
+<div id="warfareApp">
+  <div id="bootScreen" class="overlay-screen active">
+    <div class="boot-panel">
+      <div class="eyebrow">BLOODLINE BRAWL</div>
+      <h1>WARFARE</h1>
+      <p>Pick a fighter, enter the hub, and choose your battlefield.</p>
+      <div id="roster" class="roster"></div>
+      <button id="enterWarfare" class="primary-button" disabled>ENTER WARFARE</button>
+      <a class="text-link" href="index.html">← Back to Bloodline Brawl</a>
+    </div>
+  </div>
+
+  <canvas id="gameCanvas" aria-label="Bloodline Brawl Warfare 3D game"></canvas>
+  <div id="damageFlash" class="damage-flash" aria-hidden="true"></div>
+
+  <div id="hud" class="hud hidden">
+    <div class="hud-top">
+      <div class="hud-block"><strong id="hudName">LIAM</strong><span id="modeLabel">WARFARE HUB</span></div>
+      <div class="hud-center"><span id="matchTimer">HUB</span><strong id="placement">EXPLORE</strong></div>
+      <div class="hud-block right"><strong id="weaponName">UNARMED</strong><span id="ammoText">MELEE READY</span></div>
+    </div>
+    <div class="crosshair" aria-hidden="true"><span></span><span></span></div>
+    <div id="hitMarker" class="hit-marker" aria-hidden="true">×</div>
+    <div id="adsLabel" class="ads-label">HIP FIRE</div>
+    <div class="bottom-left">
+      <div class="meter-row"><label>HEALTH</label><div class="meter"><div id="healthFill" class="health-fill"></div></div><b id="healthText">100</b></div>
+      <div class="meter-row"><label>SPECIAL</label><div class="meter"><div id="specialFill" class="special-fill"></div></div></div>
+      <div class="meter-row"><label>ULTRA</label><div class="meter"><div id="ultraFill" class="ultra-fill"></div></div></div>
+      <div class="weapon-slots"><div id="slotOne" class="weapon-slot">1 EMPTY</div><div id="slotTwo" class="weapon-slot">2 EMPTY</div></div>
+    </div>
+    <div id="interactionPrompt" class="interaction hidden"></div>
+    <div id="feed" class="feed" aria-live="polite"></div>
+  </div>
+
+  <div id="matchIntro" class="match-intro hidden">
+    <div id="introMap" class="intro-map">HAUNTED BEACH HOUSE</div>
+    <div id="introMode" class="intro-mode">FREE FOR ALL • 8 PLAYERS</div>
+    <div id="introCount" class="intro-count">3</div>
+  </div>
+
+  <div id="resultScreen" class="overlay-screen hidden">
+    <div class="result-panel">
+      <div class="eyebrow">MATCH COMPLETE</div>
+      <h2 id="resultTitle">1ST PLACE</h2>
+      <div id="resultTable" class="result-table"></div>
+      <button id="returnHub" class="primary-button">RETURN TO HUB</button>
+    </div>
+  </div>
+
+  <div class="controls-card">
+    <span><b>WASD</b> Move</span><span><b>SHIFT</b> Sprint</span><span><b>SPACE</b> Jump</span><span><b>MOUSE</b> Look</span><span><b>LEFT CLICK</b> Fire / Melee</span><span><b>RIGHT CLICK</b> Aim</span><span><b>R</b> Reload</span><span><b>1 / 2</b> Weapons</span><span><b>E</b> Interact</span>
+  </div>
+</div>
+<script type="module" src="https://cdn.jsdelivr.net/gh/mcdevitt36/bloodline-brawl@2a1e3ac8d70ff9037922b66f85aaffd5838515a5/warfare-v3.js"></script>
+</body>
+</html>
