@@ -16,6 +16,7 @@ document.addEventListener(
 
     if (
       gameMode !== "2P" ||
+      document.body.classList.contains("bb-online-active") ||
       !fightScreen.classList.contains("active") ||
       event.repeat
     ) {
@@ -35,6 +36,8 @@ document.addEventListener(
     /*
       Stop the older 2P R/E handler in script.js from also firing.
       This keeps the base file untouched while correcting the controls.
+      Online/private matches are intentionally excluded above so their
+      own per-device input routing gets complete ownership of R and E.
     */
     event.preventDefault();
     event.stopImmediatePropagation();
