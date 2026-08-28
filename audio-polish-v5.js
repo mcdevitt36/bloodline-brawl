@@ -2,6 +2,7 @@
    BLOODLINE BRAWL — AUDIO POLISH V5
    Additive only.
    - Donn call speaks ONLY "Donnnnn" in a slower/lower older-woman style
+   - Prevent the old duplicate/fallback Donn yell while keeping the text unchanged
    - Menu music is substantially louder than battle music, especially title
 ===================================================== */
 
@@ -11,7 +12,7 @@
 
   /* ===================================================
      GRANDMOMMY — VOICE CONTENT / DELIVERY ONLY
-     The on-screen text remains DONN, GET OVER HERE!
+     The on-screen text still visually reads DONN, GET OVER HERE!
   =================================================== */
 
   try {
@@ -77,6 +78,52 @@
     }
   } catch (_) {}
 
+  /* Audio V4 used both the F/L key listener AND an effects observer to call Donn,
+     which could produce a second synthetic fallback yell. Keep only one call.
+     A zero-width character leaves the comic text visually identical while keeping
+     the old effects observer from interpreting it as another voice trigger. */
+  let recentGrandmommyKeyAt = -Infinity;
+
+  document.addEventListener("keydown", event => {
+    if (event.repeat) return;
+    const key = event.key.toLowerCase();
+
+    try {
+      if (
+        (key === "f" && P1?.character === "grandmommy") ||
+        (key === "l" && P2?.character === "grandmommy")
+      ) {
+        recentGrandmommyKeyAt = performance.now();
+      }
+    } catch (_) {}
+  }, true);
+
+  if (typeof addComicText === "function" && !window.__bbDonnComicTextWrapped) {
+    window.__bbDonnComicTextWrapped = true;
+    const previousAddComicText = addComicText;
+
+    addComicText = function(text, ...rest) {
+      if (/^DONN, GET OVER HERE!$/i.test(String(text || ""))) {
+        const triggeredByRecentKey = performance.now() - recentGrandmommyKeyAt < 350;
+
+        /* Visually identical, but the old observer regex no longer matches. */
+        const visualText = "DONN, GET O\u200bVER HERE!";
+        const result = previousAddComicText(visualText, ...rest);
+
+        /* CPU / on-screen-button Grandmommy still needs the one voice call. */
+        if (!triggeredByRecentKey) {
+          setTimeout(() => {
+            try { window.BloodlineAudio?.grandmommyCall?.(); } catch (_) {}
+          }, 0);
+        }
+
+        return result;
+      }
+
+      return previousAddComicText(text, ...rest);
+    };
+  }
+
   /* ===================================================
      MENU MUSIC GAIN
      Keep the user's normal battle music preference, but give the
@@ -84,12 +131,16 @@
   =================================================== */
 
   const savedMusicRaw = localStorage.getItem("bbMusic");
+  const parsedSavedMusic = savedMusicRaw === null
+    ? .30
+    : Number(savedMusicRaw);
+
   const savedMusic = Math.max(
     0,
     Math.min(
       1,
-      Number.isFinite(Number(savedMusicRaw))
-        ? Number(savedMusicRaw)
+      Number.isFinite(parsedSavedMusic)
+        ? parsedSavedMusic
         : .30
     )
   );
