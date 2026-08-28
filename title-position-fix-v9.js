@@ -159,4 +159,8 @@
   const martinChallengeModernize = document.createElement("script");
   martinChallengeModernize.src = "martin-challenge-modernize-v1.js?v=1";
   document.body.appendChild(martinChallengeModernize);
+
+  const modeLauncher = document.createElement("script");
+  modeLauncher.src = "mode-launcher-v11.js?v=1";
+  document.body.appendChild(modeLauncher);
 })();
