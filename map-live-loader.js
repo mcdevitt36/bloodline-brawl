@@ -7,6 +7,16 @@
   audio.src = "audio-v4.js?v=1";
   document.body.appendChild(audio);
 
+  audio.addEventListener(
+    "load",
+    () => {
+      const audioPolish = document.createElement("script");
+      audioPolish.src = "audio-polish-v5.js?v=1";
+      document.body.appendChild(audioPolish);
+    },
+    { once: true }
+  );
+
   const ui = document.createElement("script");
   ui.src = "ui-random-title.js?v=1";
   document.body.appendChild(ui);
@@ -71,6 +81,16 @@
                                   const finalPolish = document.createElement("script");
                                   finalPolish.src = "final-polish-v4.js?v=1";
                                   document.body.appendChild(finalPolish);
+
+                                  finalPolish.addEventListener(
+                                    "load",
+                                    () => {
+                                      const finalPolishV5 = document.createElement("script");
+                                      finalPolishV5.src = "final-polish-v5.js?v=1";
+                                      document.body.appendChild(finalPolishV5);
+                                    },
+                                    { once: true }
+                                  );
                                 },
                                 { once: true }
                               );
