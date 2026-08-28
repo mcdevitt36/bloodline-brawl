@@ -56,4 +56,8 @@
   `;
 
   document.head.appendChild(style);
+
+  const v10 = document.createElement("script");
+  v10.src = "title-art-polish-v10.js?v=1";
+  document.body.appendChild(v10);
 })();
