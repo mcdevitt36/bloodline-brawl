@@ -102,6 +102,19 @@
               familyChallenges.src = "challenge-system-v1.js?v=1";
               document.body.appendChild(familyChallenges);
 
+              /* Load the sunset polish only after the challenge system has
+                 injected its base map-variant CSS, so this stays the final
+                 visual authority for Westhampton Sunset. */
+              familyChallenges.addEventListener(
+                "load",
+                () => {
+                  const sunsetPolish = document.createElement("script");
+                  sunsetPolish.src = "westhampton-sunset-polish-v2.js?v=1";
+                  document.body.appendChild(sunsetPolish);
+                },
+                { once: true }
+              );
+
               /* Important performance change: the heavy WebRTC/private-match
                  code is NOT loaded during normal 1P/2P play anymore. This
                  lightweight button loads it only after ONLINE is clicked. */
