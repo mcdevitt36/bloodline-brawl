@@ -2,7 +2,7 @@
    BLOODLINE BRAWL — AUDIO POLISH V5
    Additive only.
    - Donn voice is fully muted; on-screen DONN, GET OVER HERE! text stays unchanged
-   - Menu music remains substantially louder than battle music, especially title
+   - Title music gets a strong lift; character/map selection get a smaller lift
 ===================================================== */
 
 (() => {
@@ -103,14 +103,17 @@
 
     let level = savedMusic;
 
+    /* Big lift for the opening/title screen. */
     if (id === "titleScreen") {
-      level = Math.max(savedMusic, .68);
+      level = Math.max(savedMusic, .84);
     }
+    /* Smaller but noticeable lift for fighter/challenge selection. */
     else if (id === "selectScreen" || id === "challengeScreen") {
-      level = Math.max(savedMusic, .56);
+      level = Math.max(savedMusic, .62);
     }
+    /* Same smaller lift for map selection. */
     else if (id === "mapScreen") {
-      level = Math.max(savedMusic, .56);
+      level = Math.max(savedMusic, .62);
     }
 
     if (setInternalMusic(level)) {
