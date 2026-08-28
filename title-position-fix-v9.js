@@ -78,4 +78,14 @@
   const combatTuning = document.createElement("script");
   combatTuning.src = "combat-tuning-v12.js?v=3";
   document.body.appendChild(combatTuning);
+
+  combatTuning.addEventListener(
+    "load",
+    () => {
+      const postMatchResults = document.createElement("script");
+      postMatchResults.src = "post-match-results-v1.js?v=1";
+      document.body.appendChild(postMatchResults);
+    },
+    { once: true }
+  );
 })();
