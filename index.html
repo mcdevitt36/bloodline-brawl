@@ -5,25 +5,56 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Bloodline Brawl</title>
 <link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="launcher.css">
 </head>
 <body>
 <div id="game">
 <section id="titleScreen" class="screen title-screen active">
-<div class="title-content">
+<div class="title-content launcher-content">
+<div class="launcher-brand">
 <h1 class="game-logo">BLOODLINE <span>BRAWL</span></h1>
-<div class="tagline">FAMILY FIGHTS GET PERSONAL</div>
-<div class="title-versus-panel">
+<div class="tagline">THE FAMILY GAME UNIVERSE</div>
+</div>
+<div class="launcher-showcase">
 <div class="title-fighter"><div id="titleLeftCharacter" class="title-character-space"></div><div id="titleLeftName" class="title-name"></div></div>
 <div class="title-vs">VS</div>
 <div class="title-fighter"><div id="titleRightCharacter" class="title-character-space"></div><div id="titleRightName" class="title-name"></div></div>
 </div>
-<div class="mode-title">CHOOSE MODE</div>
+<div class="launcher-kicker">CHOOSE YOUR MODE</div>
+<div class="game-mode-grid">
+<div class="game-mode-card classic-card">
+<div class="mode-card-badge">🥊 ORIGINAL MODE</div>
+<div class="mode-card-top"><h2>CLASSIC BRAWL</h2></div>
+<div class="mode-card-copy">The original Bloodline Brawl. Pick your fighter, choose a battlefield, and settle it family-style.</div>
+<div class="mode-card-actions">
 <div class="mode-buttons">
 <button id="onePlayerButton" class="mode-button selected">1 PLAYER<small>VS CPU</small></button>
 <button id="twoPlayerButton" class="mode-button">2 PLAYER<small>LOCAL BATTLE</small></button>
 </div>
-<button id="startButton" class="big-button title-start">START</button>
+<button id="startButton" class="big-button title-start">PLAY</button>
+</div>
+<div class="mode-card-art">🥊</div>
+</div>
+<div class="game-mode-card warfare-card">
+<div class="mode-card-badge">⚡ NEW 3D MODE</div>
+<div class="mode-card-top"><h2>WARFARE</h2></div>
+<div class="mode-card-copy">Enter the 3D hub, hunt for weapons, and battle seven rivals across Haunted Beach House and City Rooftop.</div>
+<div class="mode-card-actions">
+<a id="warfareButton" class="warfare-launch-button" href="warfare.html"><span>ENTER WARFARE</span><span>→</span></a>
+</div>
+<div class="mode-card-art">🎯</div>
+</div>
+<div class="game-mode-card challenge-card">
+<div class="mode-card-badge">🏆 SPECIAL MODE</div>
+<div class="mode-card-top"><h2>MARTIN'S CHALLENGE</h2></div>
+<div class="mode-card-copy">Take down the boss and unlock Martin for the main roster.</div>
+<div class="mode-card-actions">
 <button id="martinChallengeButton" class="challenge-button">MARTIN'S CHALLENGE</button>
+</div>
+<div class="mode-card-art">🐾</div>
+</div>
+</div>
+<div class="launcher-footer">BRAWL • WARFARE • CHALLENGES • MORE TO COME</div>
 </div>
 </section>
 <section id="selectScreen" class="screen select-screen">
