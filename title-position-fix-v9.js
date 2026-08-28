@@ -65,7 +65,7 @@
     "load",
     () => {
       const connorStubblePolish = document.createElement("script");
-      connorStubblePolish.src = "connor-stubble-polish-v1.js?v=1";
+      connorStubblePolish.src = "connor-stubble-polish-v1.js?v=2";
       document.body.appendChild(connorStubblePolish);
     },
     { once: true }
