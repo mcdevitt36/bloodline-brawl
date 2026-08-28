@@ -4,6 +4,7 @@
    - Fresh matches restore fighters hidden by the final-KO celebration
    - Load efficient host controls with no extra animation loop
    - Hard-route guest controls before any old local-2P handlers can see them
+   - Resolve RANDOM to a real fighter before online selection sync
 ===================================================== */
 
 (() => {
@@ -24,6 +25,10 @@
 
     return previousBeginMatchOnlineStabilityV2();
   };
+
+  const onlineRandomFix = document.createElement("script");
+  onlineRandomFix.src = "online-random-fix-v7.js?v=1";
+  document.body.appendChild(onlineRandomFix);
 
   const onlineControlsFix = document.createElement("script");
   onlineControlsFix.src = "online-controls-fix-v4.js?v=2";
