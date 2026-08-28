@@ -3,7 +3,7 @@
    Small additive gameplay/visual corrections only.
    - Flip Barrett's RC car so it faces its travel direction
    - Trim Connor's Fried Chicken Feast very slightly
-   - Give Shannan's longer Brainrot stun a proportionally longer cooldown
+   - Give Shannan's longer Brainrot stun a dramatically longer cooldown
 ===================================================== */
 
 (() => {
@@ -62,8 +62,8 @@
   /* ===================================================
      SHANNAN — BRAINROT COOLDOWN
      Erin's 2.5s stun stays on the normal 5.0s special cooldown.
-     Brainrot lasts 3.25s, so its cooldown is 6.5s — the same 1.3x
-     proportional increase as the stun duration itself.
+     Brainrot lasts 3.25s and has a much larger, more disruptive
+     animation, so Shannan now waits a full 9.0s before using it again.
   =================================================== */
   const previousBeginSpecialCooldownV12 = beginSpecialCooldown;
 
@@ -72,7 +72,7 @@
       return previousBeginSpecialCooldownV12(p);
     }
 
-    const duration = 6500;
+    const duration = 9000;
     const token = (p.__bbSpecialCooldownTokenV12 || 0) + 1;
 
     p.__bbSpecialCooldownTokenV12 = token;
