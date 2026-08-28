@@ -48,14 +48,14 @@
                     "load",
                     () => {
                       const ipo = document.createElement("script");
-                      ipo.src = "brendan-ipo-upgrade.js?v=1";
+                      ipo.src = "brendan-ipo-upgrade.js?v=2";
                       document.body.appendChild(ipo);
 
                       ipo.addEventListener(
                         "load",
                         () => {
                           const victory = document.createElement("script");
-                          victory.src = "victory-celebrations.js?v=1";
+                          victory.src = "victory-celebrations.js?v=2";
                           document.body.appendChild(victory);
                         },
                         { once: true }
