@@ -107,6 +107,12 @@
               nickFighter.addEventListener(
                 "load",
                 () => {
+                  /* Bridge the older closed fighter-profile move list so Nick's
+                     unlocked card gets a complete profile and responsive sizing. */
+                  const nickIntegrationPolish = document.createElement("script");
+                  nickIntegrationPolish.src = "nick-integration-polish-v2.js?v=1";
+                  document.body.appendChild(nickIntegrationPolish);
+
                   /* Existing rotating progression remains the authority for
                      Daily/Weekly Family XP and cosmetic rewards. */
                   const familyChallenges = document.createElement("script");
