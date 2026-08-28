@@ -3,19 +3,33 @@
    Private-match UI only.
    - Guest sees R / E / F instead of local-2P J / K / L
    - Normal local 2P keeps J / K / L exactly as before
-   - Live DOM + CSS authority prevents any guest melee J from surviving
+   - Directly fixes the arena melee key #player2MeleeKey
 ===================================================== */
 
 (() => {
   if (window.__bbOnlineGuestIconsV6Loaded) return;
   window.__bbOnlineGuestIconsV6Loaded = true;
 
-  /* CSS is the final visual authority for the guest melee key. Even if a
-     later local-2P refresh writes J back into the DOM, the private-match
-     guest still visibly sees R. This rule is guest-only and cannot affect
-     normal local 2P. */
+  /* The screenshot's stubborn J is NOT the bottom control-panel key.
+     It is the separate arena melee HUD span created by character-updates.js:
+     #player2MeleeKey. Private matches run through gameMode === "2P", so that
+     source normally writes J there. On the guest browser, R is the real key. */
   const guestMeleeStyle = document.createElement("style");
   guestMeleeStyle.textContent = `
+    body.bb-online-active.bb-online-guest
+    #player2MeleeKey {
+      font-size: 0 !important;
+    }
+
+    body.bb-online-active.bb-online-guest
+    #player2MeleeKey::after {
+      content: "R" !important;
+      font-size: 11px !important;
+      line-height: inherit !important;
+      font-weight: inherit !important;
+      color: inherit !important;
+    }
+
     body.bb-online-active.bb-online-guest
     .two-player-action-row .two-control-button:first-child small {
       font-size: 0 !important;
@@ -52,27 +66,25 @@
   function forceGuestMeleeToR() {
     if (!isGuestPrivateMatch()) return;
 
+    /* THIS is the exact J shown under Barrett's orange melee orb. */
+    setText(document.getElementById("player2MeleeKey"), "R");
+
     const keys = new Set();
     const p2Side = findCurrentP2Side();
 
-    /* Exact P2/non-host melee slot. */
+    /* Keep the separate bottom P2 control panel correct too. */
     p2Side
       ?.querySelectorAll(
         ".two-player-action-row .two-control-button:first-child small"
       )
       .forEach(key => keys.add(key));
 
-    /* Private matches use R melee on both devices. Catch every current or
-       rebuilt two-player melee slot, including cloned panels without the
-       original #twoPlayerControls id. */
     document
       .querySelectorAll(
         ".two-player-action-row .two-control-button:first-child small"
       )
       .forEach(key => keys.add(key));
 
-    /* Catch alternate/rebuilt markup where MELEE is not structurally the
-       first button but the key itself still says J. */
     document
       .querySelectorAll("button small")
       .forEach(key => {
@@ -115,6 +127,7 @@
 
     const p2SpecialKey = document.getElementById("player2SpecialKey");
     const p2UltimateKey = document.getElementById("player2UltimateKey");
+    const p2MeleeArenaKey = document.getElementById("player2MeleeKey");
     const p2Side = findCurrentP2Side();
     const movement = p2Side?.querySelector(":scope > span") || null;
     const meleeKey = p2Side?.querySelector(
@@ -125,8 +138,11 @@
     ) || null;
     const ultimateNote = p2Side?.querySelector(".ultimate-key-note") || null;
 
-    setText(p2SpecialKey, gameMode === "1P" ? "CPU" : "K");
-    setText(p2UltimateKey, gameMode === "1P" ? "CPU" : "L");
+    const onePlayer = gameMode === "1P";
+
+    setText(p2MeleeArenaKey, onePlayer ? "CPU" : "J");
+    setText(p2SpecialKey, onePlayer ? "CPU" : "K");
+    setText(p2UltimateKey, onePlayer ? "CPU" : "L");
     setText(movement, "ARROWS • I BLOCK");
     setText(meleeKey, "J");
     setText(specialKey, "K");
@@ -152,8 +168,9 @@
     return result;
   };
 
-  /* Observe the whole document because some late polish code can rebuild
-     or move controls outside the original fight-screen subtree. */
+  /* character-updates.js can rewrite #player2MeleeKey to J when its HUD
+     updater runs. Watching text/DOM changes means that exact write is
+     immediately corrected to R on the non-host browser. */
   const uiObserver = new MutationObserver(() => {
     if (isGuestPrivateMatch()) applyGuestLabels();
   });
