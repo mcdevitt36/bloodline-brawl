@@ -95,6 +95,16 @@
                                           const finalPolishV6 = document.createElement("script");
                                           finalPolishV6.src = "final-polish-v6.js?v=3";
                                           document.body.appendChild(finalPolishV6);
+
+                                          finalPolishV6.addEventListener(
+                                            "load",
+                                            () => {
+                                              const toddlerTrio = document.createElement("script");
+                                              toddlerTrio.src = "toddler-trio-v1.js?v=1";
+                                              document.body.appendChild(toddlerTrio);
+                                            },
+                                            { once: true }
+                                          );
                                         },
                                         { once: true }
                                       );
