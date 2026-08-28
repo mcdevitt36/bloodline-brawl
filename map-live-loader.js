@@ -133,6 +133,16 @@
                                                           const titleSelectPolish = document.createElement("script");
                                                           titleSelectPolish.src = "title-select-polish-v8.js?v=1";
                                                           document.body.appendChild(titleSelectPolish);
+
+                                                          titleSelectPolish.addEventListener(
+                                                            "load",
+                                                            () => {
+                                                              const titlePositionFix = document.createElement("script");
+                                                              titlePositionFix.src = "title-position-fix-v9.js?v=1";
+                                                              document.body.appendChild(titlePositionFix);
+                                                            },
+                                                            { once: true }
+                                                          );
                                                         },
                                                         { once: true }
                                                       );
