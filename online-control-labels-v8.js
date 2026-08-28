@@ -32,7 +32,7 @@
 
   /* Resolve the CURRENT nodes on every pass. Some late fight/UI polish can
      rebuild control markup after ONLINE first loads; cached node references
-     would then point at detached elements and leave a visible J behind. */
+     would then point at detached elements and leave a visible old key behind. */
   function currentNodes() {
     const onePlayerPanel = document.getElementById("onePlayerControls");
     const twoPlayerPanel = document.getElementById("twoPlayerControls");
@@ -49,6 +49,11 @@
     };
 
     return {
+      /* These two are the orange arena melee-orb labels created by
+         character-updates.js. P2 is the exact J visible in the screenshot. */
+      p1MeleeArenaKey: document.getElementById("player1MeleeKey"),
+      p2MeleeArenaKey: document.getElementById("player2MeleeKey"),
+
       p1SpecialKey: document.getElementById("player1SpecialKey"),
       p1UltimateKey: document.getElementById("player1UltimateKey"),
       p2SpecialKey: document.getElementById("player2SpecialKey"),
@@ -75,13 +80,16 @@
 
     const n = currentNodes();
 
-    /* Arena HUD ability letters. */
+    /* Exact arena HUD letters. Private matches use R / E / F on each
+       player's own device, even though the engine internally uses 2P mode. */
+    setText(n.p1MeleeArenaKey, "R");
+    setText(n.p2MeleeArenaKey, "R");
     setText(n.p1SpecialKey, "E");
     setText(n.p1UltimateKey, "F");
     setText(n.p2SpecialKey, "E");
     setText(n.p2UltimateKey, "F");
 
-    /* Private-match action controls. Actual melee input is R. */
+    /* Private-match action controls. */
     setText(n.oneAttack, "R");
     setText(n.oneSpecial, "E");
     setText(n.oneUltimate, "F");
@@ -96,9 +104,10 @@
     setText(n.p2Special, "E");
     setText(n.p2Ultimate, "F = ULTIMATE");
 
-    /* Extra guest-only guard: find the currently rendered P2 MELEE button
-       by its label, not its position, and never allow local-2P J to remain. */
+    /* Guest-only belt-and-suspenders guard for any rebuilt bottom panel. */
     if (isGuest()) {
+      setText(document.getElementById("player2MeleeKey"), "R");
+
       const p2Side = document.querySelector(
         "#twoPlayerControls .two-player-control-side.right"
       );
@@ -135,7 +144,9 @@
     if (isOnline()) return;
 
     const n = currentNodes();
+    const onePlayer = typeof gameMode !== "undefined" && gameMode === "1P";
 
+    setText(n.p1MeleeArenaKey, "R");
     setText(n.p1SpecialKey, "E");
     setText(n.p1UltimateKey, "F");
     setText(n.oneAttack, "R");
@@ -147,12 +158,13 @@
     setText(n.p1Special, "E");
     setText(n.p1Ultimate, "F = ULTIMATE");
 
+    setText(n.p2MeleeArenaKey, onePlayer ? "CPU" : "J");
     setText(n.p2Movement, "ARROWS • I BLOCK");
     setText(n.p2Melee, "J");
     setText(n.p2Special, "K");
     setText(n.p2Ultimate, "L = ULTIMATE");
 
-    if (typeof gameMode !== "undefined" && gameMode === "1P") {
+    if (onePlayer) {
       setText(n.p2SpecialKey, "CPU");
       setText(n.p2UltimateKey, "CPU");
     } else {
