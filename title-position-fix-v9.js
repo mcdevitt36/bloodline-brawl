@@ -92,6 +92,16 @@
           const postMatchResultsPolish = document.createElement("script");
           postMatchResultsPolish.src = "post-match-results-polish-v2.js?v=1";
           document.body.appendChild(postMatchResultsPolish);
+
+          postMatchResultsPolish.addEventListener(
+            "load",
+            () => {
+              const onlineMode = document.createElement("script");
+              onlineMode.src = "online-mode-v1.js?v=1";
+              document.body.appendChild(onlineMode);
+            },
+            { once: true }
+          );
         },
         { once: true }
       );
