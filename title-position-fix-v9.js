@@ -99,6 +99,16 @@
               const onlineMode = document.createElement("script");
               onlineMode.src = "online-mode-v1.js?v=1";
               document.body.appendChild(onlineMode);
+
+              onlineMode.addEventListener(
+                "load",
+                () => {
+                  const onlineStability = document.createElement("script");
+                  onlineStability.src = "online-stability-v2.js?v=1";
+                  document.body.appendChild(onlineStability);
+                },
+                { once: true }
+              );
             },
             { once: true }
           );
