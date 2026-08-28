@@ -96,31 +96,50 @@
           postMatchResultsPolish.addEventListener(
             "load",
             () => {
-              /* Offline progression loads after the final combat/results
-                 wrappers so its tracking sees the real finished behavior. */
-              const familyChallenges = document.createElement("script");
-              familyChallenges.src = "challenge-system-v1.js?v=1";
-              document.body.appendChild(familyChallenges);
+              /* Nick's fighter/combat definitions load BEFORE Family Challenges.
+                 That way the existing challenge wrapper sees Nick's real melee,
+                 special and ultimate just like every other fighter. Nick remains
+                 hidden from character select until Erin's reveal unlocks him. */
+              const nickFighter = document.createElement("script");
+              nickFighter.src = "nick-fighter-v1.js?v=1";
+              document.body.appendChild(nickFighter);
 
-              /* Load the sunset polish only after the challenge system has
-                 injected its base map-variant CSS, so this stays the final
-                 visual authority for Westhampton Sunset. */
-              familyChallenges.addEventListener(
+              nickFighter.addEventListener(
                 "load",
                 () => {
-                  const sunsetPolish = document.createElement("script");
-                  sunsetPolish.src = "westhampton-sunset-polish-v2.js?v=1";
-                  document.body.appendChild(sunsetPolish);
+                  /* Existing rotating progression remains the authority for
+                     Daily/Weekly Family XP and cosmetic rewards. */
+                  const familyChallenges = document.createElement("script");
+                  familyChallenges.src = "challenge-system-v1.js?v=1";
+                  document.body.appendChild(familyChallenges);
+
+                  familyChallenges.addEventListener(
+                    "load",
+                    () => {
+                      /* Erin's permanent quest exists ONLY inside the existing
+                         Challenges hub. No extra title/menu button is created. */
+                      const erinChallenge = document.createElement("script");
+                      erinChallenge.src = "erin-nick-challenge-v1.js?v=1";
+                      document.body.appendChild(erinChallenge);
+
+                      /* Final visual authority for Westhampton Sunset stays
+                         after the challenge system's base map-variant CSS. */
+                      const sunsetPolish = document.createElement("script");
+                      sunsetPolish.src = "westhampton-sunset-polish-v2.js?v=1";
+                      document.body.appendChild(sunsetPolish);
+                    },
+                    { once: true }
+                  );
+
+                  /* Important performance change: the heavy WebRTC/private-match
+                     code is NOT loaded during normal 1P/2P play anymore. This
+                     lightweight button loads it only after ONLINE is clicked. */
+                  const onlineLazyLoader = document.createElement("script");
+                  onlineLazyLoader.src = "online-lazy-loader-v4.js?v=4";
+                  document.body.appendChild(onlineLazyLoader);
                 },
                 { once: true }
               );
-
-              /* Important performance change: the heavy WebRTC/private-match
-                 code is NOT loaded during normal 1P/2P play anymore. This
-                 lightweight button loads it only after ONLINE is clicked. */
-              const onlineLazyLoader = document.createElement("script");
-              onlineLazyLoader.src = "online-lazy-loader-v4.js?v=4";
-              document.body.appendChild(onlineLazyLoader);
             },
             { once: true }
           );
