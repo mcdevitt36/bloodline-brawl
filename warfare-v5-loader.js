@@ -7,5 +7,6 @@ import './warfare-hub-polish-v10.js?v=1';
 import './warfare-keyboard-fire-v11.js?v=1';
 import './warfare-scroll-lock-v12.js?v=1';
 import './warfare-smoothing-v13.js?v=1';
+import './warfare-crouch-v14.js?v=1';
 import './warfare-gameplay-v12.js?v=1';
 import './warfare-v4.js?v=2';
