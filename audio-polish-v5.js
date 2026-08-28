@@ -2,7 +2,7 @@
    BLOODLINE BRAWL — AUDIO POLISH V5
    Additive only.
    - Donn voice is fully muted; on-screen DONN, GET OVER HERE! text stays unchanged
-   - Title, character select, challenge select, and map select music run at max
+   - Title, character select, challenge select, and map select music get a stronger temporary boost
 ===================================================== */
 
 (() => {
@@ -46,8 +46,11 @@
 
   /* ===================================================
      MENU MUSIC GAIN
-     Force all non-fight menu screens to the maximum music level.
-     Fight music still returns to the user's saved music preference.
+     Music is already at 100% on menu screens. To make the menus
+     audibly louder than before, temporarily lift BOTH the music and
+     master buses to 100% while on the non-fight screens.
+
+     The user's saved master/music settings are restored for combat.
   =================================================== */
 
   const savedMusicRaw = localStorage.getItem("bbMusic");
@@ -65,18 +68,34 @@
     )
   );
 
+  const savedMasterRaw = localStorage.getItem("bbMaster");
+  const parsedSavedMaster = savedMasterRaw === null
+    ? .82
+    : Number(savedMasterRaw);
+
+  const savedMaster = Math.max(
+    0,
+    Math.min(
+      1,
+      Number.isFinite(parsedSavedMaster)
+        ? parsedSavedMaster
+        : .82
+    )
+  );
+
   let userActivated = false;
   let lastAppliedScreen = null;
 
-  function musicInput() {
-    return document.querySelector('.bb-sound input[data-v="music"]');
+  function volumeInput(kind) {
+    return document.querySelector(`.bb-sound input[data-v="${kind}"]`);
   }
 
-  function setInternalMusic(level) {
-    const input = musicInput();
+  function setInternalVolume(kind, level) {
+    const input = volumeInput(kind);
     if (!input) return false;
 
-    const remembered = localStorage.getItem("bbMusic");
+    const storageKey = kind === "music" ? "bbMusic" : "bbMaster";
+    const remembered = localStorage.getItem(storageKey);
     const percent = Math.round(Math.max(0, Math.min(1, level)) * 100);
 
     if (Number(input.value) !== percent) {
@@ -84,9 +103,9 @@
       input.dispatchEvent(new Event("input", { bubbles:true }));
     }
 
-    /* The menu boost is temporary; preserve the user's saved fight music level. */
-    if (remembered === null) localStorage.removeItem("bbMusic");
-    else localStorage.setItem("bbMusic", remembered);
+    /* Menu boost is temporary. Never overwrite the player's saved setting. */
+    if (remembered === null) localStorage.removeItem(storageKey);
+    else localStorage.setItem(storageKey, remembered);
 
     return true;
   }
@@ -101,18 +120,19 @@
     const id = activeScreenId();
     if (!force && id === lastAppliedScreen) return;
 
-    let level = savedMusic;
-
-    if (
+    const isMenu =
       id === "titleScreen" ||
       id === "selectScreen" ||
       id === "challengeScreen" ||
-      id === "mapScreen"
-    ) {
-      level = 1;
-    }
+      id === "mapScreen";
 
-    if (setInternalMusic(level)) {
+    const musicLevel = isMenu ? 1 : savedMusic;
+    const masterLevel = isMenu ? 1 : savedMaster;
+
+    const musicApplied = setInternalVolume("music", musicLevel);
+    const masterApplied = setInternalVolume("master", masterLevel);
+
+    if (musicApplied || masterApplied) {
       lastAppliedScreen = id;
     }
   }
