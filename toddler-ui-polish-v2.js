@@ -80,4 +80,9 @@
       if (selected) renderToddlerDetail(selected);
     }, 0);
   });
+
+  /* Load after toddler-roster-v1 so this wraps the final Leo claw damage path. */
+  const leoMeterFix = document.createElement("script");
+  leoMeterFix.src = "leo-double-swipe-meter-fix-v1.js?v=1";
+  document.body.appendChild(leoMeterFix);
 })();
