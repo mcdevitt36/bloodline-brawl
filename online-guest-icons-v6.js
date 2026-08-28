@@ -3,19 +3,12 @@
    Private-match UI only.
    - Guest sees R / E / F instead of local-2P J / K / L
    - Normal local 2P keeps J / K / L exactly as before
+   - Live DOM lookup prevents rebuilt/cloned P2 melee UI from keeping J
 ===================================================== */
 
 (() => {
   if (window.__bbOnlineGuestIconsV6Loaded) return;
   window.__bbOnlineGuestIconsV6Loaded = true;
-
-  const p2SpecialKey = document.getElementById("player2SpecialKey");
-  const p2UltimateKey = document.getElementById("player2UltimateKey");
-  const p2ControlSide = document.querySelector("#twoPlayerControls .two-player-control-side.right");
-  const p2MeleeControlKey = p2ControlSide?.querySelector(".two-player-action-row .two-control-button:first-child small") || null;
-  const p2SpecialControlKey = p2ControlSide?.querySelector(".two-player-action-row .two-control-button.special small") || null;
-  const movement = p2ControlSide?.querySelector(":scope > span") || null;
-  const ultimateNote = p2ControlSide?.querySelector(".ultimate-key-note") || null;
 
   const isGuestPrivateMatch = () =>
     document.body.classList.contains("bb-online-active") &&
@@ -26,29 +19,97 @@
     if (element.textContent.trim() !== text) element.textContent = text;
   };
 
+  function findCurrentP2Side() {
+    return document.querySelector(
+      "#fightScreen #twoPlayerControls .two-player-control-side.right"
+    ) || document.querySelector(
+      "#twoPlayerControls .two-player-control-side.right"
+    );
+  }
+
+  function forceGuestMeleeToR() {
+    if (!isGuestPrivateMatch()) return;
+
+    const keys = new Set();
+    const p2Side = findCurrentP2Side();
+
+    /* Primary P2 melee location. */
+    p2Side
+      ?.querySelectorAll(
+        ".two-player-action-row .two-control-button:first-child small"
+      )
+      .forEach(key => keys.add(key));
+
+    /* Catch any rebuilt/cloned P2 control panel. */
+    document
+      .querySelectorAll(
+        "#fightScreen .two-player-control-side.right .two-control-button small"
+      )
+      .forEach(key => {
+        const button = key.closest("button");
+        if (button && /MELEE/i.test(button.textContent || "")) keys.add(key);
+      });
+
+    /* Final safety: if any visible fight-screen MELEE button still carries
+       the local-P2 J while this browser is the guest, it is the guest melee
+       key and must read R. Host/local modes never enter this branch. */
+    document
+      .querySelectorAll("#fightScreen button small")
+      .forEach(key => {
+        const button = key.closest("button");
+        if (
+          key.textContent.trim().toUpperCase() === "J" &&
+          button &&
+          /MELEE/i.test(button.textContent || "")
+        ) {
+          keys.add(key);
+        }
+      });
+
+    keys.forEach(key => setText(key, "R"));
+  }
+
   function applyGuestLabels() {
     if (!isGuestPrivateMatch()) return;
 
-    /* Arena ability-key icons. */
+    const p2SpecialKey = document.getElementById("player2SpecialKey");
+    const p2UltimateKey = document.getElementById("player2UltimateKey");
+    const p2Side = findCurrentP2Side();
+    const movement = p2Side?.querySelector(":scope > span") || null;
+    const specialKey = p2Side?.querySelector(
+      ".two-player-action-row .two-control-button.special small"
+    ) || null;
+    const ultimateNote = p2Side?.querySelector(".ultimate-key-note") || null;
+
     setText(p2SpecialKey, "E");
     setText(p2UltimateKey, "F");
-
-    /* Bottom-right P2 control panel. Target melee directly so J cannot
-       survive from the local-2P markup or a later local UI refresh. */
     setText(movement, "A/D OR ARROWS • Q BLOCK");
-    setText(p2MeleeControlKey, "R");
-    setText(p2SpecialControlKey, "E");
+    setText(specialKey, "E");
     setText(ultimateNote, "F = ULTIMATE");
+
+    forceGuestMeleeToR();
   }
 
   function restoreLocal2PLabels() {
     if (isGuestPrivateMatch()) return;
 
+    const p2SpecialKey = document.getElementById("player2SpecialKey");
+    const p2UltimateKey = document.getElementById("player2UltimateKey");
+    const p2Side = findCurrentP2Side();
+    const movement = p2Side?.querySelector(":scope > span") || null;
+    const meleeKey = p2Side?.querySelector(
+      ".two-player-action-row .two-control-button:first-child small"
+    ) || null;
+    const specialKey = p2Side?.querySelector(
+      ".two-player-action-row .two-control-button.special small"
+    ) || null;
+    const ultimateNote = p2Side?.querySelector(".ultimate-key-note") || null;
+
     setText(p2SpecialKey, gameMode === "1P" ? "CPU" : "K");
     setText(p2UltimateKey, gameMode === "1P" ? "CPU" : "L");
     setText(movement, "ARROWS • I BLOCK");
-    setText(p2MeleeControlKey, "J");
-    setText(p2SpecialControlKey, "K");
+    setText(meleeKey, "J");
+    setText(specialKey, "K");
     setText(ultimateNote, "L = ULTIMATE");
   }
 
@@ -59,9 +120,11 @@
     if (isGuestPrivateMatch()) {
       applyGuestLabels();
       setTimeout(applyGuestLabels, 0);
-      setTimeout(applyGuestLabels, 180);
+      setTimeout(applyGuestLabels, 100);
+      setTimeout(applyGuestLabels, 250);
       setTimeout(applyGuestLabels, 500);
       setTimeout(applyGuestLabels, 1000);
+      setTimeout(applyGuestLabels, 1800);
     } else {
       restoreLocal2PLabels();
     }
@@ -69,22 +132,21 @@
     return result;
   };
 
-  /* If another UI patch rewrites the local P2 labels after match start,
-     immediately put the guest-only R/E/F labels back. */
-  if (p2ControlSide) {
-    const controlObserver = new MutationObserver(() => {
+  /* Watch the entire fight UI because some late polish code can replace
+     control nodes rather than merely changing their text. */
+  const fightScreenRoot = document.getElementById("fightScreen");
+  if (fightScreenRoot) {
+    const fightObserver = new MutationObserver(() => {
       if (isGuestPrivateMatch()) applyGuestLabels();
     });
 
-    controlObserver.observe(p2ControlSide, {
+    fightObserver.observe(fightScreenRoot, {
       subtree: true,
       childList: true,
       characterData: true
     });
   }
 
-  /* Also catch the moment this browser becomes the online guest, even if
-     that class is applied after this script first loads. */
   const roleObserver = new MutationObserver(() => {
     if (isGuestPrivateMatch()) applyGuestLabels();
   });
