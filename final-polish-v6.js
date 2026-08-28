@@ -1,6 +1,6 @@
 /* =====================================================
    BLOODLINE BRAWL — FINAL POLISH V6
-   Tiny additive Kelly headphone fit + Leah naming tweaks only.
+   Tiny additive Kelly headphone fit + Leah naming + Sean visual cleanup.
 ===================================================== */
 
 (() => {
@@ -21,6 +21,12 @@
 
     .kelly-model .bb4-headphones::after {
       right: -14px !important;
+    }
+
+    /* Sean no longer uses the old guitar. Its neck was peeking up behind
+       the right side of his face, creating the small brown wedge. */
+    .sean-model .guitar-back {
+      display: none !important;
     }
   `;
 
