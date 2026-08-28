@@ -96,10 +96,6 @@
           postMatchResultsPolish.addEventListener(
             "load",
             () => {
-              /* Nick's fighter/combat definitions load BEFORE Family Challenges.
-                 That way the existing challenge wrapper sees Nick's real melee,
-                 special and ultimate just like every other fighter. Nick remains
-                 hidden from character select until Erin's reveal unlocks him. */
               const nickFighter = document.createElement("script");
               nickFighter.src = "nick-fighter-v1.js?v=1";
               document.body.appendChild(nickFighter);
@@ -107,14 +103,10 @@
               nickFighter.addEventListener(
                 "load",
                 () => {
-                  /* Bridge the older closed fighter-profile move list so Nick's
-                     unlocked card gets a complete profile and responsive sizing. */
                   const nickIntegrationPolish = document.createElement("script");
                   nickIntegrationPolish.src = "nick-integration-polish-v2.js?v=1";
                   document.body.appendChild(nickIntegrationPolish);
 
-                  /* Existing rotating progression remains the authority for
-                     Daily/Weekly Family XP and cosmetic rewards. */
                   const familyChallenges = document.createElement("script");
                   familyChallenges.src = "challenge-system-v1.js?v=1";
                   document.body.appendChild(familyChallenges);
@@ -122,14 +114,14 @@
                   familyChallenges.addEventListener(
                     "load",
                     () => {
-                      /* Erin's permanent quest exists ONLY inside the existing
-                         Challenges hub. No extra title/menu button is created. */
                       const erinChallenge = document.createElement("script");
                       erinChallenge.src = "erin-nick-challenge-v1.js?v=1";
                       document.body.appendChild(erinChallenge);
 
-                      /* Final visual authority for Westhampton Sunset stays
-                         after the challenge system's base map-variant CSS. */
+                      const martinChallengesIntegration = document.createElement("script");
+                      martinChallengesIntegration.src = "martin-challenges-integration-v1.js?v=1";
+                      document.body.appendChild(martinChallengesIntegration);
+
                       const sunsetPolish = document.createElement("script");
                       sunsetPolish.src = "westhampton-sunset-polish-v2.js?v=1";
                       document.body.appendChild(sunsetPolish);
@@ -137,9 +129,6 @@
                     { once: true }
                   );
 
-                  /* Important performance change: the heavy WebRTC/private-match
-                     code is NOT loaded during normal 1P/2P play anymore. This
-                     lightweight button loads it only after ONLINE is clicked. */
                   const onlineLazyLoader = document.createElement("script");
                   onlineLazyLoader.src = "online-lazy-loader-v4.js?v=4";
                   document.body.appendChild(onlineLazyLoader);
@@ -161,6 +150,6 @@
   document.body.appendChild(martinChallengeModernize);
 
   const modeLauncher = document.createElement("script");
-  modeLauncher.src = "mode-launcher-v11.js?v=1";
+  modeLauncher.src = "mode-launcher-v11.js?v=2";
   document.body.appendChild(modeLauncher);
 })();
