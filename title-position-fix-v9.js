@@ -85,6 +85,16 @@
       const postMatchResults = document.createElement("script");
       postMatchResults.src = "post-match-results-v1.js?v=1";
       document.body.appendChild(postMatchResults);
+
+      postMatchResults.addEventListener(
+        "load",
+        () => {
+          const postMatchResultsPolish = document.createElement("script");
+          postMatchResultsPolish.src = "post-match-results-polish-v2.js?v=1";
+          document.body.appendChild(postMatchResultsPolish);
+        },
+        { once: true }
+      );
     },
     { once: true }
   );
