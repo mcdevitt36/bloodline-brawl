@@ -126,6 +126,16 @@
                                                       const toddlerGroundBearPolish = document.createElement("script");
                                                       toddlerGroundBearPolish.src = "toddler-ground-bear-polish-v3.js?v=1";
                                                       document.body.appendChild(toddlerGroundBearPolish);
+
+                                                      toddlerGroundBearPolish.addEventListener(
+                                                        "load",
+                                                        () => {
+                                                          const titleSelectPolish = document.createElement("script");
+                                                          titleSelectPolish.src = "title-select-polish-v8.js?v=1";
+                                                          document.body.appendChild(titleSelectPolish);
+                                                        },
+                                                        { once: true }
+                                                      );
                                                     },
                                                     { once: true }
                                                   );
