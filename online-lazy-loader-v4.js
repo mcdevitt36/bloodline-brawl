@@ -60,12 +60,10 @@
     button.innerHTML = `ONLINE<small>LOADING...</small>`;
 
     try {
-      /* Remove the lightweight placeholder before V1 creates the real
-         ONLINE button. Nothing network-related exists before this click. */
       button.remove();
 
       await loadScript("online-mode-v1.js?v=2");
-      await loadScript("online-stability-v2.js?v=6");
+      await loadScript("online-stability-v2.js?v=7");
 
       const realButton = document.getElementById("onlineButton");
       if (realButton) {
