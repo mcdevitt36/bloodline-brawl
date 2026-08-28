@@ -71,7 +71,7 @@
       await loadScript("online-controls-fix-v4.js?v=3");
       await loadScript("online-guest-input-hardfix-v5.js?v=2");
       await loadScript("online-guest-icons-v6.js?v=3");
-      await loadScript("online-control-labels-v8.js?v=2");
+      await loadScript("online-control-labels-v8.js?v=3");
 
       const realButton = document.getElementById("onlineButton");
       if (realButton) {
