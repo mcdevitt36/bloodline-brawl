@@ -1,8 +1,9 @@
 /* =====================================================
    BLOODLINE BRAWL — ONLINE STABILITY V2
-   Tiny additive safety fix.
-   A fresh match must always restore fighters hidden by the final-KO
-   celebration before rematch / synced online start.
+   Small additive online-only safety layer.
+   - Fresh matches restore fighters hidden by the final-KO celebration
+   - Load efficient host controls with no extra animation loop
+   - Guard guest inputs from the older local-2P R/E capture handler
 ===================================================== */
 
 (() => {
@@ -25,6 +26,16 @@
   };
 
   const onlineControlsFix = document.createElement("script");
-  onlineControlsFix.src = "online-controls-fix-v3.js?v=1";
+  onlineControlsFix.src = "online-controls-fix-v4.js?v=1";
   document.body.appendChild(onlineControlsFix);
+
+  onlineControlsFix.addEventListener(
+    "load",
+    () => {
+      const guestInputGuard = document.createElement("script");
+      guestInputGuard.src = "online-guest-input-guard-v4.js?v=1";
+      document.body.appendChild(guestInputGuard);
+    },
+    { once: true }
+  );
 })();
