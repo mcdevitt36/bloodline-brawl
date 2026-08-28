@@ -61,9 +61,13 @@
 
   /* ===================================================
      SHANNAN — BRAINROT COOLDOWN
-     Erin's 2.5s stun stays on the normal 5.0s special cooldown.
-     Brainrot lasts 3.25s and has a much larger, more disruptive
-     animation, so Shannan now waits a full 9.0s before using it again.
+     Brainrot's stun/attached animation lasts about 3.25s. The game's
+     cooldown begins when the move is activated, so a plain 9.0s total
+     cooldown would leave only ~5.75s after the Brainrot animation ends.
+
+     Make the perceived reload a true ~9 seconds AFTER the stun ends:
+     3.25s Brainrot + 9.0s recharge = 12.25s total from activation.
+     Erin and every other fighter keep their existing cooldowns.
   =================================================== */
   const previousBeginSpecialCooldownV12 = beginSpecialCooldown;
 
@@ -72,7 +76,7 @@
       return previousBeginSpecialCooldownV12(p);
     }
 
-    const duration = 9000;
+    const duration = 12250;
     const token = (p.__bbSpecialCooldownTokenV12 || 0) + 1;
 
     p.__bbSpecialCooldownTokenV12 = token;
