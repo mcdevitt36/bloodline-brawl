@@ -99,9 +99,9 @@
                                           finalPolishV6.addEventListener(
                                             "load",
                                             () => {
-                                              const toddlerTrio = document.createElement("script");
-                                              toddlerTrio.src = "toddler-trio-v1.js?v=1";
-                                              document.body.appendChild(toddlerTrio);
+                                              const toddlerRoster = document.createElement("script");
+                                              toddlerRoster.src = "toddler-roster-v1.js?v=1";
+                                              document.body.appendChild(toddlerRoster);
                                             },
                                             { once: true }
                                           );
