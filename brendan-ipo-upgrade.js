@@ -1,8 +1,7 @@
 /* =====================================================
    BLOODLINE BRAWL — BRENDAN IPO ULTIMATE UPGRADE
-   Additive only. Brendan actively rings a giant market bell
-   with his golf club; the bell's shockwave travels into the
-   opponent and causes the ultimate damage.
+   Additive only. Brendan rings the IPO bell with his golf club,
+   then a bull-market charge rushes the opponent for the damage.
 ===================================================== */
 
 (() => {
@@ -115,13 +114,125 @@
     }
     .bb-ipo-impact{
       position:absolute;
-      width:110px;
-      height:110px;
+      width:118px;
+      height:118px;
       border-radius:50%;
       border:9px solid #ffe45a;
-      box-shadow:0 0 24px #ffd000, inset 0 0 22px #fff0a3;
+      box-shadow:0 0 24px #ffd000,inset 0 0 22px #fff0a3;
       pointer-events:none;
-      z-index:42;
+      z-index:46;
+    }
+
+    /* BULL MARKET — CSS-drawn bull, no emoji asset. */
+    .bb-ipo-bull{
+      position:absolute;
+      width:172px;
+      height:108px;
+      pointer-events:none;
+      z-index:45;
+      filter:drop-shadow(5px 8px 0 rgba(0,0,0,.28));
+      transform-origin:center center;
+    }
+    .bb-ipo-bull-body{
+      position:absolute;
+      left:22px;
+      top:34px;
+      width:106px;
+      height:54px;
+      border:4px solid #2a2018;
+      border-radius:48% 45% 40% 43%;
+      background:linear-gradient(180deg,#8f542f,#6f3d24 70%,#56301f);
+    }
+    .bb-ipo-bull-body::after{
+      content:"";
+      position:absolute;
+      right:16px;
+      top:12px;
+      width:25px;
+      height:16px;
+      border-radius:50%;
+      background:rgba(55,30,20,.28);
+    }
+    .bb-ipo-bull-head{
+      position:absolute;
+      left:111px;
+      top:26px;
+      width:50px;
+      height:48px;
+      border:4px solid #2a2018;
+      border-radius:48% 48% 42% 42%;
+      background:linear-gradient(180deg,#9a6039,#754326);
+      z-index:4;
+    }
+    .bb-ipo-bull-muzzle{
+      position:absolute;
+      right:-9px;
+      bottom:1px;
+      width:29px;
+      height:20px;
+      border:3px solid #2a2018;
+      border-radius:50%;
+      background:#b47d58;
+    }
+    .bb-ipo-bull-eye{
+      position:absolute;
+      right:11px;
+      top:13px;
+      width:7px;
+      height:7px;
+      border-radius:50%;
+      background:#f6d842;
+      box-shadow:0 0 6px #ffdf45;
+    }
+    .bb-ipo-bull-horn{
+      position:absolute;
+      top:-15px;
+      width:23px;
+      height:19px;
+      border-top:6px solid #efe1b7;
+      border-radius:60% 60% 0 0;
+      z-index:3;
+    }
+    .bb-ipo-bull-horn.one{
+      left:108px;
+      transform:rotate(-28deg);
+    }
+    .bb-ipo-bull-horn.two{
+      left:142px;
+      transform:scaleX(-1) rotate(-28deg);
+    }
+    .bb-ipo-bull-tail{
+      position:absolute;
+      left:4px;
+      top:43px;
+      width:29px;
+      height:7px;
+      border-radius:50%;
+      background:#362419;
+      transform:rotate(-20deg);
+      transform-origin:right center;
+      animation:bbBullTail .18s linear infinite alternate;
+    }
+    .bb-ipo-bull-leg{
+      position:absolute;
+      top:79px;
+      width:12px;
+      height:28px;
+      border:3px solid #2a2018;
+      background:#673921;
+      transform-origin:top center;
+      animation:bbBullLeg .16s linear infinite alternate;
+    }
+    .bb-ipo-bull-leg.one{left:38px}.bb-ipo-bull-leg.two{left:65px;animation-delay:-.08s}.bb-ipo-bull-leg.three{left:101px;animation-delay:-.08s}.bb-ipo-bull-leg.four{left:123px}
+    @keyframes bbBullLeg{from{transform:rotate(-22deg)}to{transform:rotate(24deg)}}
+    @keyframes bbBullTail{from{transform:rotate(-28deg)}to{transform:rotate(18deg)}}
+    .fight-character.bb-ipo-bull-hit .motion-layer{
+      animation:bbIPOBullHit 320ms ease-out 1;
+    }
+    @keyframes bbIPOBullHit{
+      0%{transform:translateX(0);filter:brightness(1.6)}
+      42%{transform:translateX(var(--bb-ipo-bull-recoil,18px));filter:brightness(1.2)}
+      100%{transform:translateX(0);filter:brightness(1)}
     }
   `;
   document.head.appendChild(css);
@@ -140,16 +251,67 @@
           { transform:"translateY(-6px) scale(1.08)", opacity:1, offset:.35 },
           { transform:"translateY(-24px) scale(1)", opacity:0 }
         ],
-        { duration:760, easing:"ease-out" }
+        { duration:880, easing:"ease-out" }
       );
-      setTimeout(() => el.remove(), 780);
+      setTimeout(() => el.remove(), 900);
     }, delay);
+  }
+
+  function createBull() {
+    const bull = document.createElement("div");
+    bull.className = "effect bb-ipo-bull";
+    bull.innerHTML = `
+      <div class="bb-ipo-bull-tail"></div>
+      <div class="bb-ipo-bull-body"></div>
+      <div class="bb-ipo-bull-horn one"></div>
+      <div class="bb-ipo-bull-horn two"></div>
+      <div class="bb-ipo-bull-head">
+        <div class="bb-ipo-bull-eye"></div>
+        <div class="bb-ipo-bull-muzzle"></div>
+      </div>
+      <div class="bb-ipo-bull-leg one"></div>
+      <div class="bb-ipo-bull-leg two"></div>
+      <div class="bb-ipo-bull-leg three"></div>
+      <div class="bb-ipo-bull-leg four"></div>
+    `;
+    return bull;
+  }
+
+  function bullImpact(attacker, target) {
+    const impact = document.createElement("div");
+    impact.className = "effect bb-ipo-impact";
+    impact.style.left = (target.x - 28) + "px";
+    impact.style.bottom = (50 + target.y) + "px";
+    effects.appendChild(impact);
+    impact.animate(
+      [
+        { transform:"scale(.35)", opacity:1 },
+        { transform:"scale(1.38)", opacity:.92, offset:.45 },
+        { transform:"scale(1.85)", opacity:0 }
+      ],
+      { duration:460, easing:"ease-out" }
+    );
+
+    target.fighter.style.setProperty(
+      "--bb-ipo-bull-recoil",
+      (attacker.facing * 18) + "px"
+    );
+    target.fighter.classList.remove("bb-ipo-bull-hit");
+    void target.fighter.offsetWidth;
+    target.fighter.classList.add("bb-ipo-bull-hit");
+
+    dealDamage(attacker, target, 24, { type:"ultimate", ignoreBlock:true });
+    if (window.BloodlineAudio?.play) BloodlineAudio.play("heavy", 120);
+
+    setTimeout(() => {
+      impact.remove();
+      target.fighter.classList.remove("bb-ipo-bull-hit");
+    }, 480);
   }
 
   function brendanIPOUltimate(attacker, target) {
     actionLock = true;
-
-    addComicText("IPO!", "green-text", 1800);
+    addComicText("IPO!", "green-text", 2200);
 
     const direction = attacker.facing || 1;
     const bell = document.createElement("div");
@@ -167,10 +329,10 @@
 
     bell.animate(
       [
-        { transform: direction === -1 ? "scaleX(-1) translateY(18px)" : "translateY(18px)", opacity:0 },
+        { transform: direction === -1 ? "scaleX(-1) translateY(22px)" : "translateY(22px)", opacity:0 },
         { transform: direction === -1 ? "scaleX(-1) translateY(0)" : "translateY(0)", opacity:1 }
       ],
-      { duration:220, easing:"ease-out", fill:"forwards" }
+      { duration:320, easing:"ease-out", fill:"forwards" }
     );
 
     const arm = attacker.fighter.querySelector(".weapon-arm");
@@ -178,14 +340,15 @@
       arm.animate(
         [
           { transform:"rotate(0deg)" },
-          { transform:`rotate(${direction === 1 ? -52 : 52}deg)` },
-          { transform:`rotate(${direction === 1 ? 34 : -34}deg)` },
+          { transform:`rotate(${direction === 1 ? -58 : 58}deg)`, offset:.38 },
+          { transform:`rotate(${direction === 1 ? 38 : -38}deg)`, offset:.68 },
           { transform:"rotate(0deg)" }
         ],
-        { duration:520, easing:"cubic-bezier(.2,.7,.2,1)" }
+        { duration:760, easing:"cubic-bezier(.2,.7,.2,1)" }
       );
     }
 
+    /* Slower, more readable bell strike. */
     setTimeout(() => {
       if (window.BloodlineAudio?.play) {
         BloodlineAudio.play("golf", 80);
@@ -195,11 +358,12 @@
       bell.animate(
         [
           { transform: direction === -1 ? "scaleX(-1) rotate(0deg)" : "rotate(0deg)" },
-          { transform: direction === -1 ? "scaleX(-1) rotate(-8deg)" : "rotate(8deg)" },
-          { transform: direction === -1 ? "scaleX(-1) rotate(7deg)" : "rotate(-7deg)" },
+          { transform: direction === -1 ? "scaleX(-1) rotate(-10deg)" : "rotate(10deg)" },
+          { transform: direction === -1 ? "scaleX(-1) rotate(8deg)" : "rotate(-8deg)" },
+          { transform: direction === -1 ? "scaleX(-1) rotate(-5deg)" : "rotate(5deg)" },
           { transform: direction === -1 ? "scaleX(-1) rotate(0deg)" : "rotate(0deg)" }
         ],
-        { duration:460, easing:"ease-out" }
+        { duration:620, easing:"ease-out" }
       );
 
       const flash = document.createElement("div");
@@ -208,77 +372,98 @@
       flash.style.bottom = "94px";
       effects.appendChild(flash);
       flash.animate(
-        [ { transform:"scale(.2)", opacity:1 }, { transform:"scale(2.1)", opacity:0 } ],
-        { duration:360, easing:"ease-out" }
+        [ { transform:"scale(.2)", opacity:1 }, { transform:"scale(2.25)", opacity:0 } ],
+        { duration:430, easing:"ease-out" }
       );
-      setTimeout(() => flash.remove(), 380);
+      setTimeout(() => flash.remove(), 450);
 
-      const startX = bellX + (direction === 1 ? 110 : 0);
-      const endX = target.x + 25;
-      const travel = Math.max(300, Math.min(700, Math.abs(endX - startX) * 1.45));
-
+      const ringX = bellX + (direction === 1 ? 108 : 2);
       [0,1,2].forEach(i => {
         const wave = document.createElement("div");
         wave.className = "effect bb-ipo-wave";
-        wave.style.left = startX + "px";
-        wave.style.bottom = (67 - i * 4) + "px";
+        wave.style.left = ringX + "px";
+        wave.style.bottom = (66 - i * 4) + "px";
         if (direction === -1) wave.style.transform = "scaleX(-1)";
         effects.appendChild(wave);
-
-        const delta = endX - startX;
         wave.animate(
           [
             { transform:`${direction === -1 ? "scaleX(-1) " : ""}translateX(0) scale(.72)`, opacity:.95 },
-            { transform:`${direction === -1 ? "scaleX(-1) " : ""}translateX(${delta}px) scale(${1.15 + i*.16})`, opacity:0 }
+            { transform:`${direction === -1 ? "scaleX(-1) " : ""}translateX(${direction * (105 + i*28)}px) scale(${1.1 + i*.16})`, opacity:0 }
           ],
-          { duration:travel, delay:i*85, easing:"cubic-bezier(.12,.55,.28,1)", fill:"forwards" }
+          { duration:440 + i*60, delay:i*70, easing:"ease-out", fill:"forwards" }
         );
-        setTimeout(() => wave.remove(), travel + i*85 + 60);
+        setTimeout(() => wave.remove(), 720);
       });
 
-      addIPOText("IPO", startX + direction*15, 165, 40);
-      addIPOText("MARKET OPEN", startX + direction*55, 205, 190);
-      addIPOText("LISTED!", startX + direction*90, 150, 340);
+      addIPOText("MARKET OPEN", ringX + direction*18, 194, 80);
 
+      /* The bell opens the market; the bull is what actually deals damage. */
       setTimeout(() => {
-        const impact = document.createElement("div");
-        impact.className = "effect bb-ipo-impact";
-        impact.style.left = (target.x - 25) + "px";
-        impact.style.bottom = (48 + target.y) + "px";
-        effects.appendChild(impact);
-        impact.animate(
+        addIPOText("BULL MARKET!", Math.max(28, Math.min(arena.clientWidth - 185, attacker.x + direction*45)), 165, 0);
+
+        const bull = createBull();
+        const startX = direction === 1 ? -190 : arena.clientWidth + 24;
+        const impactX = direction === 1 ? target.x - 84 : target.x + 14;
+        const exitX = direction === 1 ? arena.clientWidth + 190 : -190;
+        const distance = Math.abs(impactX - startX);
+        const chargeDuration = Math.max(650, Math.min(900, distance * .92));
+
+        bull.style.left = startX + "px";
+        bull.style.bottom = "30px";
+        if (direction === -1) bull.style.transform = "scaleX(-1)";
+        effects.appendChild(bull);
+
+        bull.animate(
           [
-            { transform:"scale(.35)", opacity:1 },
-            { transform:"scale(1.35)", opacity:.9, offset:.45 },
-            { transform:"scale(1.8)", opacity:0 }
+            { left:startX + "px" },
+            { left:impactX + "px" }
           ],
-          { duration:420, easing:"ease-out" }
+          {
+            duration:chargeDuration,
+            easing:"cubic-bezier(.12,.68,.18,1)",
+            fill:"forwards"
+          }
         );
 
-        dealDamage(attacker, target, 24, { type:"ultimate", ignoreBlock:true });
-        if (window.BloodlineAudio?.play) BloodlineAudio.play("heavy", 120);
+        setTimeout(() => {
+          if (!roundOver) {
+            bullImpact(attacker, target);
+          }
 
-        setTimeout(() => impact.remove(), 440);
-      }, travel - 40);
+          bull.animate(
+            [
+              { left:impactX + "px" },
+              { left:exitX + "px" }
+            ],
+            {
+              duration:430,
+              easing:"cubic-bezier(.18,.72,.25,1)",
+              fill:"forwards"
+            }
+          );
 
-      setTimeout(() => {
-        bell.animate(
-          [ { opacity:1, transform: direction === -1 ? "scaleX(-1) translateY(0)" : "translateY(0)" },
-            { opacity:0, transform: direction === -1 ? "scaleX(-1) translateY(18px)" : "translateY(18px)" } ],
-          { duration:260, fill:"forwards" }
-        );
-      }, travel + 180);
-
-      setTimeout(() => {
-        bell.remove();
-        actionLock = false;
-      }, travel + 480);
-    }, 360);
+          setTimeout(() => {
+            bull.remove();
+            bell.animate(
+              [
+                { opacity:1, transform: direction === -1 ? "scaleX(-1) translateY(0)" : "translateY(0)" },
+                { opacity:0, transform: direction === -1 ? "scaleX(-1) translateY(20px)" : "translateY(20px)" }
+              ],
+              { duration:300, fill:"forwards" }
+            );
+            setTimeout(() => {
+              bell.remove();
+              actionLock = false;
+            }, 320);
+          }, 450);
+        }, chargeDuration - 35);
+      }, 300);
+    }, 520);
 
     setTimeout(() => {
       if (bell.isConnected) bell.remove();
       actionLock = false;
-    }, 2200);
+    }, 3400);
   }
 
   const previousUltimateAttack = ultimateAttack;
