@@ -35,6 +35,16 @@
       const guestInputHardfix = document.createElement("script");
       guestInputHardfix.src = "online-guest-input-hardfix-v5.js?v=1";
       document.body.appendChild(guestInputHardfix);
+
+      guestInputHardfix.addEventListener(
+        "load",
+        () => {
+          const guestIcons = document.createElement("script");
+          guestIcons.src = "online-guest-icons-v6.js?v=1";
+          document.body.appendChild(guestIcons);
+        },
+        { once: true }
+      );
     },
     { once: true }
   );
