@@ -100,7 +100,7 @@
                  code is NOT loaded during normal 1P/2P play anymore. This
                  lightweight button loads it only after ONLINE is clicked. */
               const onlineLazyLoader = document.createElement("script");
-              onlineLazyLoader.src = "online-lazy-loader-v4.js?v=2";
+              onlineLazyLoader.src = "online-lazy-loader-v4.js?v=3";
               document.body.appendChild(onlineLazyLoader);
             },
             { once: true }
