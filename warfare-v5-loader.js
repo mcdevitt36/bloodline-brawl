@@ -5,4 +5,5 @@ import './warfare-character-polish-v8.js?v=1';
 import './warfare-specials-v9.js?v=1';
 import './warfare-hub-polish-v10.js?v=1';
 import './warfare-keyboard-fire-v11.js?v=1';
+import './warfare-scroll-lock-v12.js?v=1';
 import './warfare-v4.js?v=2';
