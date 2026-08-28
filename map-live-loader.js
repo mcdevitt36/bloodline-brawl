@@ -117,7 +117,7 @@
                                                 "load",
                                                 () => {
                                                   const toddlerPolish = document.createElement("script");
-                                                  toddlerPolish.src = "toddler-ui-polish-v2.js?v=1";
+                                                  toddlerPolish.src = "toddler-ui-polish-v2.js?v=2";
                                                   document.body.appendChild(toddlerPolish);
 
                                                   toddlerPolish.addEventListener(
