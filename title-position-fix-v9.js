@@ -74,4 +74,8 @@
   const singlePlayerControls = document.createElement("script");
   singlePlayerControls.src = "single-player-controls-v1.js?v=1";
   document.body.appendChild(singlePlayerControls);
+
+  const combatTuning = document.createElement("script");
+  combatTuning.src = "combat-tuning-v12.js?v=1";
+  document.body.appendChild(combatTuning);
 })();
