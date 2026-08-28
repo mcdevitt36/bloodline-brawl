@@ -118,4 +118,8 @@
     },
     { once: true }
   );
+
+  const martinChallengeModernize = document.createElement("script");
+  martinChallengeModernize.src = "martin-challenge-modernize-v1.js?v=1";
+  document.body.appendChild(martinChallengeModernize);
 })();
