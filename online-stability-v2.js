@@ -1,10 +1,5 @@
 /* =====================================================
    BLOODLINE BRAWL — ONLINE STABILITY V2
-   Small additive online-only safety layer.
-   - Fresh matches restore fighters hidden by the final-KO celebration
-   - Load efficient host controls with no extra animation loop
-   - Hard-route guest controls before any old local-2P handlers can see them
-   - Reuse the base RANDOM selector before online selection sync
 ===================================================== */
 
 (() => {
@@ -27,7 +22,7 @@
   };
 
   const onlineRandomFix = document.createElement("script");
-  onlineRandomFix.src = "online-random-fix-v7.js?v=2";
+  onlineRandomFix.src = "online-random-fix-v7.js?v=3";
   document.body.appendChild(onlineRandomFix);
 
   const onlineControlsFix = document.createElement("script");
@@ -47,6 +42,16 @@
           const guestIcons = document.createElement("script");
           guestIcons.src = "online-guest-icons-v6.js?v=2";
           document.body.appendChild(guestIcons);
+
+          guestIcons.addEventListener(
+            "load",
+            () => {
+              const controlLabels = document.createElement("script");
+              controlLabels.src = "online-control-labels-v8.js?v=1";
+              document.body.appendChild(controlLabels);
+            },
+            { once: true }
+          );
         },
         { once: true }
       );
