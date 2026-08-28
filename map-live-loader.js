@@ -102,6 +102,16 @@
                                               const toddlerRoster = document.createElement("script");
                                               toddlerRoster.src = "toddler-roster-v1.js?v=1";
                                               document.body.appendChild(toddlerRoster);
+
+                                              toddlerRoster.addEventListener(
+                                                "load",
+                                                () => {
+                                                  const toddlerPolish = document.createElement("script");
+                                                  toddlerPolish.src = "toddler-ui-polish-v2.js?v=1";
+                                                  document.body.appendChild(toddlerPolish);
+                                                },
+                                                { once: true }
+                                              );
                                             },
                                             { once: true }
                                           );
