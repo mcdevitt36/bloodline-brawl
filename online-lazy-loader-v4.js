@@ -1,7 +1,7 @@
 /* =====================================================
    BLOODLINE BRAWL — ONLINE LAZY LOADER V4
    Keep every offline mode completely free of online gameplay loops.
-   The full WebRTC/private-match code loads only after ONLINE is clicked.
+   All private-match scripts load in a deterministic order before the lobby.
 ===================================================== */
 
 (() => {
@@ -62,8 +62,16 @@
     try {
       button.remove();
 
+      /* Load the online engine first, then every ownership/selection/UI fix
+         in strict order. The real ONLINE button is not clicked until every
+         script below has fired its load event. */
       await loadScript("online-mode-v1.js?v=2");
-      await loadScript("online-stability-v2.js?v=7");
+      await loadScript("online-random-fix-v7.js?v=4");
+      await loadScript("online-stability-v2.js?v=8");
+      await loadScript("online-controls-fix-v4.js?v=3");
+      await loadScript("online-guest-input-hardfix-v5.js?v=2");
+      await loadScript("online-guest-icons-v6.js?v=3");
+      await loadScript("online-control-labels-v8.js?v=2");
 
       const realButton = document.getElementById("onlineButton");
       if (realButton) {
