@@ -1,5 +1,5 @@
 /* =====================================================
-   BLOODLINE BRAWL — CONNOR LIGHT BEARD POLISH V3
+   BLOODLINE BRAWL — CONNOR LIGHT BEARD POLISH V4
    Visual-only additive patch.
    Uses Connor's existing beard element so the same beard appears
    anywhere characterHTML("connor") is rendered: title, select,
@@ -7,22 +7,21 @@
 ===================================================== */
 
 (() => {
-  if (window.__bbConnorBeardPolishV3Loaded) return;
-  window.__bbConnorBeardPolishV3Loaded = true;
+  if (window.__bbConnorBeardPolishV4Loaded) return;
+  window.__bbConnorBeardPolishV4Loaded = true;
 
   const style = document.createElement("style");
 
   style.textContent = `
-    /* Remove the previous face-overlay beard. */
+    /* Remove any older face-overlay beard. */
     .connor-model .face::after {
       content: none !important;
       display: none !important;
     }
 
     /*
-      Light connected beard.
-      Slightly darker than V2, but still translucent enough to read
-      as a short/light beard instead of a heavy full beard.
+      Short connected beard, now clearly darker than V3 without
+      becoming a thick/full beard.
     */
     .connor-model .connor-stubble {
       display: block !important;
@@ -38,19 +37,19 @@
       background:
         linear-gradient(
           180deg,
-          rgba(82,53,37,.18) 0%,
-          rgba(82,53,37,.31) 42%,
-          rgba(76,48,34,.43) 100%
+          rgba(67,43,31,.32) 0%,
+          rgba(67,43,31,.48) 42%,
+          rgba(61,38,28,.61) 100%
         ) !important;
 
-      border-left: 2px solid rgba(72,45,32,.48) !important;
-      border-right: 2px solid rgba(72,45,32,.48) !important;
-      border-bottom: 2px solid rgba(72,45,32,.56) !important;
+      border-left: 2px solid rgba(57,35,26,.66) !important;
+      border-right: 2px solid rgba(57,35,26,.66) !important;
+      border-bottom: 2px solid rgba(57,35,26,.74) !important;
       border-top: 0 !important;
       border-radius: 0 0 13px 13px !important;
     }
 
-    /* Connected sideburns beginning just under Connor's hairline. */
+    /* Sideburns stay connected directly into the jaw beard. */
     .connor-model .connor-stubble::before,
     .connor-model .connor-stubble::after {
       content: "" !important;
@@ -61,8 +60,8 @@
       background:
         linear-gradient(
           180deg,
-          rgba(78,49,34,.50),
-          rgba(78,49,34,.38)
+          rgba(62,39,28,.72),
+          rgba(62,39,28,.56)
         ) !important;
       border-radius: 2px 2px 1px 1px !important;
     }
@@ -75,7 +74,7 @@
       right: -2px !important;
     }
 
-    /* Keep his facial features crisp and clearly above the beard. */
+    /* Keep his eyes and mouth clean above the beard shading. */
     .connor-model .face .eye,
     .connor-model .face .mouth {
       position: absolute !important;
