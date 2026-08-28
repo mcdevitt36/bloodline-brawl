@@ -18,7 +18,7 @@
         "load",
         () => {
           const menuScreenPolish = document.createElement("script");
-          menuScreenPolish.src = "menu-screen-polish-v7.js?v=1";
+          menuScreenPolish.src = "menu-screen-polish-v7.js?v=2";
           document.body.appendChild(menuScreenPolish);
         },
         { once: true }
