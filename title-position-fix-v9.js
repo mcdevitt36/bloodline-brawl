@@ -96,6 +96,12 @@
           postMatchResultsPolish.addEventListener(
             "load",
             () => {
+              /* Offline progression loads after the final combat/results
+                 wrappers so its tracking sees the real finished behavior. */
+              const familyChallenges = document.createElement("script");
+              familyChallenges.src = "challenge-system-v1.js?v=1";
+              document.body.appendChild(familyChallenges);
+
               /* Important performance change: the heavy WebRTC/private-match
                  code is NOT loaded during normal 1P/2P play anymore. This
                  lightweight button loads it only after ONLINE is clicked. */
