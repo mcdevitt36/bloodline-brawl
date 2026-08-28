@@ -3,12 +3,34 @@
    Private-match UI only.
    - Guest sees R / E / F instead of local-2P J / K / L
    - Normal local 2P keeps J / K / L exactly as before
-   - Live DOM lookup prevents rebuilt/cloned P2 melee UI from keeping J
+   - Live DOM + CSS authority prevents any guest melee J from surviving
 ===================================================== */
 
 (() => {
   if (window.__bbOnlineGuestIconsV6Loaded) return;
   window.__bbOnlineGuestIconsV6Loaded = true;
+
+  /* CSS is the final visual authority for the guest melee key. Even if a
+     later local-2P refresh writes J back into the DOM, the private-match
+     guest still visibly sees R. This rule is guest-only and cannot affect
+     normal local 2P. */
+  const guestMeleeStyle = document.createElement("style");
+  guestMeleeStyle.textContent = `
+    body.bb-online-active.bb-online-guest
+    .two-player-action-row .two-control-button:first-child small {
+      font-size: 0 !important;
+    }
+
+    body.bb-online-active.bb-online-guest
+    .two-player-action-row .two-control-button:first-child small::after {
+      content: "R" !important;
+      font-size: 11px !important;
+      line-height: inherit !important;
+      font-weight: inherit !important;
+      color: inherit !important;
+    }
+  `;
+  document.head.appendChild(guestMeleeStyle);
 
   const isGuestPrivateMatch = () =>
     document.body.classList.contains("bb-online-active") &&
@@ -33,28 +55,26 @@
     const keys = new Set();
     const p2Side = findCurrentP2Side();
 
-    /* Primary P2 melee location. */
+    /* Exact P2/non-host melee slot. */
     p2Side
       ?.querySelectorAll(
         ".two-player-action-row .two-control-button:first-child small"
       )
       .forEach(key => keys.add(key));
 
-    /* Catch any rebuilt/cloned P2 control panel. */
+    /* Private matches use R melee on both devices. Catch every current or
+       rebuilt two-player melee slot, including cloned panels without the
+       original #twoPlayerControls id. */
     document
       .querySelectorAll(
-        "#fightScreen .two-player-control-side.right .two-control-button small"
+        ".two-player-action-row .two-control-button:first-child small"
       )
-      .forEach(key => {
-        const button = key.closest("button");
-        if (button && /MELEE/i.test(button.textContent || "")) keys.add(key);
-      });
+      .forEach(key => keys.add(key));
 
-    /* Final safety: if any visible fight-screen MELEE button still carries
-       the local-P2 J while this browser is the guest, it is the guest melee
-       key and must read R. Host/local modes never enter this branch. */
+    /* Catch alternate/rebuilt markup where MELEE is not structurally the
+       first button but the key itself still says J. */
     document
-      .querySelectorAll("#fightScreen button small")
+      .querySelectorAll("button small")
       .forEach(key => {
         const button = key.closest("button");
         if (
@@ -132,20 +152,17 @@
     return result;
   };
 
-  /* Watch the entire fight UI because some late polish code can replace
-     control nodes rather than merely changing their text. */
-  const fightScreenRoot = document.getElementById("fightScreen");
-  if (fightScreenRoot) {
-    const fightObserver = new MutationObserver(() => {
-      if (isGuestPrivateMatch()) applyGuestLabels();
-    });
+  /* Observe the whole document because some late polish code can rebuild
+     or move controls outside the original fight-screen subtree. */
+  const uiObserver = new MutationObserver(() => {
+    if (isGuestPrivateMatch()) applyGuestLabels();
+  });
 
-    fightObserver.observe(fightScreenRoot, {
-      subtree: true,
-      childList: true,
-      characterData: true
-    });
-  }
+  uiObserver.observe(document.body, {
+    subtree: true,
+    childList: true,
+    characterData: true
+  });
 
   const roleObserver = new MutationObserver(() => {
     if (isGuestPrivateMatch()) applyGuestLabels();
