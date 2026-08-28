@@ -23,4 +23,8 @@
 
     return previousBeginMatchOnlineStabilityV2();
   };
+
+  const onlineControlsFix = document.createElement("script");
+  onlineControlsFix.src = "online-controls-fix-v3.js?v=1";
+  document.body.appendChild(onlineControlsFix);
 })();
