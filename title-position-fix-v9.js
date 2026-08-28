@@ -76,6 +76,6 @@
   document.body.appendChild(singlePlayerControls);
 
   const combatTuning = document.createElement("script");
-  combatTuning.src = "combat-tuning-v12.js?v=2";
+  combatTuning.src = "combat-tuning-v12.js?v=3";
   document.body.appendChild(combatTuning);
 })();
