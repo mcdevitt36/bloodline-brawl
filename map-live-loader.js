@@ -88,6 +88,16 @@
                                       const finalPolishV5 = document.createElement("script");
                                       finalPolishV5.src = "final-polish-v5.js?v=1";
                                       document.body.appendChild(finalPolishV5);
+
+                                      finalPolishV5.addEventListener(
+                                        "load",
+                                        () => {
+                                          const finalPolishV6 = document.createElement("script");
+                                          finalPolishV6.src = "final-polish-v6.js?v=1";
+                                          document.body.appendChild(finalPolishV6);
+                                        },
+                                        { once: true }
+                                      );
                                     },
                                     { once: true }
                                   );
