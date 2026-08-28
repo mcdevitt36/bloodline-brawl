@@ -65,7 +65,7 @@
       button.remove();
 
       await loadScript("online-mode-v1.js?v=2");
-      await loadScript("online-stability-v2.js?v=2");
+      await loadScript("online-stability-v2.js?v=3");
 
       const realButton = document.getElementById("onlineButton");
       if (realButton) {
