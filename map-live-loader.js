@@ -93,7 +93,7 @@
                                         "load",
                                         () => {
                                           const finalPolishV6 = document.createElement("script");
-                                          finalPolishV6.src = "final-polish-v6.js?v=2";
+                                          finalPolishV6.src = "final-polish-v6.js?v=3";
                                           document.body.appendChild(finalPolishV6);
                                         },
                                         { once: true }
