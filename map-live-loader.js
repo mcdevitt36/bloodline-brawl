@@ -64,6 +64,16 @@
                               const polish = document.createElement("script");
                               polish.src = "character-polish-v3.js?v=1";
                               document.body.appendChild(polish);
+
+                              polish.addEventListener(
+                                "load",
+                                () => {
+                                  const finalPolish = document.createElement("script");
+                                  finalPolish.src = "final-polish-v4.js?v=1";
+                                  document.body.appendChild(finalPolish);
+                                },
+                                { once: true }
+                              );
                             },
                             { once: true }
                           );
