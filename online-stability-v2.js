@@ -40,7 +40,7 @@
         "load",
         () => {
           const guestIcons = document.createElement("script");
-          guestIcons.src = "online-guest-icons-v6.js?v=1";
+          guestIcons.src = "online-guest-icons-v6.js?v=2";
           document.body.appendChild(guestIcons);
         },
         { once: true }
