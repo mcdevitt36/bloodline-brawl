@@ -55,8 +55,18 @@
                         "load",
                         () => {
                           const victory = document.createElement("script");
-                          victory.src = "victory-celebrations.js?v=2";
+                          victory.src = "victory-celebrations.js?v=3";
                           document.body.appendChild(victory);
+
+                          victory.addEventListener(
+                            "load",
+                            () => {
+                              const polish = document.createElement("script");
+                              polish.src = "character-polish-v3.js?v=1";
+                              document.body.appendChild(polish);
+                            },
+                            { once: true }
+                          );
                         },
                         { once: true }
                       );
