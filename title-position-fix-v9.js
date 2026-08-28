@@ -96,19 +96,12 @@
           postMatchResultsPolish.addEventListener(
             "load",
             () => {
-              const onlineMode = document.createElement("script");
-              onlineMode.src = "online-mode-v1.js?v=1";
-              document.body.appendChild(onlineMode);
-
-              onlineMode.addEventListener(
-                "load",
-                () => {
-                  const onlineStability = document.createElement("script");
-                  onlineStability.src = "online-stability-v2.js?v=1";
-                  document.body.appendChild(onlineStability);
-                },
-                { once: true }
-              );
+              /* Important performance change: the heavy WebRTC/private-match
+                 code is NOT loaded during normal 1P/2P play anymore. This
+                 lightweight button loads it only after ONLINE is clicked. */
+              const onlineLazyLoader = document.createElement("script");
+              onlineLazyLoader.src = "online-lazy-loader-v4.js?v=1";
+              document.body.appendChild(onlineLazyLoader);
             },
             { once: true }
           );
