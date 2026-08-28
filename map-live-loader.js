@@ -138,7 +138,7 @@
                                                             "load",
                                                             () => {
                                                               const titlePositionFix = document.createElement("script");
-                                                              titlePositionFix.src = "title-position-fix-v9.js?v=12";
+                                                              titlePositionFix.src = "title-position-fix-v9.js?v=13";
                                                               document.body.appendChild(titlePositionFix);
                                                             },
                                                             { once: true }
