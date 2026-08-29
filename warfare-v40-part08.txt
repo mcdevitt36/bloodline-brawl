@@ -1,0 +1,24 @@
+et(x,y,z);o.castShadow=true;g.add(o);return o;};
+  const sph=(x,y,z,r,c)=>{const o=new THREE.Mesh(new THREE.SphereGeometry(r,14,10),std(c,.62,.01));o.position.set(x,y,z);o.castShadow=true;g.add(o);return o;};
+  if(charId==='sean'){const cone=new THREE.Mesh(new THREE.ConeGeometry(.11,.38,12),std(0xd7a15d,.82,.01));cone.rotation.z=Math.PI;cone.position.y=.1;g.add(cone);sph(0,.35,0,.15,0xf0d5b7);sph(-.06,.43,.01,.09,0xf7b4c8);}
+  else if(charId==='shannan'){const b=cyl(0,.17,0,.055,.5,0xdff8ff);b.material.transparent=true;b.material.opacity=.86;box(0,-.08,0,.22,.05,.1,0x73909b);cyl(0,.58,0,.012,.35,0xc5c5c5);}
+  else if(charId==='erin'){cyl(0,.15,0,.045,.52,0xe78ba6);box(0,.49,0,.22,.3,.12,0xe78ba6);for(const x of [-.07,0,.07])for(const y of [.4,.5,.6])cyl(x,y,.075,.01,.08,0x31353a);}
+  else if(charId==='connor'){cyl(0,.2,0,.045,.65,0x7d4e2d);box(0,.58,0,.21,.17,.1,0xd8d0b8);box(0,.69,.01,.2,.08,.11,0x42a7df);}
+  else if(charId==='kelly'){cyl(0,.17,0,.045,.84,0x8b633a);const blade=new THREE.Mesh(new THREE.ConeGeometry(.18,.34,5),std(0x909ba3,.4,.5));blade.position.y=.7;blade.rotation.z=Math.PI;blade.scale.z=.48;g.add(blade);}
+  else {const ball=sph(0,.15,0,.16,0xeceae2);ball.scale.set(1.35,.78,.72);box(0,.15,.14,.14,.022,.02,0x222222);}
+  g.userData.name=cfg.melee;return g;
+}
+
+function buildCharacterRig(charId,isBot){
+  const cfg=CHARACTERS[charId],root=new THREE.Group();root.name='ACTOR';
+  const visual=new THREE.Group();visual.name='HERO_BODY';root.add(visual);
+  const mats={shirt:std(cfg.shirt,.62,.01),shirt2:std(cfg.shirt2,.64,.01),pants:std(cfg.pants,.7,.01),skin:std(cfg.skin,.68,.005),hair:std(cfg.hair,.75,.005),shoe:std(charId==='liam'||charId==='erin'?0xf1f2f3:0x20242a,.5,.03)};
+  // torso / hips / neck
+  const torso=new THREE.Mesh(new THREE.CylinderGeometry(.43*cfg.build,.52*cfg.build,1.05,16),mats.shirt);torso.position.y=1.55;torso.castShadow=true;visual.add(torso);
+  const chest=new THREE.Mesh(new THREE.SphereGeometry(.5*cfg.build,18,12),mats.shirt2);chest.scale.set(1,.65,.68);chest.position.set(0,1.84,0);chest.castShadow=true;visual.add(chest);
+  const hips=new THREE.Mesh(new THREE.CylinderGeometry(.35,.4,.3,14),mats.pants);hips.position.y=.96;hips.castShadow=true;visual.add(hips);
+  const neck=new THREE.Mesh(new THREE.CylinderGeometry(.14,.15,.24,12),mats.skin);neck.position.y=2.13;visual.add(neck);
+  // head + face
+  const headGroup=new THREE.Group();headGroup.position.y=2.48;visual.add(headGroup);
+  const head=new THREE.Mesh(new THREE.SphereGeometry(.38,22,16),mats.skin);head.scale.set(.94,1.06,.9);head.castShadow=true;headGroup.add(head);
+  const jaw=new THREE.Mesh(new THREE.SphereGeometry(.29,16,12),mats.skin);jaw.scale.set(.95,.58,.82);j
