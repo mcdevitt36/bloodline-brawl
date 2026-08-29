@@ -1,0 +1,18 @@
+ble.appendChild(r);});resultScreen.classList.remove('hidden');
+}
+
+function reload(a=player){const w=currentWeapon(a),t=now();if(!w||a.reloading||w.mag>=w.def.mag||w.reserve<=0)return;a.reloading=true;a.reloadEnd=t+w.def.reload;if(a===player){ammoText.textContent='RELOADING…';playTone(270,.05,.04,'square');}}
+function finishReload(a){const w=currentWeapon(a);if(!w){a.reloading=false;return;}const need=w.def.mag-w.mag,got=Math.min(need,w.reserve);w.mag+=got;w.reserve-=got;a.reloading=false;if(a===player)updateLoadoutVisual(a);}
+function switchSlot(i){if(!player||player.dead)return;if(player.weapons[i]){player.slot=i;player.reloading=false;rebuildHeldGun(player);updateLoadoutVisual(player);}}
+
+function useSpecial(){if(!player||player.dead||state.phase!=='fight'||player.special<100)return;if(state.phase==='grace')return;player.special=0;const t=now();if(player.charId==='liam'){player.buffUntil=t+4000;player.health=Math.min(100,player.health+12);}else if(player.charId==='erin'){player.buffUntil=t+5000;}else if(player.charId==='sean'){player.health=Math.min(100,player.health+25);}else if(player.charId==='shannan'){player.armor=Math.min(40,player.armor+25);}else if(player.charId==='connor'){player.damageBuffUntil=t+4500;}else{player.armor=Math.min(50,player.armor+30);}playTone(760,.16,.08,'sine');updateHUD();}
+function useUltra(){if(!player||player.dead||state.phase!=='fight'||player.ultra<100)return;player.ultra=0;player.damageBuffUntil=now()+6500;player.buffUntil=now()+6500;player.health=Math.min(100,player.health+20);playTone(980,.22,.12,'sawtooth');updateHUD();}
+
+function hasLineOfSight(a,b){const origin=a.mesh.position.clone().add(new THREE.Vector3(0,1.55,0)),target=b.mesh.position.clone().add(new THREE.Vector3(0,1.35,0)),dir=target.clone().sub(origin),dist=dir.length();dir.normalize();raycaster.set(origin,dir);raycaster.far=dist;const hit=raycaster.intersectObjects(worldMeshes,false)[0];return !hit||hit.distance>dist-.5;}
+
+function updateAnimations(dt,t){
+  for(const a of actors){if(a.dead)continue;const rig=a.mesh.userData.rig;if(!rig)continue;const speed=Math.hypot(a.velocity.x,a.velocity.z);a.walkPhase+=speed*dt*1.2;const stride=speed>.25?Math.sin(a.walkPhase*5.5):0;const crouch=a.crouching?1:0;const sliding=t<a.slideUntil;const armed=!!currentWeapon(a);const meleeAge=(t-a.meleeSwingAt)/430;
+    rig.visual.position.y=(speed>.2?Math.abs(Math.sin(a.walkPhase*5.5))*.025:Math.sin(t*.002)*.008)-(crouch?.32:0);
+    rig.visual.rotation.x=sliding?-.38:speed>9?-.10:0;
+    rig.leftLeg.hip.rotation.x=stride*.65;rig.rightLeg.hip.rotation.x=-stride*.65;rig.leftLeg.knee.rotation.x=Math.max(0,-stride)*.5;rig.rightLeg.knee.rotation.x=Math.max(0,stride)*.5;
+    rig.m
