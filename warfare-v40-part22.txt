@@ -1,0 +1,12 @@
+cation.href='index.html');
+resultRematch.addEventListener('click',startMatch);resultReturn.addEventListener('click',returnToWarfare);resultHome.addEventListener('click',()=>location.href='index.html');
+canvas.addEventListener('mousedown',e=>{ensureAudio();if(document.pointerLockElement!==canvas){canvas.requestPointerLock?.();return;}if(e.button===0){mouseDown=true;attack(player);}if(e.button===2)aiming=true;});
+addEventListener('mouseup',e=>{if(e.button===0)mouseDown=false;if(e.button===2)aiming=false;});
+canvas.addEventListener('contextmenu',e=>e.preventDefault());
+addEventListener('mousemove',e=>{if(document.pointerLockElement!==canvas||state.spectating)return;cameraYaw-=e.movementX*.00225;cameraPitch=clamp(cameraPitch-e.movementY*.00175,-.62,.48);});
+addEventListener('keydown',e=>{keys.add(e.code);if(e.repeat&&['KeyE','KeyR','KeyQ','KeyF','Digit1','Digit2','KeyJ'].includes(e.code))return;if(e.code==='KeyE')interact();if(e.code==='KeyR')reload(player);if(e.code==='Digit1')switchSlot(0);if(e.code==='Digit2')switchSlot(1);if(e.code==='KeyJ')attack(player);if(e.code==='KeyK')aiming=true;if(e.code==='KeyQ')useSpecial();if(e.code==='KeyF')useUltra();if(state.spectating&&(e.code==='KeyA'||e.code==='ArrowLeft'))cycleSpectate(-1);if(state.spectating&&(e.code==='KeyD'||e.code==='ArrowRight'))cycleSpectate(1);});
+addEventListener('keyup',e=>{keys.delete(e.code);if(e.code==='KeyK')aiming=false;});
+addEventListener('blur',()=>{keys.clear();mouseDown=false;aiming=false;});
+
+initMenu();
+window.__bbWarfareV40={version:40,standalone:true,graceSeconds:20,roundSeconds:300};
