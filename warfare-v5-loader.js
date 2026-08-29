@@ -10,7 +10,7 @@ import './warfare-hub-polish-v10.js?v=1';
 import './warfare-keyboard-fire-v11.js?v=1';
 import './warfare-scroll-lock-v12.js?v=1';
 import './warfare-smoothing-v13.js?v=2';
-import './warfare-crouch-v14.js?v=2';
+import './warfare-crouch-v14.js?v=3';
 import './warfare-loot-cover-v15.js?v=4';
 import './warfare-stability-v17.js?v=1';
 import './warfare-vertical-combat-v16.js?v=1';
@@ -24,3 +24,6 @@ import './warfare-unified-polish-v25.js?v=2';
 import './warfare-ui-state-v28.js?v=2';
 import './warfare-gameplay-v12.js?v=1';
 import './warfare-v4.js?v=2';
+/* Final gameplay authority for the opening seconds: protection, bot release,
+   and the requested +20% movement speed. Must load after the core loop. */
+import './warfare-opening-flow-v29.js?v=1';
