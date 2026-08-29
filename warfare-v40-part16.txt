@@ -18,7 +18,7 @@ function meleeAttack(a){
 }
 
 function applyDamage(target,amount,attacker,headshot=false,hitPoint=null,melee=false){
-  if(state.phase!=='fight'||target.dead)return;
+  if((state.phase!=='fight'&&state.phase!=='spectate')||target.dead)return;
   let dmg=amount;if(target.armor>0){const absorbed=Math.min(target.armor,dmg*.5);target.armor-=absorbed;dmg-=absorbed;}
   target.health-=dmg;target.hitReact=now()+160;attacker.damage+=dmg;attacker.special=clamp(attacker.special+dmg*.7,0,100);attacker.ultra=clamp(attacker.ultra+dmg*.38,0,100);
   if(attacker===player){state.damage+=dmg;showDamageNumber(target,dmg,headshot);hitMarker.classList.remove('active','kill');void hitMarker.offsetWidth;hitMarker.classList.add('active');setTimeout(()=>hitMarker.classList.remove('active'),90);statsDamage.textContent=Math.round(state.damage);}
