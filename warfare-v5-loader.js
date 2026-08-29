@@ -24,13 +24,9 @@ import './warfare-unified-polish-v25.js?v=2';
 import './warfare-ui-state-v28.js?v=2';
 import './warfare-gameplay-v12.js?v=1';
 import './warfare-v4.js?v=2';
-/* V30 replaces the older post-countdown protection layer with one coherent
-   Warfare ruleset: 20s grace, 5m one-life round, readable combat and death flow. */
 import './warfare-comprehensive-polish-v30.js?v=1';
-/* Guard for first-frame grace, ability locking, family-loot prompts and
-   player visibility on the rooftop map. */
 import './warfare-v30-hardening-v31.js?v=3';
-/* V32 is the final live combat authority. It removes lingering invulnerability
-   and fixes weapon holding, tracer origins, Classic melee visibility,
-   hit numbers, countdown reliability and unsticking. */
 import './warfare-combat-hardfix-v32.js?v=1';
+/* V33 replaces the visible legacy box bodies with rounded segmented hero rigs.
+   It loads last so combat/weapon authority stays intact while visuals win. */
+import './warfare-character-body-v33.js?v=1';
