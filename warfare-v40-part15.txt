@@ -1,0 +1,25 @@
+='grace')return;const s=Math.max(1,Math.ceil((state.graceEnd-now())/1000));interactionPrompt.textContent=`COMBAT LOCKED • ${s}s`;interactionPrompt.classList.remove('hidden');setTimeout(()=>interactionPrompt.classList.add('hidden'),650);}
+
+function fireWeapon(a){
+  if(a===player){a.heading=cameraYaw;a.mesh.rotation.y=cameraYaw;}
+  const t=now(),w=currentWeapon(a),def=w.def;if(a.reloading||t-a.lastShot<def.fireRate)return;if(w.mag<=0){reload(a);return;}a.lastShot=t;w.mag--;a.recoil=Math.min(1,a.recoil+def.recoil);if(a===player){updateLoadoutVisual(a);playGunSound(w.type);}
+  const origin=getMuzzlePosition(a);const baseDir=a===player?playerAimDirection():actorForward(a);
+  const shots=def.pellets||1;
+  for(let i=0;i<shots;i++){const spread=def.spread*(a===player&&aiming?.55:1);const dir=baseDir.clone();dir.x+=rand(-spread,spread);dir.y+=rand(-spread,spread);dir.z+=rand(-spread,spread);dir.normalize();performHitscan(a,origin,dir,def);}
+  muzzleFlash(a,origin,def.color);
+  if(w.mag<=0&&a.isBot)reload(a);
+}
+
+function botShoot(bot,target,dist){
+  const w=currentWeapon(bot),def=w.def,t=now();if(bot.reloading||t-bot.lastShot<def.fireRate*rand(1.05,1.4))return;if(w.mag<=0){reload(bot);return;}
+  bot.lastShot=t;w.mag--;const origin=getMuzzlePosition(bot);const targetPoint=target.mesh.position.clone().add(new THREE.Vector3(0,1.35,0));let dir=targetPoint.sub(origin).normalize();
+  const moving=Math.hypot(target.velocity.x,target.velocity.z);const rangePenalty=clamp(dist/70,0,1);const error=.018+rangePenalty*.06+(moving>4?.03:0);dir.x+=rand(-error,error);dir.y+=rand(-error*.6,error*.6);dir.z+=rand(-error,error);dir.normalize();
+  const shots=def.pellets||1;for(let i=0;i<shots;i++){const d=dir.clone();if(shots>1){d.x+=rand(-def.spread,def.spread);d.y+=rand(-def.spread,def.spread);d.z+=rand(-def.spread,def.spread);d.normalize();}performHitscan(bot,origin,d,def);}muzzleFlash(bot,origin,def.color);playGunSound(w.type,.32);
+}
+
+function getMuzzlePosition(a){const rig=a.mesh.userData.rig,w=currentWeapon(a);if(w&&rig.gunModel?.userData.muzzle){const p=new THREE.Vector3();rig.gunModel.userData.muzzle.getWorldPosition(p);return p;}return a.mesh.position.clone().add(new THREE.Vector3(0,1.55,0));}
+function playerAimDirection(){return new THREE.Vector3(-Math.sin(cameraYaw)*Math.cos(cameraPitch),Math.sin(cameraPitch),-Math.cos(cameraYaw)*Math.cos(cameraPitch)).normalize();}
+function actorForward(a){return new THREE.Vector3(-Math.sin(a.mesh.rotation.y),0,-Math.cos(a.mesh.rotation.y)).normalize();}
+
+function performHitscan(shooter,origin,dir,def){
+  raycaster.set(origin,dir);raycaster.far=def.range;const worldHit=raycaster.intersectObjects(worldMeshes,false)[0];const worldDist=worl
