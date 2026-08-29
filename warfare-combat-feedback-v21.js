@@ -1,6 +1,6 @@
 import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.180.0/build/three.module.js';
 
-/* WARFARE V21.1 — visual/event combat feedback only.
+/* WARFARE V21.2 — visual/event combat feedback only.
    V20 is the single audio owner. V21 detects confirmed hits/kills/movement
    feedback, renders the compact banner, and dispatches semantic audio events. */
 const previousRender=THREE.WebGLRenderer.prototype.render;
@@ -11,23 +11,12 @@ function actors(scene){const out=[];scene?.traverse(o=>{const a=o.userData?.acto
 function human(list){return list.find(a=>!a.isBot)||null;}
 function emit(type,detail={}){document.dispatchEvent(new CustomEvent('bb:combat-feedback',{detail:{type,...detail}}));}
 function banner(text,kind='info'){
- let e=document.getElementById('bbKillConfirm');if(!e){e=document.createElement('div');e.id='bbKillConfirm';e.className='bb-combat-banner';document.body.appendChild(e);}
- e.textContent=text;e.dataset.kind=kind;e.classList.add('show');clearTimeout(e._t);e._t=setTimeout(()=>e.classList.remove('show'),650);
+ let e=document.getElementById('bbKillConfirm');
+ if(!e){e=document.createElement('div');e.id='bbKillConfirm';Object.assign(e.style,{position:'fixed',left:'50%',top:'42%',transform:'translate(-50%,-50%) scale(.94)',padding:'8px 14px',borderRadius:'999px',font:'900 12px Inter,system-ui,sans-serif',letterSpacing:'1.3px',background:'linear-gradient(180deg,rgba(12,18,28,.9),rgba(5,9,15,.86))',border:'1px solid rgba(255,255,255,.26)',color:'#fff',boxShadow:'0 8px 25px rgba(0,0,0,.28)',zIndex:'35',pointerEvents:'none',opacity:'0',transition:'opacity .1s ease,transform .12s ease,border-color .12s ease'});document.body.appendChild(e);}
+ e.textContent=text;e.style.borderColor=kind==='kill'?'rgba(255,214,92,.72)':kind==='rarity'?'rgba(106,174,255,.7)':'rgba(255,255,255,.26)';e.style.opacity='1';e.style.transform='translate(-50%,-50%) scale(1.04)';clearTimeout(e._t);e._t=setTimeout(()=>{e.style.opacity='0';e.style.transform='translate(-50%,-50%) scale(.96)';},650);
 }
 function snap(a){return{health:a.health??100,dead:!!a.dead,onGround:!!a.onGround,pos:a.mesh.position.clone(),slot:a.slot||0,weapons:(a.weapons||[]).map(w=>({type:w.type,ammo:w.ammo??0,reserve:w.reserve??0,rarity:w.rarity||'basic'}))};}
-function update(scene){
- const list=actors(scene),p=human(list),now=performance.now();if(!p)return;
- for(const a of list){
-  const old=seen.get(a),cur=snap(a);if(!old){seen.set(a,cur);continue;}
-  const ow=old.weapons[old.slot],nw=cur.weapons[cur.slot];
-  if(a===p&&ow&&nw&&ow.type===nw.type&&nw.ammo<ow.ammo)lastHumanShot=now;
-  if(a!==p&&cur.health<old.health&&now-lastHumanShot<170){emit('hit');if(cur.dead&&!old.dead){emit('kill');banner('ELIM CONFIRMED','kill');}}
-  if(a===p&&ow&&nw&&ow.type===nw.type&&ow.rarity!==nw.rarity){emit('rarity',{rarity:nw.rarity,typeName:nw.type});banner(`${String(nw.rarity).toUpperCase()} ${nw.type.toUpperCase()}`,'rarity');}
-  if(a===p&&!old.onGround&&cur.onGround&&old.pos.y-cur.pos.y<2.6)emit('land');
-  if(a===p&&cur.onGround){const d=cur.pos.clone().sub(old.pos).setY(0).length();if(d>.06&&now-lastStep>390){lastStep=now;emit('step');}}
-  seen.set(a,cur);
- }
-}
+function update(scene){const list=actors(scene),p=human(list),now=performance.now();if(!p)return;for(const a of list){const old=seen.get(a),cur=snap(a);if(!old){seen.set(a,cur);continue;}const ow=old.weapons[old.slot],nw=cur.weapons[cur.slot];if(a===p&&ow&&nw&&ow.type===nw.type&&nw.ammo<ow.ammo)lastHumanShot=now;if(a!==p&&cur.health<old.health&&now-lastHumanShot<170){emit('hit');if(cur.dead&&!old.dead){emit('kill');banner('ELIM CONFIRMED','kill');}}if(a===p&&ow&&nw&&ow.type===nw.type&&ow.rarity!==nw.rarity){emit('rarity',{rarity:nw.rarity,typeName:nw.type});banner(`${String(nw.rarity).toUpperCase()} ${nw.type.toUpperCase()}`,'rarity');}if(a===p&&!old.onGround&&cur.onGround&&old.pos.y-cur.pos.y<2.6)emit('land');if(a===p&&cur.onGround){const d=cur.pos.clone().sub(old.pos).setY(0).length();if(d>.06&&now-lastStep>390){lastStep=now;emit('step');}}seen.set(a,cur);}}
 document.addEventListener('keydown',e=>{if(e.code==='KeyC'&&!e.repeat&&activeScene&&match(activeScene))emit('slide');},true);
 THREE.WebGLRenderer.prototype.render=function(scene,camera){activeScene=scene;if(match(scene))update(scene);return previousRender.call(this,scene,camera);};
-window.__bbCombatFeedbackV21={version:'21.1',features:['confirmed-hit','kill-confirm','rarity-banner','landing','slide','soft-footsteps'],audioOwner:'warfare-gameplay-audio-v20'};
+window.__bbCombatFeedbackV21={version:'21.2',features:['confirmed-hit','kill-confirm','rarity-banner','landing','slide','soft-footsteps'],audioOwner:'warfare-gameplay-audio-v20'};
