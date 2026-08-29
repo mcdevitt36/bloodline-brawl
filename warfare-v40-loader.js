@@ -1,7 +1,7 @@
 import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.180.0/build/three.module.js';
 
-const BUILD='44';
-const parts=Array.from({length:25},(_,i)=>`warfare-v40-part${String(i+1).padStart(2,'0')}.txt?build=${BUILD}`);
+const BUILD='45';
+const parts=Array.from({length:26},(_,i)=>`warfare-v40-part${String(i+1).padStart(2,'0')}.txt?build=${BUILD}`);
 const badge=document.getElementById('warfareBuildBadge');
 function fail(message,error){
   console.error('[WARFARE V40]',message,error||'');
@@ -14,6 +14,6 @@ try{
   const source=responses.join('');
   if(source.length<60000)throw new Error(`runtime incomplete (${source.length} chars)`);
   new Function('THREE',`${source}\n//# sourceURL=warfare-v40-runtime.js`)(THREE);
-  window.__bbWarfareV40Bootstrap={build:44,core:40,parts:parts.length,sourceLength:source.length,mode:'first-person'};
-  if(badge){badge.textContent='V40 • FIRST-PERSON WARFARE LIVE • BUILD 44';badge.style.background='#073b28';badge.style.borderColor='#50e69d';}
+  window.__bbWarfareV40Bootstrap={build:45,core:40,parts:parts.length,sourceLength:source.length,mode:'first-person'};
+  if(badge){badge.textContent='V40 • FIRST-PERSON WARFARE LIVE • BUILD 45';badge.style.background='#073b28';badge.style.borderColor='#50e69d';}
 }catch(error){fail(error?.message||String(error),error);}
