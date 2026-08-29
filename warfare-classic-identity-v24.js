@@ -3,13 +3,13 @@ import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.180.0/build/three.m
 /* BLOODLINE BRAWL — WARFARE CLASSIC IDENTITY V24
    Makes the 3D Warfare roster visually mirror established Classic Brawl designs.
    Adds Classic melee props and character-specific outfit/details without changing hitboxes.
-   Sean follows the current Classic file (baseball bat + guitar). Kelly remains provisional because
+   Sean uses his current ice cream cone melee identity. Kelly remains provisional because
    she has no established Classic Brawl model in the current Classic roster. */
 
 const prevRender=THREE.WebGLRenderer.prototype.render;
 const done=new WeakSet();
 const C={
- sean:{shirt:0x3e7d3b,pants:0x64472f,hair:0x101010,melee:'BASEBALL BAT'},
+ sean:{shirt:0x3e7d3b,pants:0x64472f,hair:0x101010,melee:'ICE CREAM CONE'},
  shannan:{shirt:0x597c9b,pants:0x3d4652,hair:0x7b4c2c,melee:'SYRINGE'},
  erin:{shirt:0xf7f7f7,pants:0x3971a8,hair:0xe5c35c,melee:'HAIRBRUSH'},
  liam:{shirt:0x101010,pants:0x315b93,hair:0x51331f,melee:'SHOULDER CHECK'},
@@ -42,18 +42,18 @@ function addPaintbrush(g){
 }
 function addHairbrush(g){
  const w=new THREE.Group();w.name='BB_CLASSIC_MELEE';w.position.set(.62,1.45,.03);w.rotation.z=-.38;g.add(w);
- cyl(w,0,.18,0,.045,.62,0xe58aa5);const h=box(w,0,.58,0,.23,.34,.12,0xe58aa5);h.geometry.translate(0,0,0);for(let x=-.07;x<=.07;x+=.07)for(let y=.48;y<=.68;y+=.08)cyl(w,x,y,.075,.012,.08,0x333333);
+ cyl(w,0,.18,0,.045,.62,0xe58aa5);box(w,0,.58,0,.23,.34,.12,0xe58aa5);for(let x=-.07;x<=.07;x+=.07)for(let y=.48;y<=.68;y+=.08)cyl(w,x,y,.075,.012,.08,0x333333);
 }
 function addSyringe(g){
  const w=new THREE.Group();w.name='BB_CLASSIC_MELEE';w.position.set(.62,1.48,.03);w.rotation.z=-.34;g.add(w);
  const barrel=cyl(w,0,.24,0,.07,.54,0xdff8ff);barrel.material.transparent=true;barrel.material.opacity=.88;box(w,0,-.06,0,.24,.05,.10,0x728f9b);cyl(w,0,.69,0,.012,.38,0xc5c5c5);box(w,0,-.16,0,.14,.05,.08,0xe7f8fb);
 }
-function addBat(g){
- const w=new THREE.Group();w.name='BB_CLASSIC_MELEE';w.position.set(.62,1.47,.02);w.rotation.z=-.42;g.add(w);
- const bat=new THREE.Mesh(new THREE.CylinderGeometry(.075,.035,1.18,12),mat(0xb98b58,.62,.01));bat.position.y=.34;bat.castShadow=true;w.add(bat);cyl(w,0,-.29,0,.04,.22,0x68472c);
+function addIceCreamCone(g){
+ const w=new THREE.Group();w.name='BB_CLASSIC_MELEE';w.position.set(.62,1.47,.03);w.rotation.z=-.30;g.add(w);
+ const cone=new THREE.Mesh(new THREE.ConeGeometry(.12,.42,14),mat(0xd6a05a,.9,0));cone.position.y=.13;cone.rotation.z=Math.PI;cone.castShadow=true;w.add(cone);
+ sphere(w,0,.42,0,.15,0xf3d7ad,1,1,1);sphere(w,-.065,.49,.015,.10,0xf5b6c8,.9,.9,.9);sphere(w,.07,.50,-.01,.095,0xf7efe2,.9,.9,.9);
 }
 function addRugbyDetail(g){
- // Classic Liam carries a rugby ball visually; melee remains the shoulder check.
  const ball=sphere(g,.47,1.55,.22,.18,0xe9e6dc,1.35,.78,.72);ball.rotation.z=-.28;box(g,.47,1.56,.385,.16,.025,.025,0x222222);
 }
 function addShoes(g,key){
@@ -62,19 +62,16 @@ function addShoes(g,key){
 function addIdentity(actor){
  if(!actor?.mesh||done.has(actor.mesh))return;const key=actor.charId,cfg=C[key];if(!cfg)return;done.add(actor.mesh);recolorBase(actor,cfg);
  const g=new THREE.Group();g.name='BB_CLASSIC_IDENTITY_V24';actor.mesh.add(g);
- // Hide V8 front clothing panels where their colors contradict Classic; replace with a Classic-colored front panel.
  actor.mesh.children.forEach(ch=>{if(ch.name==='BB_CHARACTER_DETAIL_V8')ch.traverse(o=>{if(o.isMesh&&o.position.y>1&&o.position.y<2.15&&Math.abs(o.position.x)<.5&&o.geometry?.type==='BoxGeometry')o.visible=false;});});
  box(g,0,1.57,.285,.86,1.04,.07,cfg.shirt);addShoes(g,key);
  if(key==='connor'){addConnorStubble(g);addPaintbrush(g);}
  if(key==='erin')addHairbrush(g);
  if(key==='shannan')addSyringe(g);
  if(key==='liam')addRugbyDetail(g);
- if(key==='sean'){addGlasses(g);addSeanGuitar(g);addBat(g);}
- // expose identity for later animation/audio layers
+ if(key==='sean'){addGlasses(g);addSeanGuitar(g);addIceCreamCone(g);}
  actor.mesh.userData.bbClassicMelee=cfg.melee;actor.classicMelee=cfg.melee;
 }
 
-// Update visible Warfare roster cards with Classic melee identity while still suppressing old generic subtitle styling.
 function syncRoster(){
  document.querySelectorAll('.fighter-choice').forEach(b=>{
    const name=b.querySelector('strong')?.textContent?.trim().toLowerCase();const cfg=C[name];if(!cfg)return;
