@@ -44,11 +44,13 @@
       margin:8px 0 0!important;
     }
 
+    /* Raise the complete matchup block together — both fighter cards and VS —
+       to balance the open space under the tagline and clear the bottom modes. */
     #titleScreen.bb-title-menu-restored .title-versus-panel{
       grid-row:3!important;
       align-self:center!important;
       margin:0 auto!important;
-      transform:translateY(-4px)!important;
+      transform:translateY(-58px)!important;
       max-height:none!important;
     }
 
@@ -181,7 +183,7 @@
         padding-top:7px!important;
         padding-bottom:8px!important;
       }
-      #titleScreen.bb-title-menu-restored .title-versus-panel{transform:translateY(0)!important}
+      #titleScreen.bb-title-menu-restored .title-versus-panel{transform:translateY(-34px)!important}
       #titleScreen.bb-title-menu-restored .bb-title-controls{bottom:8px!important}
       #titleScreen.bb-title-menu-restored .mode-buttons .mode-button{min-height:48px!important;padding-top:6px!important;padding-bottom:6px!important}
       #titleScreen.bb-title-menu-restored #startButton{min-height:39px!important;padding-top:6px!important;padding-bottom:6px!important}
