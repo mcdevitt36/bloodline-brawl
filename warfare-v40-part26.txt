@@ -1,0 +1,33 @@
+/* WARFARE V40 — BOT WEAPON POSE V45 */
+const BOT_DOWN_V45=new THREE.Vector3(0,-1,0);
+function botGripProfileV45(type){
+  if(type==='pistol')return{right:new THREE.Vector3(.14,-.17,.11),left:new THREE.Vector3(-.04,-.13,-.03)};
+  if(type==='shotgun')return{right:new THREE.Vector3(.15,-.15,.14),left:new THREE.Vector3(-.04,-.01,-.35)};
+  if(type==='sniper')return{right:new THREE.Vector3(.15,-.15,.15),left:new THREE.Vector3(-.04,.01,-.43)};
+  if(type==='lmg')return{right:new THREE.Vector3(.16,-.16,.13),left:new THREE.Vector3(-.05,-.03,-.31)};
+  return{right:new THREE.Vector3(.15,-.16,.12),left:new THREE.Vector3(-.05,-.02,-.34)};
+}
+function poseBotArmV45(arm,target,side){
+  if(!arm?.shoulder||!arm?.elbow)return;
+  const L1=.43,L2=.46,start=arm.shoulder.position.clone(),delta=target.clone().sub(start),raw=Math.max(.001,delta.length()),dist=clamp(raw,.14,L1+L2-.012),dir=delta.normalize();
+  const along=(L1*L1-L2*L2+dist*dist)/(2*dist),height=Math.sqrt(Math.max(0,L1*L1-along*along));
+  let bend=new THREE.Vector3(side*.9,-.12,.26);bend.addScaledVector(dir,-bend.dot(dir));if(bend.lengthSq()<.001)bend.set(side,0,0);bend.normalize();
+  const elbowPoint=start.clone().addScaledVector(dir,along).addScaledVector(bend,height),upperDir=elbowPoint.clone().sub(start).normalize();
+  arm.shoulder.quaternion.setFromUnitVectors(BOT_DOWN_V45,upperDir);
+  const actualElbow=new THREE.Vector3(0,-L1,0).applyQuaternion(arm.shoulder.quaternion).add(start),foreWorld=target.clone().sub(actualElbow).normalize(),inv=arm.shoulder.quaternion.clone().invert(),foreLocal=foreWorld.applyQuaternion(inv).normalize();
+  arm.elbow.quaternion.setFromUnitVectors(BOT_DOWN_V45,foreLocal);
+}
+const legacyAnimationsV45=updateAnimations;
+updateAnimations=function(dt,t){
+  legacyAnimationsV45(dt,t);
+  for(const a of actors){
+    if(a===player||a.dead||!a.isBot)continue;
+    const w=currentWeapon(a),rig=a.mesh.userData.rig;if(!w||!rig?.gunAnchor)continue;
+    rig.gunAnchor.position.set(.02,1.88,-.48);
+    let pitch=0;if(a.target&&!a.target.dead){const dy=(a.target.mesh.position.y+1.42)-(a.mesh.position.y+1.88),dx=a.target.mesh.position.x-a.mesh.position.x,dz=a.target.mesh.position.z-a.mesh.position.z;pitch=Math.atan2(dy,Math.max(.01,Math.hypot(dx,dz)))*.75;}
+    rig.gunAnchor.rotation.set(pitch-rigOffset(a.recoil,.07),0,0);rig.gunAnchor.updateMatrix();
+    const grip=botGripProfileV45(w.type),rightTarget=grip.right.clone().applyMatrix4(rig.gunAnchor.matrix),leftTarget=grip.left.clone().applyMatrix4(rig.gunAnchor.matrix);
+    poseBotArmV45(rig.rightArm,rightTarget,1);poseBotArmV45(rig.leftArm,leftTarget,-1);
+  }
+};
+window.__bbWarfareBotPoseV45={version:45,shoulderWeapons:true,twoHanded:true};
