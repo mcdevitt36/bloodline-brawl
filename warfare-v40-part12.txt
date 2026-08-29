@@ -1,0 +1,34 @@
+7.6;if(t<player.buffUntil)maxSpeed*=1.22;
+  if(t<player.slideUntil){maxSpeed=14.5;move.set(-Math.sin(player.heading),0,-Math.cos(player.heading));}
+  const accel=move.lengthSq()?30:23;
+  player.velocity.x=THREE.MathUtils.damp(player.velocity.x,move.x*maxSpeed,accel,dt);
+  player.velocity.z=THREE.MathUtils.damp(player.velocity.z,move.z*maxSpeed,accel,dt);
+  if(move.lengthSq())player.heading=Math.atan2(-move.x,-move.z);
+  if((keys.has('Space'))&&player.onGround){player.yVel=8.7;player.onGround=false;keys.delete('Space');playTone(170,.05,.04,'triangle');}
+  if(keys.has('KeyC')&&player.onGround&&move.lengthSq()&&t>player.slideUntil+300){player.slideUntil=t+780;keys.delete('KeyC');}
+  player.yVel-=24*dt;player.mesh.position.y+=player.yVel*dt;if(player.mesh.position.y<=0){if(!player.onGround&&player.yVel<-4)playTone(85,.045,.045,'sine');player.mesh.position.y=0;player.yVel=0;player.onGround=true;}
+  moveActorHorizontal(player,player.velocity.x*dt,player.velocity.z*dt);
+  if(aiming)player.heading=cameraYaw;
+  player.mesh.rotation.y=player.heading;
+  if(player.reloading&&t>=player.reloadEnd)finishReload(player);
+  if(mouseDown&&currentWeapon(player)?.def.auto)attack(player);
+}
+
+function moveActorHorizontal(a,dx,dz){
+  const p=a.mesh.position.clone();p.x+=dx;p.z+=dz;const radius=.62;
+  p.x=clamp(p.x,-59+radius,59-radius);p.z=clamp(p.z,-59+radius,59-radius);
+  for(const o of obstacles){
+    const nx=clamp(p.x,o.minX,o.maxX),nz=clamp(p.z,o.minZ,o.maxZ),vx=p.x-nx,vz=p.z-nz,d2=vx*vx+vz*vz;
+    if(d2<radius*radius){if(d2>.0001){const d=Math.sqrt(d2),push=radius-d;p.x+=vx/d*push;p.z+=vz/d*push;}else{const left=Math.abs(p.x-o.minX),right=Math.abs(o.maxX-p.x),top=Math.abs(p.z-o.minZ),bottom=Math.abs(o.maxZ-p.z),m=Math.min(left,right,top,bottom);if(m===left)p.x=o.minX-radius;else if(m===right)p.x=o.maxX+radius;else if(m===top)p.z=o.minZ-radius;else p.z=o.maxZ+radius;}}
+  }
+  a.mesh.position.x=p.x;a.mesh.position.z=p.z;
+}
+
+function updateBots(dt,t){
+  if(state.phase!=='grace'&&state.phase!=='fight'&&state.phase!=='spectate')return;
+  for(const bot of actors){if(!bot.isBot||bot.dead)continue;
+    if(bot.reloading&&t>=bot.reloadEnd)finishReload(bot);
+    const needsGun=!currentWeapon(bot);
+    if(needsGun){const pick=nearestAvailablePickup(bot.mesh.position,'weapon');if(pick){const dir=tmpV.copy(pick.group.position).sub(bot.mesh.position);dir.y=0;moveBotToward(bot,dir,dt,8.6);if(dir.length()<1.6)takePickup(bot,pick);}else wanderBot(bot,dt,t);continue;}
+    if(!bot.target||bot.target.dead||t>bot.thinkAt){bot.target=nearestEnemy(bot);bot.thinkAt=t+rand(350,700);bot.reactionReadyAt=t+rand(420,850);if(Math.random()<.25)bot.strafe*=-1;}
+    const target=bot.target;if(!target){w
