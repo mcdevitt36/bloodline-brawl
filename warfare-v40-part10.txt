@@ -1,0 +1,34 @@
+osition.set(0,-.53,-.08);shoe.castShadow=true;knee.add(shoe);return{hip,knee,shoe};}
+  const leftLeg=makeLeg(-1),rightLeg=makeLeg(1);
+  const gunAnchor=new THREE.Group();gunAnchor.position.set(.08,1.62,-.42);visual.add(gunAnchor);
+  const meleeAnchor=new THREE.Group();meleeAnchor.position.set(.62,1.42,-.12);meleeAnchor.rotation.z=-.33;visual.add(meleeAnchor);const meleeProp=buildMeleeProp(charId);meleeAnchor.add(meleeProp);
+  const ring=new THREE.Mesh(new THREE.RingGeometry(.62,.72,26),new THREE.MeshBasicMaterial({color:isBot?0xff654f:0x67c5ff,side:THREE.DoubleSide,transparent:true,opacity:.6}));ring.rotation.x=-Math.PI/2;ring.position.y=.025;root.add(ring);
+  root.userData.rig={visual,torso,headGroup,leftArm,rightArm,leftLeg,rightLeg,gunAnchor,meleeAnchor,meleeProp,ring};
+  return root;
+}
+
+function makeActor(charId,pos,isBot=false,name=''){
+  const mesh=buildCharacterRig(charId,isBot);mesh.position.copy(pos);scene.add(mesh);
+  const a={
+    charId,name:name||CHARACTERS[charId].name,isBot,mesh,health:100,maxHealth:100,armor:0,dead:false,
+    velocity:new THREE.Vector3(),onGround:true,yVel:0,heading:0,weapons:[],slot:0,kills:0,damage:0,
+    lastShot:0,lastMelee:0,lastReload:0,reloading:false,reloadEnd:0,recoil:0,hitReact:0,
+    special:0,ultra:0,buffUntil:0,damageBuffUntil:0,slideUntil:0,crouching:false,
+    target:null,thinkAt:0,reactionReadyAt:0,strafe:Math.random()<.5?-1:1,stuckAt:now(),stuckPos:pos.clone(),lastPos:pos.clone(),walkPhase:Math.random()*6.28,
+    meleeSwingAt:-9999,eliminatedAt:0
+  };
+  mesh.userData.actor=a;mesh.traverse(o=>o.userData.actor=a);actors.push(a);return a;
+}
+
+function startMatch(){
+  initRenderer();
+  state.matchSerial++;state.phase='grace';state.kills=0;state.damage=0;state.playerEliminated=false;state.spectating=false;state.spectateIndex=0;state.lastCountdownSecond=null;
+  state.startAt=now();state.graceEnd=state.startAt+20000;state.roundEnd=state.graceEnd+300000;
+  boot.classList.add('hidden');eliminated.classList.add('hidden');resultScreen.classList.add('hidden');hud.classList.remove('hidden');spectateBanner.classList.add('hidden');
+  resetScene(state.selectedMap);
+  modeLabel.textContent=state.selectedMap==='city'?'CITY ROOFTOP':'HAUNTED BEACH HOUSE';
+  const spawnPoints=[[-51,-48],[0,-51],[51,-48],[-51,0],[51,0],[-51,48],[0,51],[51,48]].map(([x,z])=>new THREE.Vector3(x,0,z));
+  shuffle(spawnPoints);
+  player=makeActor(state.selectedCharacter,spawnPoints[0],false,CHARACTERS[state.selectedCharacter].name);hudName.textContent=player.name;
+  const charIds=Object.keys(CHARACTERS);
+  for(let i=1;i<8;i++){const id=choice(charIds),bot=makeActor(id,spawnPoints[i],true,BOT_NAMES[(i-1)%BOT_NAMES.length]);bot.heading=Math.atan2(-
