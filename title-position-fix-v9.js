@@ -104,7 +104,7 @@
                 "load",
                 () => {
                   const nickIntegrationPolish = document.createElement("script");
-                  nickIntegrationPolish.src = "nick-integration-polish-v2.js?v=1";
+                  nickIntegrationPolish.src = "nick-integration-polish-v2.js?v=2";
                   document.body.appendChild(nickIntegrationPolish);
 
                   const familyChallenges = document.createElement("script");
