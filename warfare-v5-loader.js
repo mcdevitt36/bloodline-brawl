@@ -27,6 +27,9 @@ import './warfare-v4.js?v=2';
 import './warfare-comprehensive-polish-v30.js?v=1';
 import './warfare-v30-hardening-v31.js?v=3';
 import './warfare-combat-hardfix-v32.js?v=1';
-/* V33 replaces the visible legacy box bodies with rounded segmented hero rigs.
-   It loads last so combat/weapon authority stays intact while visuals win. */
+/* V33 owns modern body geometry. */
 import './warfare-character-body-v33.js?v=1';
+/* V34 is the consolidated final presentation/game-feel authority: HUD, map
+   dressing, camera collision, animation/weapon finishing, audio hierarchy and
+   legacy visual conflict suppression. */
+import './warfare-master-overhaul-v34.js?v=1';
