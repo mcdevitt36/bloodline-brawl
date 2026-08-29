@@ -6,12 +6,12 @@ import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.180.0/build/three.m
    - Block Special / Ultra input during the 20-second no-damage grace period.
    - Make Grandaddy's Toolbox / Barrett's Toy Chest interaction prompts explicit.
    - Reassert the living human fighter's visibility, especially on City Rooftop.
+   - Keep the legacy 7-minute results panel from resurfacing under V30 results.
 */
 
 const previousAdd = THREE.Scene.prototype.add;
 const previousRender = THREE.WebGLRenderer.prototype.render;
 let activeScene = null;
-let activeCamera = null;
 const pendingRoots = new WeakSet();
 
 function actors(scene){
@@ -24,16 +24,12 @@ function isMatch(scene){
   const label=(document.getElementById('modeLabel')?.textContent||'').toUpperCase();
   return (label.includes('HAUNTED')||label.includes('CITY')||label.includes('ROOFTOP'))&&actors(scene).length>1;
 }
-function v30State(){
-  return window.__bbWarfareComprehensiveV30State || null;
-}
 
 /* makeActor() adds the mesh to the scene immediately before assigning
    mesh.userData.actor. A microtask therefore sees the completed actor while
    still running before the browser gets its next animation frame. */
 THREE.Scene.prototype.add=function(...objects){
   const result=previousAdd.apply(this,objects);
-  const scene=this;
   for(const root of objects){
     if(!root||pendingRoots.has(root))continue;
     pendingRoots.add(root);
@@ -119,15 +115,22 @@ function updatePrompt(scene){
   }
 }
 
+function suppressLegacyResults(){
+  if(document.getElementById('bbV30Elim')||document.getElementById('bbV30Results')||document.getElementById('bbV30Spectate')){
+    document.getElementById('resultScreen')?.classList.add('hidden');
+  }
+}
+
 THREE.WebGLRenderer.prototype.render=function(scene,camera){
-  activeScene=scene;activeCamera=camera;
+  activeScene=scene;
   try{
     if(isMatch(scene)){
       ensureHumanVisible(scene);
       updatePrompt(scene);
+      suppressLegacyResults();
     }
   }catch(error){console.warn('Warfare V31 hardening:',error);}
   return previousRender.call(this,scene,camera);
 };
 
-window.__bbWarfareHardeningV31={version:31,features:['first-frame-grace','ability-grace-lock','legacy-family-loot-prompts','rooftop-human-visibility']};
+window.__bbWarfareHardeningV31={version:31,features:['first-frame-grace','ability-grace-lock','legacy-family-loot-prompts','rooftop-human-visibility','legacy-results-suppression']};
