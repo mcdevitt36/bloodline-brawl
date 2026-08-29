@@ -39,7 +39,10 @@ THREE.Scene.prototype.add=function(...objects){
         if(!a)return;
         const label=(document.getElementById('modeLabel')?.textContent||'').toUpperCase();
         if(label.includes('HAUNTED')||label.includes('CITY')||label.includes('ROOFTOP')){
-          a.spawnProtection=Math.max(a.spawnProtection||0,999);
+          /* First-frame safety only. V30/V32 own the real 20-second grace.
+             This used to be 999 seconds, which made all hit registration
+             appear broken for the entire round. */
+          a.spawnProtection=Math.max(a.spawnProtection||0,22);
           a.lastShot=Math.max(a.lastShot||0,performance.now()+22000);
           a.lastMelee=Math.max(a.lastMelee||0,performance.now()+22000);
           a.mesh.visible=true;
