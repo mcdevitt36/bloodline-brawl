@@ -1,0 +1,38 @@
+ )=>addBox(g,x,h/2-.1,z,w,h,d,i%2?0x8e7b58:0x776a50,{collide:true,rough:.98}));
+  [[-48,-18],[-46,18],[-19,-47],[-18,47],[47,-19],[47,18]].forEach(([x,z])=>{
+    addCylinder(g,x,2.2,z,.28,.36,4.4,0x4b3828,{collide:true,rough:.9});
+    addSphere(g,x,4.9,z,1.9,0x234836,{rough:.9});
+  });
+  for(const [x,z] of [[-17,-20],[-17,0],[-17,20],[35,-22],[35,22]]){
+    addCylinder(g,x,1.5,z,.07,.09,3,0x33383d,{shoot:false,metal:.35});const bulb=addSphere(g,x,3.1,z,.14,0xffc27d,{emissive:0xffa955});const light=new THREE.PointLight(0xffb46c,3.5,13,2);light.position.copy(bulb.position);g.add(light);
+  }
+  const moon=addSphere(g,-50,34,-90,5.5,0xe1eaff,{emissive:0x8198c0});moon.castShadow=false;
+  spawnHauntedLoot();
+}
+
+function spawnCityLoot(){
+  const points=[[-48,-42],[-28,-40],[-4,-43],[20,-42],[45,-35],[-46,-18],[-22,-18],[24,-17],[47,-7],[-44,16],[-20,16],[18,17],[43,18],[-45,43],[-15,42],[13,42],[43,42]];
+  points.forEach((p,i)=>createWeaponPickup(choice(Object.keys(WEAPONS)),new THREE.Vector3(p[0],.65,p[1]),i%3===0));
+  createFamilyContainer(FAMILY_LOOT[0],new THREE.Vector3(-34,.65,8));
+  createFamilyContainer(FAMILY_LOOT[1],new THREE.Vector3(31,.65,-29));
+  createFamilyContainer(FAMILY_LOOT[2],new THREE.Vector3(6,.65,33));
+  createFamilyContainer(FAMILY_LOOT[3],new THREE.Vector3(-45,.65,-6));
+  createFamilyContainer(FAMILY_LOOT[4],new THREE.Vector3(42,.65,2));
+}
+function spawnHauntedLoot(){
+  const points=[[-48,-43],[-30,-37],[-9,-42],[16,-39],[43,-40],[-50,-13],[-30,-10],[-12,-13],[35,-15],[48,0],[-49,18],[-29,20],[-12,29],[34,22],[-46,44],[-22,43],[10,43],[44,43]];
+  points.forEach((p,i)=>createWeaponPickup(choice(Object.keys(WEAPONS)),new THREE.Vector3(p[0],.65,p[1]),i%4===0));
+  createFamilyContainer(FAMILY_LOOT[0],new THREE.Vector3(-21,.65,-2));
+  createFamilyContainer(FAMILY_LOOT[1],new THREE.Vector3(39,.65,-28));
+  createFamilyContainer(FAMILY_LOOT[2],new THREE.Vector3(4,.65,29));
+  createFamilyContainer(FAMILY_LOOT[3],new THREE.Vector3(-44,.65,5));
+  createFamilyContainer(FAMILY_LOOT[4],new THREE.Vector3(39,.65,30));
+}
+
+function createWeaponPickup(type,pos,rare=false){
+  const def=WEAPONS[type],g=new THREE.Group();g.position.copy(pos);g.userData.pickupType='weapon';g.userData.weaponType=type;g.userData.rare=rare;scene.add(g);
+  const ring=new THREE.Mesh(new THREE.TorusGeometry(.65,.08,8,24),new THREE.MeshBasicMaterial({color:rare?0xffd34d:def.color,transparent:true,opacity:.85}));ring.rotation.x=Math.PI/2;g.add(ring);
+  const model=buildGunModel(type,def.color);model.scale.setScalar(.72);model.rotation.y=Math.PI/2;g.add(model);
+  pickups.push({group:g,type:'weapon',weaponType:type,rare,taken:false,baseY:pos.y,phase:Math.random()*6.28});
+}
+function crea
