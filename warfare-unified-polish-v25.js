@@ -1,95 +1,48 @@
 import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.180.0/build/three.module.js';
 
 /* BLOODLINE BRAWL — WARFARE UNIFIED POLISH V25
-   Consolidated quality pass without replacing the v4 core:
-   - Classic melee animation/readability
-   - rarity actually adds bonus firearm damage
-   - tactical bot retreat/flanking/loot seeking
-   - crouch movement reduction + reliable landing feedback
-   - extra anti-sniper / route cover
-   - lively coastal hub ambience
-   - character layer cleanup and rarity weapon glow
+   Cohesion pass. Keeps v4 authoritative and avoids competing ownership:
+   - character-specific Classic melee motion + impact VFX
+   - modest one-pass rarity bonus + rarity HUD/weapon glow
+   - bot decision bias (weapon choice/retreat/loot intent) without overriding core steering
+   - crouch speed shaping using V14's authoritative state
+   - landing/body-lean feedback
+   - deliberate counter-cover
+   - lightweight hub ambience
+   - character layer cleanup
 */
 const prevRender=THREE.WebGLRenderer.prototype.render;
-const sceneState=new WeakMap();
-const actorState=new WeakMap();
-const keys={};
-document.addEventListener('keydown',e=>keys[e.code]=true,true);
-document.addEventListener('keyup',e=>keys[e.code]=false,true);
+const sceneState=new WeakMap(),actorState=new WeakMap();
+const RARITY={basic:{name:'BASIC',mult:1,color:0xd7dde6,css:'#d7dde6'},rare:{name:'RARE',mult:1.08,color:0x4fa8ff,css:'#4fa8ff'},legendary:{name:'LEGENDARY',mult:1.16,color:0xffc83d,css:'#ffc83d'}};
+const HAIR={sean:0x101010,shannan:0x7b4c2c,erin:0xe5c35c,liam:0x51331f,connor:0x583a25,kelly:0x6a4328};
+const MELEE={sean:'ICE CREAM CONE',shannan:'SYRINGE',erin:'HAIRBRUSH',liam:'SHOULDER CHECK',connor:'PAINTBRUSH',kelly:'SHOVEL'};
+const tmp=new THREE.Vector3();
 
-const HAIR={sean:0x101010,shannan:0x7b4c2c,erin:0xe5c35c,liam:0x51331f,connor:0x583a25,kelly:0x74513b};
-const RARITY={basic:{mult:1,color:0xd7dde6},rare:{mult:1.08,color:0x4fa8ff},legendary:{mult:1.16,color:0xffc83d}};
 function actors(sc){const out=[];sc?.traverse(o=>{const a=o.userData?.actor;if(a&&!out.includes(a))out.push(a);});return out;}
-function human(sc){return actors(sc).find(a=>!a.isBot)||null;}
 function mapId(sc){const bg=sc?.background?.isColor?sc.background.getHex():0;if([0x071526,0x243d68].includes(bg))return'hub';if([0x020711,0x080d20].includes(bg))return'haunted';if([0x091226,0x111d44].includes(bg))return'city';if(sc?.getObjectByName('BB_GRANDADDY_TOOLBOX'))return'match';return null;}
-function getState(sc){let s=sceneState.get(sc);if(!s){s={id:mapId(sc),ready:false,last:performance.now(),prevPlayer:null,ambient:[],recentShots:[],cover:[]};sceneState.set(sc,s);}return s;}
-function mat(c,r=.64,m=.08){return new THREE.MeshStandardMaterial({color:c,roughness:r,metalness:m});}
+function state(sc){let s=sceneState.get(sc);if(!s){s={id:mapId(sc),ready:false,last:performance.now(),prevP:null,air:false,ambient:[],recentShots:[],lastMeleeFx:new WeakMap()};sceneState.set(sc,s);}return s;}
+function mat(c,r=.65,m=.08){return new THREE.MeshStandardMaterial({color:c,roughness:r,metalness:m});}
+function rarity(w){return RARITY[String(w?.rarity||'basic').toLowerCase()]||RARITY.basic;}
 
-function addCover(sc,x,z,w,d,h=1.05,c=0x505a64){const m=new THREE.Mesh(new THREE.BoxGeometry(w,h,d),mat(c,.7,.14));m.position.set(x,h/2,z);m.castShadow=m.receiveShadow=true;m.name='BB_V15_COVER';m.userData.bbV25=true;sc.add(m);return m;}
-function setupCombatCover(sc,id,s){
- const pts=id==='haunted'?
- [[-7,10,2.8,.9,1.05],[12,4,2.6,.9,1.05],[25,-7,2.8,.9,1.05],[-19,18,2.5,1.0,1.05],[8,25,3.0,.9,1.05],[34,17,2.7,.9,1.05],[-32,23,2.5,.9,1.05],[20,-23,2.7,.9,1.05]]:
- [[-6,8,3,1,1.05],[17,7,2.8,1,1.05],[-29,-1,2.6,1,1.05],[4,31,3,1,1.05],[29,21,2.7,1,1.05],[-18,-26,2.8,1,1.05],[25,-29,2.8,1,1.05],[-37,11,2.5,1,1.05]];
- s.cover=pts.map(p=>addCover(sc,...p));
-}
-function person(color=0x596d7c){const g=new THREE.Group();const body=new THREE.Mesh(new THREE.BoxGeometry(.52,1.05,.34),mat(color));body.position.y=.95;const head=new THREE.Mesh(new THREE.SphereGeometry(.22,10,8),mat(0xe9bf9f));head.position.y=1.65;g.add(body,head);return g;}
-function setupHub(sc,s){
- // Small moving groups make the boardwalk feel inhabited without adding gameplay collision.
- const pts=[[-5,7],[11,18],[-8,29],[17,-7],[5,-18]];
- pts.forEach((p,i)=>{const g=person([0x496a8c,0x8e5252,0x6b8453,0x82649a,0x9b704a][i]);g.position.set(p[0],0,p[1]);g.rotation.y=Math.random()*Math.PI*2;sc.add(g);s.ambient.push({g,base:g.position.clone(),phase:i*1.4});});
- // Distant gull silhouettes above the ocean.
- for(let i=0;i<5;i++){const g=new THREE.Group();for(const side of [-1,1]){const wing=new THREE.Mesh(new THREE.PlaneGeometry(.55,.12),new THREE.MeshBasicMaterial({color:0xf3f0e7,side:THREE.DoubleSide}));wing.position.x=side*.25;wing.rotation.z=side*.25;g.add(wing);}g.position.set(-38-Math.random()*22,8+Math.random()*8,-24+Math.random()*50);sc.add(g);s.ambient.push({g,gull:true,phase:Math.random()*6});}
-}
-function setup(sc,s){if(s.ready)return;s.ready=true;const id=mapId(sc);s.id=id;if(id==='haunted'||id==='city')setupCombatCover(sc,id,s);else if(id==='hub')setupHub(sc,s);}
+function addCover(sc,x,z,w,d,h=1.05,c=0x505a64){const o=new THREE.Mesh(new THREE.BoxGeometry(w,h,d),mat(c,.72,.12));o.position.set(x,h/2,z);o.castShadow=o.receiveShadow=true;o.name='BB_V15_COVER';o.userData.bbV25=true;sc.add(o);return o;}
+function setupCover(sc,id){const p=id==='haunted'?[[-7,10,2.8,.9],[12,4,2.6,.9],[25,-7,2.8,.9],[-19,18,2.5,1],[8,25,3,.9],[34,17,2.7,.9],[-32,23,2.5,.9],[20,-23,2.7,.9]]:[[-6,8,3,1],[17,7,2.8,1],[-29,-1,2.6,1],[4,31,3,1],[29,21,2.7,1],[-18,-26,2.8,1],[25,-29,2.8,1],[-37,11,2.5,1]];p.forEach(x=>addCover(sc,...x));}
+function person(c){const g=new THREE.Group(),b=new THREE.Mesh(new THREE.BoxGeometry(.5,1.02,.32),mat(c)),h=new THREE.Mesh(new THREE.SphereGeometry(.21,10,8),mat(0xe8bd9d));b.position.y=.94;h.position.y=1.62;g.add(b,h);return g;}
+function setupHub(sc,s){[[-5,7],[11,18],[-8,29],[17,-7],[5,-18]].forEach((p,i)=>{const g=person([0x496a8c,0x8e5252,0x6b8453,0x82649a,0x9b704a][i]);g.position.set(p[0],0,p[1]);sc.add(g);s.ambient.push({g,base:g.position.clone(),phase:i*1.4});});for(let i=0;i<4;i++){const g=new THREE.Group();for(const k of [-1,1]){const wing=new THREE.Mesh(new THREE.PlaneGeometry(.5,.1),new THREE.MeshBasicMaterial({color:0xf3f0e7,side:THREE.DoubleSide}));wing.position.x=k*.22;wing.rotation.z=k*.25;g.add(wing);}g.position.set(-40-Math.random()*18,9+Math.random()*7,-20+Math.random()*40);sc.add(g);s.ambient.push({g,gull:true,phase:Math.random()*6});}}
+function setup(sc,s){if(s.ready)return;s.ready=true;s.id=mapId(sc);if(s.id==='haunted'||s.id==='city')setupCover(sc,s.id);else if(s.id==='hub')setupHub(sc,s);}
 
-function findMeleeGroup(a){let found=null;a.mesh?.traverse(o=>{if(!found&&o.name==='BB_CLASSIC_MELEE')found=o;});return found;}
-function cleanCharacterLayers(a){
- if(a._bbV25Clean)return;a._bbV25Clean=true;
- // Force every underlying scalp/crown piece to the established color so older layers cannot peek through.
- const hc=HAIR[a.charId];if(hc!=null)a.mesh.children.forEach(o=>{if(o.isMesh&&o.position.y>2.48&&o.material?.color)o.material.color.setHex(hc);});
- a.mesh.children.forEach(o=>{if(o.name==='BB_FEMALE_LONG_HAIR_V22')o.visible=false;});
-}
-function animateMelee(a,now){
- cleanCharacterLayers(a);const st=actorState.get(a)||{};const melee=findMeleeGroup(a);const armed=!!a.weapons?.[a.slot];if(melee)melee.visible=!armed&&!a.dead;
- if(a.lastMelee&&a.lastMelee!==st.lastMelee){st.lastMelee=a.lastMelee;st.swingStart=now;}
- const t=st.swingStart?Math.min(1,(now-st.swingStart)/300):1;
- if(melee){if(!st.base){st.base={p:melee.position.clone(),r:melee.rotation.clone()};}melee.position.copy(st.base.p);melee.rotation.copy(st.base.r);if(t<1){const q=Math.sin(t*Math.PI);if(a.charId==='shannan'){melee.position.z-=q*.38;melee.rotation.x=-q*.18;}else if(a.charId==='sean'){melee.rotation.z=st.base.r.z-q*1.15;melee.rotation.x=q*.28;}else if(a.charId==='erin'){melee.rotation.z=st.base.r.z-q*.9;melee.rotation.x=q*.22;}else if(a.charId==='connor'){melee.rotation.z=st.base.r.z-q*.82;melee.rotation.y=q*.30;}else{melee.rotation.z=st.base.r.z-q*.55;}}}
- if(a.charId==='liam'&&t<1&&!armed){const p=a.mesh.userData.parts;const q=Math.sin(t*Math.PI);if(p?.torso)p.torso.rotation.x=-q*.18;if(p?.arms)p.arms.rotation.x=-q*.55;}else if(a.charId==='liam'){const p=a.mesh.userData.parts;if(p?.torso)p.torso.rotation.x*=.65;}
- actorState.set(a,st);
-}
+function findMelee(a){let m=null;a.mesh?.traverse(o=>{if(!m&&o.name==='BB_CLASSIC_MELEE')m=o;});return m;}
+function cleanCharacter(a){if(a._bbV25Clean)return;a._bbV25Clean=true;const hc=HAIR[a.charId];a.mesh?.traverse(o=>{if(o.name==='BB_FEMALE_LONG_HAIR_V22')o.visible=false;});if(hc!=null)a.mesh?.traverse(o=>{if(!o.isMesh||!o.material?.color)return;let p=o.parent,inHair=false;while(p&&p!==a.mesh){if(p.name==='BB_HAIR_UPGRADE_V23'||p.name==='BB_FEMALE_LONG_HAIR_V22'){inHair=true;break;}p=p.parent;}if(inHair||(o.parent===a.mesh&&o.position.y>2.48))o.material.color.setHex(hc);});a.classicMelee=MELEE[a.charId]||a.classicMelee;a.mesh.userData.bbClassicMelee=a.classicMelee;}
+function meleeMotion(a,now){cleanCharacter(a);const m=findMelee(a),armed=!!a.weapons?.[a.slot],st=actorState.get(a)||{};if(m)m.visible=!armed&&!a.dead;if(a.lastMelee&&a.lastMelee!==st.lastMelee){st.lastMelee=a.lastMelee;st.swing=now;}const t=st.swing?Math.min(1,(now-st.swing)/330):1,q=Math.sin(t*Math.PI);if(m){if(!st.base)st.base={p:m.position.clone(),r:m.rotation.clone()};m.position.copy(st.base.p);m.rotation.copy(st.base.r);if(t<1){if(a.charId==='sean'){m.rotation.z=st.base.r.z-q*1.2;m.rotation.x=q*.32;}else if(a.charId==='shannan'){m.position.z-=q*.48;m.position.y+=q*.05;m.rotation.x=-q*.18;}else if(a.charId==='erin'){m.rotation.z=st.base.r.z-q*.95;m.rotation.x=q*.25;}else if(a.charId==='connor'){m.rotation.z=st.base.r.z-q*.86;m.rotation.y=q*.42;}else if(a.charId==='kelly'){m.rotation.z=st.base.r.z-q*1.28;m.rotation.x=q*.38;}}}const parts=a.mesh.userData.parts||{};if(!armed&&t<1){if(a.charId==='liam'){if(parts.torso)parts.torso.rotation.x=-q*.22;if(parts.arms)parts.arms.rotation.x=-q*.62;a.mesh.position.y+=q*.015;}else if(a.charId==='kelly'&&parts.arms)parts.arms.rotation.x=-q*.35;}actorState.set(a,st);}
+function impactFx(sc,p,color,heavy=false){const ring=new THREE.Mesh(new THREE.RingGeometry(.12,.34,18),new THREE.MeshBasicMaterial({color,transparent:true,opacity:.72,side:THREE.DoubleSide,depthWrite:false}));ring.position.copy(p);ring.lookAt(p.clone().add(new THREE.Vector3(0,0,1)));sc.add(ring);for(let i=0;i<(heavy?7:4);i++){const s=new THREE.Mesh(new THREE.SphereGeometry(.035,6,4),new THREE.MeshBasicMaterial({color,transparent:true,opacity:.7}));s.position.copy(p);sc.add(s);const v=new THREE.Vector3((Math.random()-.5)*2,Math.random()*1.6,(Math.random()-.5)*2),born=performance.now();(function tick(){const t=(performance.now()-born)/220;if(t>=1){s.removeFromParent();return;}s.position.addScaledVector(v,.016);v.y-=.09;s.material.opacity=.7*(1-t);requestAnimationFrame(tick);})();}const born=performance.now();(function grow(){const t=(performance.now()-born)/180;if(t>=1){ring.removeFromParent();return;}ring.scale.setScalar(1+t*1.8);ring.material.opacity=.72*(1-t);requestAnimationFrame(grow);})();}
+function meleeFeedback(sc,list,s,now){for(const a of list){if(!a.lastMelee||s.lastMeleeFx.get(a)===a.lastMelee)continue;s.lastMeleeFx.set(a,a.lastMelee);const range=a.charId==='liam'?3.0:2.7,forward=new THREE.Vector3(Math.sin(a.mesh.rotation.y),0,Math.cos(a.mesh.rotation.y));let victim=null,bd=range;for(const v of list){if(v===a||v.dead)continue;const d=v.mesh.position.clone().sub(a.mesh.position),len=d.length();if(len<bd&&d.normalize().dot(forward)>.05){bd=len;victim=v;}}if(victim){const c=a.charId==='connor'?0x3ba6d8:a.charId==='shannan'?0x87d6eb:a.charId==='erin'?0xe58aa5:a.charId==='sean'?0xf5b6c8:a.charId==='kelly'?0xaab2b8:0xe7edf5;impactFx(sc,victim.mesh.position.clone().add(new THREE.Vector3(0,1.35,0)),c,a.charId==='liam'||a.charId==='kelly');if(a.charId==='connor'){for(let i=0;i<3;i++){const streak=new THREE.Mesh(new THREE.PlaneGeometry(.4,.06),new THREE.MeshBasicMaterial({color:c,transparent:true,opacity:.65,side:THREE.DoubleSide}));streak.position.copy(victim.mesh.position).add(new THREE.Vector3((i-1)*.18,1.25+i*.12,.35));streak.rotation.z=.35;sc.add(streak);setTimeout(()=>streak.removeFromParent(),180);}}}}}
 
-function rarityOf(w){const r=(w?.rarity||'basic').toLowerCase();return RARITY[r]||RARITY.basic;}
-function detectRarityDamage(list,now,s){
- const frameShots=[];
- for(const a of list){let st=actorState.get(a)||{};const w=a.weapons?.[a.slot];const ammo=w?.ammo;if(typeof ammo==='number'&&typeof st.ammo==='number'&&ammo<st.ammo&&w){const r=rarityOf(w);if(r.mult>1)frameShots.push({a,mult:r.mult,time:now});}st.ammo=ammo;actorState.set(a,st);}
- s.recentShots=s.recentShots.concat(frameShots).filter(x=>now-x.time<150);
- for(const v of list){let st=actorState.get(v)||{};const old=st.health;if(typeof old==='number'&&v.health<old&&!v.dead){const drop=old-v.health;const shooter=s.recentShots.filter(x=>x.a!==v).sort((x,y)=>y.time-x.time)[0];if(shooter&&shooter.mult>1){const bonus=drop*(shooter.mult-1);v.health=Math.max(1,v.health-bonus);v._bbRarityBonus=(v._bbRarityBonus||0)+bonus;}}st.health=v.health;actorState.set(v,st);}
-}
-function rarityGlow(a){const w=a.weapons?.[a.slot];let held=null;a.mesh?.traverse(o=>{if(!held&&o.name==='BB_HELD_GUN')held=o;});if(!held)return;const r=rarityOf(w);held.traverse(o=>{if(o.isMesh&&o.material?.emissive){o.material.emissive.set(r.color);o.material.emissiveIntensity=r.mult>1?(r.mult>1.1?.18:.08):0;}});}
+function rarityDamage(list,now,s){const shots=[];for(const a of list){const st=actorState.get(a)||{},w=a.weapons?.[a.slot],ammo=w?.ammo;if(w&&typeof st.ammo==='number'&&ammo<st.ammo){const r=rarity(w);if(r.mult>1)shots.push({a,mult:r.mult,time:now});}st.ammo=ammo;actorState.set(a,st);}s.recentShots=s.recentShots.concat(shots).filter(x=>now-x.time<125);for(const v of list){const st=actorState.get(v)||{},old=st.health;if(typeof old==='number'&&v.health<old&&!v.dead){const hit=s.recentShots.filter(x=>x.a!==v).sort((a,b)=>b.time-a.time)[0];if(hit){const raw=old-v.health,bonus=Math.min(raw*(hit.mult-1),Math.max(0,v.health-1));if(bonus>0){v.health-=bonus;v._bbRarityBonus=(v._bbRarityBonus||0)+bonus;}}}st.health=v.health;actorState.set(v,st);}}
+function glowHeld(a){const w=a.weapons?.[a.slot],r=rarity(w);let g=null;a.mesh?.traverse(o=>{if(!g&&o.name==='BB_HELD_GUN')g=o;});if(!g)return;g.traverse(o=>{if(o.isMesh&&o.material?.emissive){o.material.emissive.set(r.color);o.material.emissiveIntensity=r.mult>1?(r.mult>1.1?.16:.07):0;}});}
+function hud(p){if(!p)return;const w=p.weapons?.[p.slot],r=rarity(w),name=document.getElementById('weaponName'),ammo=document.getElementById('ammoText'),health=document.getElementById('healthText'),fill=document.getElementById('healthFill');if(name&&w){name.textContent=`${r.name} • ${name.textContent.replace(/^(BASIC|RARE|LEGENDARY) • /,'')}`;name.style.color=r.css;}else if(name)name.style.color='';if(ammo&&w)ammo.dataset.rarity=r.name;const low=(p.health??100)<=25;if(health)health.style.textShadow=low?'0 0 12px #ff4455':'';if(fill)fill.style.filter=low?'drop-shadow(0 0 7px #ff4455)':'';for(const [i,id] of [[0,'slotOne'],[1,'slotTwo']]){const el=document.getElementById(id),x=p.weapons?.[i];if(!el||!x)continue;const rr=rarity(x);el.style.borderColor=rr.css;el.style.boxShadow=rr.mult>1?`0 0 9px ${rr.css}55`:'';}}
 
-function nearestLootObject(sc,a){let best=null,bd=32;sc.traverse(o=>{if(o.visible===false)return;if(o.name!=='BB_GRANDADDY_TOOLBOX'&&o.name!=='BB_BARRETT_TOY_CHEST'&&o.name!=='BB_V15_LOOT')return;const d=o.getWorldPosition(new THREE.Vector3()).distanceTo(a.mesh.position);if(d<bd){bd=d;best=o;}});return best;}
-function tacticalBots(sc,list,dt,now){
- for(const b of list){if(!b.isBot||b.dead)continue;const target=b.target;if(!target||target.dead)continue;const to=target.mesh.position.clone().sub(b.mesh.position).setY(0),dist=to.length();if(!dist)continue;to.normalize();let nudge=new THREE.Vector3();
-   if(b.health<34&&dist<18)nudge.addScaledVector(to,-1.45); // disengage when hurt
-   else if(dist>6&&dist<24){const side=new THREE.Vector3(-to.z,0,to.x).multiplyScalar(b.strafe||1);nudge.addScaledVector(side,.48);} // less robotic straight-line pursuit
-   if(!b.weapons?.length){const loot=nearestLootObject(sc,b);if(loot){const lp=loot.getWorldPosition(new THREE.Vector3()).sub(b.mesh.position).setY(0);if(lp.lengthSq())nudge.add(lp.normalize().multiplyScalar(1.15));}}
-   if(nudge.lengthSq()){nudge.normalize();b.mesh.position.addScaledVector(nudge,dt*1.8);}
-   if(Math.random()<dt*.35)b.strafe=(b.strafe||1)*-1;
- }
-}
-function playerMovement(sc,p,cam,s,dt){
- if(!p||p.dead)return;const cur=p.mesh.position.clone();if(s.prevPlayer){const delta=cur.clone().sub(s.prevPlayer);if(keys.KeyX&&Math.abs(delta.y)<.3){p.mesh.position.x=s.prevPlayer.x+delta.x*.72;p.mesh.position.z=s.prevPlayer.z+delta.z*.72;}
-   // Extra landing cue that does not rely on the older wasAir flag.
-   if(s.playerAir&&!p.onGround){/* still airborne */}
-   if(s.playerAir&&p.onGround){cam.position.y-=.055;const ring=new THREE.Mesh(new THREE.RingGeometry(.18,.42,18),new THREE.MeshBasicMaterial({color:0xd7d0be,transparent:true,opacity:.28,side:THREE.DoubleSide,depthWrite:false}));ring.rotation.x=-Math.PI/2;ring.position.copy(p.mesh.position).add(new THREE.Vector3(0,.025,0));sc.add(ring);const born=performance.now();const tick=()=>{const t=(performance.now()-born)/260;if(t>=1){ring.removeFromParent();return;}ring.scale.setScalar(1+t*1.8);ring.material.opacity=.28*(1-t);requestAnimationFrame(tick);};tick();}
- }
- s.playerAir=!p.onGround;s.prevPlayer=p.mesh.position.clone();
-}
-function animateAmbient(s,now){for(const a of s.ambient){if(a.gull){a.g.position.x+=.006;a.g.position.y+=Math.sin(now*.0015+a.phase)*.002;a.g.rotation.y=Math.sin(now*.00035+a.phase)*.15;}else{a.g.position.x=a.base.x+Math.sin(now*.00018+a.phase)*1.3;a.g.position.z=a.base.z+Math.cos(now*.00015+a.phase)*.7;a.g.rotation.y=now*.00018+a.phase;}}}
+function botDecisions(sc,list,now){for(const b of list){if(!b.isBot||b.dead)continue;const t=b.target,dist=t&&!t.dead?t.mesh.position.distanceTo(b.mesh.position):99;if(b.health<34){b.preferred='range';if(Math.random()<.035)b.strafe=(b.strafe||1)*-1;}else if(b.health>70&&b.preferred==='range'&&Math.random()<.01)b.preferred='balanced';if(b.weapons?.length){let best=b.slot||0,score=-1e9;b.weapons.forEach((w,i)=>{const r=rarity(w);let s=r.mult*20;if(w.type==='shotgun')s+=dist<10?18:-5;else if(w.type==='smg')s+=dist<16?12:1;else if(w.type==='sniper')s+=dist>18?18:-10;else if(w.type==='launcher')s+=dist>8&&dist<38?12:-8;else if(w.type==='rifle')s+=10;else if(w.type==='lmg')s+=8;if((w.ammo??0)<=0)s-=30;if(s>score){score=s;best=i;}});b.slot=best;}if(!b.weapons?.length&&now>(b._bbLootThink||0)){b._bbLootThink=now+700;let loot=null,bd=26;sc.traverse(o=>{if(o.visible===false||!['BB_GRANDADDY_TOOLBOX','BB_BARRETT_TOY_CHEST','BB_V15_LOOT'].includes(o.name))return;const d=o.getWorldPosition(tmp).distanceTo(b.mesh.position);if(d<bd){bd=d;loot=o;}});if(loot)b._bbLootIntent=loot.getWorldPosition(new THREE.Vector3()).clone();}/* core AI remains sole movement owner; intent is consumed only as preference metadata */}}
+function movement(p,cam,s,dt){if(!p||p.dead)return;const cur=p.mesh.position.clone();if(s.prevP){const d=cur.clone().sub(s.prevP),c=window.__bbWarfareCrouch;if(c?.active&&Math.abs(d.y)<.35){p.mesh.position.x=s.prevP.x+d.x*.72;p.mesh.position.z=s.prevP.z+d.z*.72;}if(s.air&&p.onGround){cam.position.y-=.045;impactFx(cam.parent||p.mesh.parent,p.mesh.position.clone().add(new THREE.Vector3(0,.05,0)),0xd7d0be,false);}const speed=d.setY(0).length()/Math.max(dt,.001),parts=p.mesh.userData.parts||{};if(parts.torso&&!c?.active){const lean=THREE.MathUtils.clamp(speed/10,0,1)*.06;parts.torso.rotation.z=THREE.MathUtils.damp(parts.torso.rotation.z,0,12,dt);parts.torso.rotation.x=THREE.MathUtils.damp(parts.torso.rotation.x,-lean,10,dt);}}s.air=!p.onGround;s.prevP=p.mesh.position.clone();}
+function ambient(s,now){for(const a of s.ambient){if(a.gull){a.g.position.x+=.006;a.g.position.y+=Math.sin(now*.0015+a.phase)*.002;}else{a.g.position.x=a.base.x+Math.sin(now*.00018+a.phase)*1.3;a.g.position.z=a.base.z+Math.cos(now*.00015+a.phase)*.7;a.g.rotation.y=now*.00018+a.phase;}}}
 
-THREE.WebGLRenderer.prototype.render=function(sc,cam){
- const s=getState(sc);setup(sc,s);const now=performance.now(),dt=Math.min(.04,(now-s.last)/1000||.016);s.last=now;const list=actors(sc),p=list.find(a=>!a.isBot)||null;
- for(const a of list){animateMelee(a,now);rarityGlow(a);}if(s.id==='haunted'||s.id==='city'){detectRarityDamage(list,now,s);tacticalBots(sc,list,dt,now);playerMovement(sc,p,cam,s,dt);}if(s.id==='hub')animateAmbient(s,now);
- return prevRender.call(this,sc,cam);
-};
-window.__bbUnifiedPolishV25={version:25,features:['classic-melee-motion','rarity-damage','bot-tactics','crouch-speed','landing-feedback','combat-cover','hub-ambience','layer-cleanup']};
+THREE.WebGLRenderer.prototype.render=function(sc,cam){const s=state(sc);setup(sc,s);const now=performance.now(),dt=Math.min(.04,(now-s.last)/1000||.016);s.last=now;const list=actors(sc),p=list.find(a=>!a.isBot)||null;for(const a of list){meleeMotion(a,now);glowHeld(a);}if(s.id==='haunted'||s.id==='city'||s.id==='match'){rarityDamage(list,now,s);botDecisions(sc,list,now);movement(p,cam,s,dt);meleeFeedback(sc,list,s,now);hud(p);}else if(s.id==='hub')ambient(s,now);return prevRender.call(this,sc,cam);};
+window.__bbUnifiedPolishV25={version:25,features:['classic-melee-motion','melee-impact-vfx','single-pass-rarity','bot-decision-bias','crouch-speed','landing-feedback','combat-cover','hub-ambience','rarity-hud','layer-cleanup'],coreMovementOwner:'warfare-v4'};
