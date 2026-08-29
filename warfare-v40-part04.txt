@@ -1,0 +1,43 @@
+x+r,minZ:z-r,maxZ:z+r});}
+  if(shoot)worldMeshes.push(m);
+  return m;
+}
+function addSphere(parent,x,y,z,r,color,{rough=.62,metal=.02,emissive=0,shoot=false}={}){
+  const m=new THREE.Mesh(new THREE.SphereGeometry(r,20,14),std(color,rough,metal,emissive));
+  m.position.set(x,y,z);m.castShadow=true;m.receiveShadow=true;parent.add(m);if(shoot)worldMeshes.push(m);return m;
+}
+
+function resetScene(map){
+  scene=new THREE.Scene();
+  scene.background=new THREE.Color(map==='city'?0x17243d:0x0b1730);
+  scene.fog=new THREE.Fog(map==='city'?0x17243d:0x0d1730,65,190);
+  actors=[];pickups=[];containers=[];obstacles=[];worldMeshes=[];effects=[];player=null;
+  const hemi=new THREE.HemisphereLight(map==='city'?0xcfe6ff:0x9dbbff,map==='city'?0x33404b:0x1d2530,map==='city'?1.3:1.05);scene.add(hemi);
+  const sun=new THREE.DirectionalLight(map==='city'?0xfff1d7:0xb7ccff,map==='city'?2.1:1.35);sun.position.set(map==='city'?30:-40,55,map==='city'?20:-25);sun.castShadow=true;sun.shadow.mapSize.set(2048,2048);sun.shadow.camera.left=-80;sun.shadow.camera.right=80;sun.shadow.camera.top=80;sun.shadow.camera.bottom=-80;scene.add(sun);
+  if(map==='city')buildCity();else buildHaunted();
+}
+
+function buildCity(){
+  const g=new THREE.Group();g.name='CITY_ROOFTOP';scene.add(g);
+  addBox(g,0,-.5,0,124,1,124,0x384756,{shoot:true,rough:.91});
+  // perimeter railings
+  addBox(g,0,.9,-61,124,1.8,.45,0x6a737d,{collide:true,metal:.42});
+  addBox(g,0,.9,61,124,1.8,.45,0x6a737d,{collide:true,metal:.42});
+  addBox(g,-61,.9,0,.45,1.8,124,0x6a737d,{collide:true,metal:.42});
+  addBox(g,61,.9,0,.45,1.8,124,0x6a737d,{collide:true,metal:.42});
+  // combat cover / structures
+  const cover=[[-28,-22,7,3,5],[-7,-26,5,2.4,8],[17,-25,8,3,4],[34,-12,5,2.4,7],[-35,3,6,2.8,4],[-15,4,4,3,10],[9,3,8,2.5,5],[32,10,6,3,5],[-29,27,8,2.8,4],[-4,27,5,2.6,8],[24,31,9,3,4]];
+  cover.forEach(([x,z,w,h,d],i)=>{const c=addBox(g,x,h/2,z,w,h,d,i%3===0?0x556572:0x46535f,{collide:true,metal:.14});addBox(g,x,h+.15,z,w*.82,.3,d*.82,0x73808a,{shoot:false,rough:.55,metal:.28});});
+  // central elevated utility room with door gaps creating lanes
+  addBox(g,0,2.3,-8,18,4.6,2.3,0x26333f,{collide:true});
+  addBox(g,-8,2.3,0,2.3,4.6,14,0x26333f,{collide:true});
+  addBox(g,8,2.3,0,2.3,4.6,14,0x26333f,{collide:true});
+  addBox(g,-5,2.3,8,6,4.6,2.3,0x26333f,{collide:true});
+  addBox(g,5,2.3,8,6,4.6,2.3,0x26333f,{collide:true});
+  // rooftop detail
+  [[-42,-35],[42,-33],[42,32],[-43,35]].forEach(([x,z],i)=>{
+    addCylinder(g,x,2.1,z,1.7,1.7,4.2,0x4d5962,{collide:true,metal:.3});
+    addCylinder(g,x,4.45,z,2.05,1.75,.5,0x75818a,{shoot:false,metal:.35});
+  });
+  for(let i=0;i<16;i++){
+    const x=rand(-48,48),z=rand(-48,48);if(Math.abs(x)<1
