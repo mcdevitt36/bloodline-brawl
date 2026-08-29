@@ -1,0 +1,118 @@
+/* =============================================================
+   WARFARE V40 — MELEE ATTACK HARD-FIX V47
+   - attack dispatcher explicitly routes equipped slot 3 to melee
+   - K / LMB always produces a visible swing while melee is drawn
+   - grace period allows swing animation but still blocks damage
+   - stronger first-person wind-up / slash / follow-through
+   ============================================================= */
+
+let meleeVisualSwingAtV47=-9999;
+let meleeSlashStyleV47=null;
+
+function ensureMeleeSlashStyleV47(){
+  if(meleeSlashStyleV47?.isConnected)return;
+  const style=document.createElement('style');
+  style.id='meleeSlashStyleV47';
+  style.textContent=`
+    #fpsMeleeSlashV47{position:fixed;inset:0;z-index:54;pointer-events:none;overflow:hidden}
+    .fps-melee-slash-v47{position:absolute;left:50%;top:50%;width:min(52vw,640px);height:12px;border-radius:999px;transform-origin:0 50%;background:linear-gradient(90deg,transparent 0%,rgba(255,255,255,.25) 22%,rgba(255,231,151,.92) 58%,rgba(255,125,80,.08) 100%);filter:blur(.3px);box-shadow:0 0 14px rgba(255,211,119,.5);animation:fpsMeleeSlashV47 .22s ease-out forwards}
+    .fps-melee-slash-v47.hit{height:16px;background:linear-gradient(90deg,transparent,rgba(255,255,255,.36),rgba(255,196,93,1),rgba(255,88,60,.12));box-shadow:0 0 22px rgba(255,169,72,.8)}
+    @keyframes fpsMeleeSlashV47{0%{opacity:0;transform:translate(-4%,-50%) rotate(-38deg) scaleX(.12)}18%{opacity:1}70%{opacity:.9;transform:translate(-48%,-50%) rotate(24deg) scaleX(1)}100%{opacity:0;transform:translate(-58%,-50%) rotate(32deg) scaleX(1.08)}}
+  `;
+  document.head.appendChild(style);meleeSlashStyleV47=style;
+}
+function meleeSlashV47(hit=false){
+  ensureMeleeSlashStyleV47();
+  let root=document.getElementById('fpsMeleeSlashV47');
+  if(!root){root=document.createElement('div');root.id='fpsMeleeSlashV47';document.body.appendChild(root);}
+  const s=document.createElement('div');s.className='fps-melee-slash-v47'+(hit?' hit':'');root.appendChild(s);setTimeout(()=>s.remove(),260);
+}
+
+// The main attack dispatcher now treats melee as an explicit equipped weapon,
+// not as an accidental consequence of having no gun selected.
+const legacyAttackV47=attack;
+attack=function(a){
+  if(a===player&&player?.slot===2)return meleeAttack(player);
+  return legacyAttackV47(a);
+};
+
+const legacyMeleeAttackV47=meleeAttack;
+meleeAttack=function(a){
+  if(a!==player)return legacyMeleeAttackV47(a);
+  if(!player||player.dead||player.slot!==2||state.spectating)return;
+  const t=now();
+  if(t-player.lastMelee<500)return;
+
+  // Always animate an equipped melee swing, including during GET READY.
+  player.lastMelee=t;
+  player.meleeSwingAt=t;
+  meleeSwingAtV46=t;
+  meleeVisualSwingAtV47=t;
+  fpsAimHeldV44=false;aiming=false;
+  playTone(205,.055,.06,'sawtooth');
+  setTimeout(()=>playTone(145,.05,.038,'triangle'),55);
+  meleeSlashV47(false);
+
+  // Grace/hub swings are visual only. Damage remains locked until FIGHT.
+  if(state.phase!=='fight'){
+    if(state.phase==='grace')lockedCombatFeedback();
+    return;
+  }
+
+  const cfg=CHARACTERS[player.charId];
+  const range=MELEE_RANGE_V46[player.charId]||3.1;
+  const hit=meleeTargetV46(range);
+  if(hit){
+    let dmg=MELEE_DAMAGE_V46[player.charId]||46;
+    if(now()<player.damageBuffUntil)dmg=Math.round(dmg*1.25);
+    applyDamage(hit.target,dmg,player,false,hit.point,true);
+    fpsHitBurstV44(false,false,dmg);
+    impactSpark(hit.point,'melee');
+    meleeSlashV47(true);
+    const shove=playerLookDirV44().setY(0).normalize().multiplyScalar(player.charId==='liam'?2.45:1.45);
+    moveActorHorizontal(hit.target,shove.x,shove.z);
+    moveActorHorizontal(player,shove.x*.10,shove.z*.10);
+    playTone(78,.075,.07,'square');
+  }else{
+    const origin=camera.position.clone(),dir=playerLookDirV44();
+    raycaster.set(origin,dir);raycaster.far=range;
+    const wall=raycaster.intersectObjects(worldMeshes,false)[0];
+    if(wall){impactSpark(wall.point,'melee');playTone(104,.045,.028,'square');}
+  }
+};
+
+// Make the melee motion impossible to miss in first person.
+const legacyPositionFPSRigV47=positionFPSRigV44;
+positionFPSRigV44=function(dt,t,instant=false){
+  legacyPositionFPSRigV47(dt,t,instant);
+  if(!fpsRigV44||!player||player.slot!==2)return;
+  const age=(t-meleeVisualSwingAtV47)/390;
+  if(age<0||age>=1)return;
+
+  let x=0,y=0,z=0,rx=0,ry=0,rz=0;
+  if(age<.20){
+    const q=age/.20;
+    x=.22*q;y=-.05*q;z=-.09*q;rx=.12*q;ry=-.32*q;rz=.58*q;
+  }else if(age<.62){
+    const q=(age-.20)/.42;
+    const e=1-Math.pow(1-q,2);
+    x=.22-.72*e;y=-.05+.12*Math.sin(q*Math.PI);z=-.09+.42*e;rx=.12-.40*e;ry=-.32+1.62*e;rz=.58-1.58*e;
+  }else{
+    const q=(age-.62)/.38;
+    const e=1-Math.pow(1-q,3);
+    x=-.50*(1-e);y=.02*(1-e);z=.33*(1-e);rx=-.28*(1-e);ry=1.30*(1-e);rz=-1.00*(1-e);
+  }
+  fpsRigV44.position.x+=x;fpsRigV44.position.y+=y;fpsRigV44.position.z+=z;
+  fpsRigV44.rotation.x+=rx;fpsRigV44.rotation.y+=ry;fpsRigV44.rotation.z+=rz;
+  if(fpsGunV44){
+    const bladeArc=Math.sin(clamp(age,0,1)*Math.PI);
+    fpsGunV44.position.x-=bladeArc*.16;
+    fpsGunV44.position.y+=bladeArc*.10;
+    fpsGunV44.rotation.y+=bladeArc*.68;
+    fpsGunV44.rotation.z-=bladeArc*.74;
+  }
+  if(fpsRightHandV44)fpsRightHandV44.rotation.z-=Math.sin(age*Math.PI)*.82;
+};
+
+ensureMeleeSlashStyleV47();
+window.__bbWarfareMeleeHardFixV47={version:47,attackDispatch:true,visibleSwing:true,graceVisualSwing:true};
