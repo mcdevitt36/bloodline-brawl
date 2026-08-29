@@ -24,6 +24,6 @@ import './warfare-unified-polish-v25.js?v=2';
 import './warfare-ui-state-v28.js?v=2';
 import './warfare-gameplay-v12.js?v=1';
 import './warfare-v4.js?v=2';
-/* Final gameplay authority for the opening seconds: protection, bot release,
-   and the requested +20% movement speed. Must load after the core loop. */
-import './warfare-opening-flow-v29.js?v=1';
+/* V30 replaces the older post-countdown protection layer with one coherent
+   Warfare ruleset: 20s grace, 5m one-life round, readable combat and death flow. */
+import './warfare-comprehensive-polish-v30.js?v=1';
