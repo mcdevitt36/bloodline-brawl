@@ -1,0 +1,24 @@
+position,'melee');
+  if(target.health<=0)eliminate(target,attacker);
+  if(target===player)updateHUD();
+}
+
+function eliminate(target,attacker){
+  if(target.dead)return;target.dead=true;target.health=0;target.eliminatedAt=now();target.mesh.visible=false;attacker.kills++;if(attacker===player){state.kills++;statsKills.textContent=state.kills;hitMarker.classList.add('kill');setTimeout(()=>hitMarker.classList.remove('kill'),180);}addFeed(`${attacker.name} eliminated ${target.name}`);
+  if(target===player){state.playerEliminated=true;state.phase='fight';document.exitPointerLock?.();showEliminated();}
+  updateHUD();
+}
+
+function showEliminated(){
+  const alive=actors.filter(a=>!a.dead).length;const placement=alive+1;eliminatedStats.innerHTML=`<div><b>${placement}${ordinal(placement)}</b><span>PLACE</span></div><div><b>${state.kills}</b><span>ELIMS</span></div><div><b>${Math.round(state.damage)}</b><span>DAMAGE</span></div><div><b>${formatTime((now()-state.startAt)/1000)}</b><span>SURVIVED</span></div>`;eliminated.classList.remove('hidden');
+}
+function ordinal(n){return n%10===1&&n%100!==11?'ST':n%10===2&&n%100!==12?'ND':n%10===3&&n%100!==13?'RD':'TH';}
+function formatTime(sec){const s=Math.max(0,Math.round(sec));return `${Math.floor(s/60)}:${String(s%60).padStart(2,'0')}`;}
+
+function startSpectate(){eliminated.classList.add('hidden');state.spectating=true;state.phase='spectate';spectateBanner.classList.remove('hidden');cycleSpectate(1);}
+function cycleSpectate(dir){const live=actors.filter(a=>!a.dead);if(!live.length)return;state.spectateIndex=(state.spectateIndex+dir+live.length)%live.length;const a=live[state.spectateIndex];spectateBanner.textContent=`SPECTATING — ${a.name}   •   A / D TO SWITCH`;}
+function spectateTarget(){const live=actors.filter(a=>!a.dead);if(!live.length)return null;state.spectateIndex=clamp(state.spectateIndex,0,live.length-1);return live[state.spectateIndex];}
+
+function finishMatch(){
+  if(state.phase==='results')return;state.phase='results';state.spectating=false;document.exitPointerLock?.();spectateBanner.classList.add('hidden');eliminated.classList.add('hidden');
+  const ranked=[...actors].sort((a,b)=>(Number(!b.dead)-Number(!a.dead))||(b.health-a.health)||(b.kills-a.kills)||(a.eliminatedAt-b.eliminatedAt));const place=ranked.indexOf(player)+1;resultTitle.textContent=player&&!player.dead&&place===1?'VICTORY ROYALE — BLOODLINE STYLE':`${place}${ordinal(place)} PLACE`;resultTable.innerHTML='';ranked.forEach((a,i)=>{const r=document.createElement('div');r.className='result-row'+(a===player?' you':'');r.innerHTML=`<span>${i+1}</span><strong>${a.name}</strong><span>${a.kills} ELIMS</span><span>${Math.round(a.damage)} DMG</span>`;resultTa
