@@ -2,38 +2,76 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
-<title>Bloodline Brawl — Warfare</title>
-<link rel="stylesheet" href="warfare.css?v=6&build=36">
+<title>Bloodline Brawl — Warfare V40</title>
+<link rel="stylesheet" href="warfare-v40.css?build=40">
 </head>
 <body>
 <div id="warfareApp">
-  <div id="bootScreen" class="overlay-screen active">
+  <canvas id="gameCanvas" aria-label="Bloodline Brawl Warfare"></canvas>
+
+  <section id="bootScreen" class="overlay">
     <div class="boot-panel">
       <div class="eyebrow">BLOODLINE BRAWL</div>
       <h1>WARFARE</h1>
-      <div id="warfareBuildBadge" style="display:inline-flex;align-items:center;justify-content:center;margin:0 auto 12px;padding:6px 10px;border:1px solid rgba(78,226,151,.65);border-radius:999px;background:rgba(7,40,27,.88);color:#9cf4c8;font:900 9px/1 Arial,sans-serif;letter-spacing:1.4px;position:relative;z-index:9999">OVERHAUL V36 • GAME-UPDATES</div>
-      <p>Pick a fighter, enter the expanded coastal hub, and choose your battlefield.</p>
+      <div id="warfareBuildBadge" class="build-badge">V40 • LOADING NEW CORE</div>
+      <p>A faster, cleaner third-person arena shooter rebuilt from the ground up. Loot during the 20-second grace period, then fight through a five-minute one-life round.</p>
+      <div class="menu-section-title">CHOOSE FIGHTER</div>
       <div id="roster" class="roster"></div>
-      <button id="enterWarfare" class="primary-button" disabled>ENTER WARFARE</button>
-      <a class="text-link" href="index.html">← Back to Bloodline Brawl</a>
+      <div class="menu-section-title">CHOOSE BATTLEFIELD</div>
+      <div id="mapChoices" class="map-choices">
+        <button class="map-choice" data-map="city"><strong>CITY ROOFTOP</strong><span>Fast lanes • neon skyline • rooftop cover</span></button>
+        <button class="map-choice" data-map="haunted"><strong>HAUNTED BEACH HOUSE</strong><span>House corridors • boardwalk • dunes and cover</span></button>
+      </div>
+      <button id="playWarfare" class="primary">START WARFARE</button>
+      <a href="index.html" class="text-link">← Back to Bloodline Brawl</a>
+    </div>
+  </section>
+
+  <div id="hud" class="hud hidden">
+    <div class="hud-top">
+      <div class="hud-card"><strong id="hudName">LIAM</strong><span id="modeLabel">WARFARE</span></div>
+      <div class="hud-card hud-center"><span id="matchTimer" class="timer">5:00</span><span id="aliveText" class="alive">8 ALIVE</span></div>
+      <div class="hud-card right"><strong id="weaponName">UNARMED</strong><span id="ammoText">MELEE READY</span></div>
+    </div>
+    <div class="crosshair"></div>
+    <div id="hitMarker" class="hit-marker">×</div>
+    <div id="damageFlash" class="damage-flash"></div>
+    <div id="damageDir" class="damage-dir"></div>
+    <div id="interactionPrompt" class="interaction hidden"></div>
+    <div id="feed" class="feed"></div>
+    <div class="bottom-left">
+      <div class="meter-row"><span>HEALTH</span><div class="meter"><div id="healthFill" class="health-fill"></div></div><b id="healthText">100</b></div>
+      <div class="meter-row"><span>SPECIAL Q</span><div class="meter"><div id="specialFill" class="special-fill"></div></div><b></b></div>
+      <div class="meter-row"><span>ULTRA F</span><div class="meter"><div id="ultraFill" class="ultra-fill"></div></div><b></b></div>
+      <div class="weapon-slots"><div id="slotOne" class="weapon-slot active">1 EMPTY</div><div id="slotTwo" class="weapon-slot">2 EMPTY</div></div>
+      <div class="stats-strip"><span>ELIMS <b id="statsKills">0</b></span><span>DAMAGE <b id="statsDamage">0</b></span></div>
     </div>
   </div>
-  <canvas id="gameCanvas" aria-label="Bloodline Brawl Warfare 3D game"></canvas>
-  <div id="damageFlash" class="damage-flash" aria-hidden="true"></div>
-  <div id="hud" class="hud hidden">
-    <div class="hud-top"><div class="hud-block"><strong id="hudName">LIAM</strong><span id="modeLabel">WARFARE HUB</span></div><div class="hud-center"><span id="matchTimer">HUB</span><strong id="placement">EXPLORE</strong></div><div class="hud-block right"><strong id="weaponName">UNARMED</strong><span id="ammoText">MELEE READY</span></div></div>
-    <div class="crosshair" aria-hidden="true"><span></span><span></span></div><div id="hitMarker" class="hit-marker" aria-hidden="true">×</div><div id="adsLabel" class="ads-label">HIP FIRE</div>
-    <div class="bottom-left"><div class="meter-row"><label>HEALTH</label><div class="meter"><div id="healthFill" class="health-fill"></div></div><b id="healthText">100</b></div><div class="meter-row"><label>SPECIAL • Q</label><div class="meter"><div id="specialFill" class="special-fill"></div></div></div><div class="meter-row"><label>ULTRA • F</label><div class="meter"><div id="ultraFill" class="ultra-fill"></div></div></div><div class="weapon-slots"><div id="slotOne" class="weapon-slot">1 EMPTY</div><div id="slotTwo" class="weapon-slot">2 EMPTY</div></div></div>
-    <div id="interactionPrompt" class="interaction hidden"></div><div id="feed" class="feed" aria-live="polite"></div>
-  </div>
-  <div id="matchIntro" class="match-intro hidden"><div id="introMap" class="intro-map">HAUNTED BEACH HOUSE</div><div id="introMode" class="intro-mode">FREE FOR ALL • 8 PLAYERS</div><div id="introCount" class="intro-count">20</div></div>
-  <div id="resultScreen" class="overlay-screen hidden"><div class="result-panel"><div class="eyebrow">MATCH COMPLETE</div><h2 id="resultTitle">1ST PLACE</h2><div id="resultTable" class="result-table"></div><button id="returnHub" class="primary-button">RETURN TO HUB</button></div></div>
-  <div class="controls-card"><span><b>WASD / ARROWS</b> Move</span><span><b>SHIFT</b> Sprint</span><span><b>SPACE</b> Jump</span><span><b>C</b> Slide</span><span><b>X / CTRL</b> Crouch</span><span><b>MOUSE</b> Look</span><span><b>LEFT CLICK / J</b> Fire / Melee</span><span><b>RIGHT CLICK / K</b> Aim</span><span><b>Q</b> Special</span><span><b>F</b> Ultra</span><span><b>R</b> Reload</span><span><b>1 / 2</b> Weapons</span><span><b>E</b> Interact</span></div>
+
+  <div id="countdown" class="countdown hidden"><div id="countdownLabel" class="label">GET READY</div><div id="countdownNumber" class="number">20</div><div id="countdownNote" class="note">MOVE • LOOT • SPREAD OUT • COMBAT LOCKED</div></div>
+  <div id="spectateBanner" class="spectate-banner hidden">SPECTATING</div>
+
+  <section id="eliminatedScreen" class="overlay hidden">
+    <div class="modal-panel">
+      <div class="eyebrow">WARFARE</div><h2>ELIMINATED</h2><p>Choose what happens next.</p>
+      <div id="eliminatedStats" class="death-stats"></div>
+      <div class="button-row"><button id="rematchButton" class="primary">REMATCH</button><button id="spectateButton" class="secondary">SPECTATE</button><button id="returnWarfareButton" class="secondary">RETURN TO WARFARE</button><button id="homeButton" class="secondary danger">HOME</button></div>
+    </div>
+  </section>
+
+  <section id="resultScreen" class="overlay hidden">
+    <div class="modal-panel">
+      <div class="eyebrow">MATCH COMPLETE</div><h2 id="resultTitle">WARFARE COMPLETE</h2><div id="resultTable" class="result-table"></div>
+      <div class="button-row"><button id="resultRematch" class="primary">REMATCH</button><button id="resultReturn" class="secondary">RETURN TO WARFARE</button><button id="resultHome" class="secondary danger">HOME</button></div>
+    </div>
+  </section>
+
+  <div class="controls-card"><span><b>WASD / ARROWS</b> Move</span><span><b>SHIFT</b> Sprint</span><span><b>SPACE</b> Jump</span><span><b>C</b> Slide</span><span><b>X / CTRL</b> Crouch</span><span><b>MOUSE</b> Look</span><span><b>LEFT CLICK / J</b> Fire / Melee</span><span><b>RIGHT CLICK / K</b> Aim</span><span><b>R</b> Reload</span><span><b>1 / 2</b> Weapons</span><span><b>E</b> Loot</span><span><b>Q / F</b> Abilities</span></div>
 </div>
-<script type="module" src="warfare-v6-loader.js?v=36"></script>
+<script type="module" src="warfare-v40-loader.js?build=40"></script>
 </body>
 </html>
