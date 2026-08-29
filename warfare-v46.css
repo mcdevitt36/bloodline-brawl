@@ -1,0 +1,8 @@
+/* BLOODLINE BRAWL — DEDICATED MELEE SLOT V46 */
+.weapon-slots{grid-template-columns:repeat(3,minmax(0,1fr))}
+.weapon-slot.melee-slot{border-color:#ffb05d38;background:linear-gradient(135deg,#7b3f1720,#ffffff06);color:#c9b7a7}
+.weapon-slot.melee-slot.active{color:#fff;border-color:#ffb05d;background:linear-gradient(135deg,#b9602438,#8b321b24);box-shadow:inset 3px 0 0 #ffb05d,0 0 16px #ff8b3326}
+body.melee-equipped-v46 .hud-card.right{border-color:#ffb05d66;box-shadow:0 8px 24px #0003,inset 0 -2px 0 #ff9e4a55}
+.crosshair.melee{--spread:5px;background:#ffd0a0;box-shadow:0 0 9px #ff9f50}
+.crosshair.melee:before,.crosshair.melee:after{background:#ffd0a0;box-shadow:0 0 6px #ff9f50}
+@media(max-width:760px){.weapon-slot{padding:7px 6px;font-size:8px}}
