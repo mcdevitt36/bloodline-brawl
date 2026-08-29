@@ -119,7 +119,7 @@
                       document.body.appendChild(erinChallenge);
 
                       const martinChallengesIntegration = document.createElement("script");
-                      martinChallengesIntegration.src = "martin-challenges-integration-v1.js?v=1";
+                      martinChallengesIntegration.src = "martin-challenges-integration-v1.js?v=2";
                       document.body.appendChild(martinChallengesIntegration);
 
                       const sunsetPolish = document.createElement("script");
