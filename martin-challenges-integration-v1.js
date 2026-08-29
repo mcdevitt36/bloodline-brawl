@@ -49,12 +49,22 @@
     if (original) original.click();
   }
 
+  function setTabState(tab, complete) {
+    if (!tab) return;
+    const stateKey = complete ? 'complete' : 'open';
+    if (tab.dataset.martinState === stateKey) return;
+    tab.dataset.martinState = stateKey;
+    tab.classList.toggle('complete', complete);
+    tab.textContent = complete ? "MARTIN'S CHALLENGE ✓" : "MARTIN'S CHALLENGE";
+  }
+
   function renderPanel(panel, tab) {
     if (!panel) return;
     const complete = martinUnlocked();
+    const stateKey = complete ? 'complete' : 'open';
+    panel.dataset.martinState = stateKey;
     panel.classList.toggle('complete', complete);
-    tab?.classList.toggle('complete', complete);
-    if (tab) tab.textContent = complete ? "MARTIN'S CHALLENGE ✓" : "MARTIN'S CHALLENGE";
+    setTabState(tab, complete);
 
     panel.innerHTML = complete
       ? '<div><div class="kicker">CHALLENGE COMPLETE</div><h3>MARTIN\'S CHALLENGE</h3><p>You defeated Martin and earned the ultimate reward: Martin is permanently unlocked as a playable fighter.</p><div class="bb-martin-meta"><span class="bb-martin-pill">BOSS DEFEATED</span><span class="bb-martin-pill reward">REWARD • MARTIN UNLOCKED</span></div></div><button type="button" id="bbLaunchMartinChallenge" disabled>✓ COMPLETED</button>'
@@ -71,8 +81,10 @@
 
   function refreshMartinStatus() {
     const complete = martinUnlocked();
+    const stateKey = complete ? 'complete' : 'open';
     const feature = document.querySelector('.bb-martin-feature');
-    if (feature) {
+    if (feature && feature.dataset.martinState !== stateKey) {
+      feature.dataset.martinState = stateKey;
       feature.classList.toggle('complete', complete);
       feature.innerHTML = complete
         ? '<small>FEATURED CHALLENGE • COMPLETE</small><strong>MARTIN\'S CHALLENGE</strong><span>Martin unlocked ✓</span>'
@@ -81,12 +93,8 @@
 
     const tab = document.querySelector('[data-bb-tab="martin"]');
     const panel = document.getElementById('bbMartinChallengePanel');
-    const panelComplete = panel?.classList.contains('complete');
-    if (panel && panelComplete !== complete) renderPanel(panel, tab);
-    else if (tab) {
-      tab.classList.toggle('complete', complete);
-      tab.textContent = complete ? "MARTIN'S CHALLENGE ✓" : "MARTIN'S CHALLENGE";
-    }
+    if (panel && panel.dataset.martinState !== stateKey) renderPanel(panel, tab);
+    else setTabState(tab, complete);
   }
 
   function installTitleFeature() {
