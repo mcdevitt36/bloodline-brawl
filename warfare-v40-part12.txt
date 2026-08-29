@@ -29,6 +29,6 @@ function updateBots(dt,t){
   for(const bot of actors){if(!bot.isBot||bot.dead)continue;
     if(bot.reloading&&t>=bot.reloadEnd)finishReload(bot);
     const needsGun=!currentWeapon(bot);
-    if(needsGun){const pick=nearestAvailablePickup(bot.mesh.position,'weapon');if(pick){const dir=tmpV.copy(pick.group.position).sub(bot.mesh.position);dir.y=0;moveBotToward(bot,dir,dt,8.6);if(dir.length()<1.6)takePickup(bot,pick);}else wanderBot(bot,dt,t);continue;}
+    if(needsGun){const pick=nearestAvailablePickup(bot.mesh.position,'weapon');if(pick){const dir=tmpV.copy(pick.group.position).sub(bot.mesh.position);dir.y=0;const pickupDistance=dir.length();if(pickupDistance<1.6)takePickup(bot,pick);else moveBotToward(bot,dir,dt,8.6);}else wanderBot(bot,dt,t);continue;}
     if(!bot.target||bot.target.dead||t>bot.thinkAt){bot.target=nearestEnemy(bot);bot.thinkAt=t+rand(350,700);bot.reactionReadyAt=t+rand(420,850);if(Math.random()<.25)bot.strafe*=-1;}
     const target=bot.target;if(!target){w
