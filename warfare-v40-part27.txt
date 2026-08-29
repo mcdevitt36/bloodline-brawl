@@ -1,0 +1,159 @@
+/* =============================================================
+   WARFARE V40 — EQUIPPED MELEE SLOT V46
+   - 1 / 2 = firearm slots, 3 = dedicated melee slot
+   - melee must be drawn before K / LMB can swing it
+   - first-person crosshair-authoritative melee hit detection
+   - meaningful close-range damage + knockback + impact feedback
+   - fast shooter-style draw / slash / recover animation
+   ============================================================= */
+
+let lastGunSlotV46=0;
+let meleeDrawAtV46=-9999;
+let meleeSwingAtV46=-9999;
+let weaponSwapAtV46=-9999;
+let meleeSlotElV46=null;
+
+const MELEE_DAMAGE_V46={sean:46,shannan:44,erin:45,liam:54,connor:47,kelly:52};
+const MELEE_RANGE_V46={sean:3.05,shannan:3.15,erin:3.05,liam:3.25,connor:3.10,kelly:3.30};
+
+function ensureMeleeSlotV46(){
+  if(meleeSlotElV46?.isConnected)return meleeSlotElV46;
+  const wrap=document.querySelector('.weapon-slots');if(!wrap)return null;
+  const el=document.createElement('div');el.id='slotThree';el.className='weapon-slot melee-slot';el.textContent='3  MELEE';wrap.appendChild(el);meleeSlotElV46=el;return el;
+}
+function syncMeleeHUDV46(){
+  const el=ensureMeleeSlotV46();if(!player||!el)return;
+  const cfg=CHARACTERS[player.charId];
+  el.textContent=`3  ${cfg.melee}`;el.classList.toggle('active',player.slot===2);
+  document.body.classList.toggle('melee-equipped-v46',player.slot===2);
+  fpsCrosshairV44?.classList.toggle('melee',player.slot===2);
+  if(player.slot===2){weaponName.textContent=cfg.melee;ammoText.textContent=`${MELEE_DAMAGE_V46[player.charId]||46} DMG • CLOSE RANGE`;}
+}
+
+// Slot 3 is deliberately not a firearm. All existing gun logic sees null while it is equipped.
+const legacyCurrentWeaponV46=currentWeapon;
+currentWeapon=function(a){
+  if(a===player&&a?.slot===2)return null;
+  return legacyCurrentWeaponV46(a);
+};
+
+function drawMeleeV46(){
+  if(!player||player.dead)return;
+  player.slot=2;player.reloading=false;fpsAimHeldV44=false;aiming=false;
+  meleeDrawAtV46=weaponSwapAtV46=now();
+  playTone(360,.045,.035,'triangle');setTimeout(()=>playTone(510,.04,.025,'triangle'),45);
+  rebuildHeldGun(player);rebuildFPSViewmodelV44(true);updateLoadoutVisual(player);syncMeleeHUDV46();
+}
+
+const legacySwitchSlotV46=switchSlot;
+switchSlot=function(i){
+  if(!player||player.dead)return;
+  if(i===2){drawMeleeV46();return;}
+  if(i!==0&&i!==1)return;
+  if(!player.weapons[i])return;
+  lastGunSlotV46=i;weaponSwapAtV46=now();fpsAimHeldV44=false;aiming=false;
+  legacySwitchSlotV46(i);syncMeleeHUDV46();
+};
+
+// Picking up a firearm while melee is drawn equips the new gun instead of accidentally creating weapon slot 3.
+const legacyEquipWeaponV46=equipWeapon;
+equipWeapon=function(a,type,rare=false){
+  if(a===player&&a.slot===2){
+    if(a.weapons.length===0)a.slot=0;
+    else if(a.weapons.length===1)a.slot=1;
+    else a.slot=clamp(lastGunSlotV46,0,1);
+  }
+  legacyEquipWeaponV46(a,type,rare);
+  if(a===player){lastGunSlotV46=clamp(a.slot,0,1);weaponSwapAtV46=now();rebuildFPSViewmodelV44(true);syncMeleeHUDV46();}
+};
+
+const legacyLoadoutVisualV46=updateLoadoutVisual;
+updateLoadoutVisual=function(a){legacyLoadoutVisualV46(a);if(a===player)syncMeleeHUDV46();};
+
+function meleeTargetV46(range){
+  const origin=camera.position.clone(),dir=playerLookDirV44();
+  let best=null,bestDist=range,bestPoint=null;
+  for(const a of actors){
+    if(a===player||a.dead)continue;
+    const points=[
+      [a.mesh.position.clone().add(new THREE.Vector3(0,1.28,0)),.78],
+      [a.mesh.position.clone().add(new THREE.Vector3(0,2.38,0)),.48]
+    ];
+    for(const [center,r] of points){
+      const d=raySphereDistance(origin,dir,center,r);
+      if(d!==null&&d<bestDist){best=a;bestDist=d;bestPoint=origin.clone().addScaledVector(dir,d);}
+    }
+  }
+  if(!best)return null;
+  // A wall between the player and target blocks the strike.
+  raycaster.set(origin,dir);raycaster.far=bestDist+.12;
+  const wall=raycaster.intersectObjects(worldMeshes,false)[0];
+  if(wall&&wall.distance<bestDist-.08)return null;
+  return{target:best,point:bestPoint||best.mesh.position.clone().add(new THREE.Vector3(0,1.3,0)),distance:bestDist};
+}
+
+const legacyMeleeAttackV46=meleeAttack;
+meleeAttack=function(a){
+  if(a!==player)return legacyMeleeAttackV46(a);
+  if(!player||player.dead||player.slot!==2||state.spectating)return;
+  if(state.phase!=='fight')return lockedCombatFeedback();
+  const t=now();if(t-player.lastMelee<500)return;
+  player.lastMelee=t;player.meleeSwingAt=t;meleeSwingAtV46=t;
+  fpsAimHeldV44=false;aiming=false;
+  const cfg=CHARACTERS[player.charId],range=MELEE_RANGE_V46[player.charId]||3.1;
+  playTone(188,.055,.055,'sawtooth');setTimeout(()=>playTone(128,.045,.035,'triangle'),55);
+  const hit=meleeTargetV46(range);
+  if(hit){
+    let dmg=MELEE_DAMAGE_V46[player.charId]||46;if(now()<player.damageBuffUntil)dmg=Math.round(dmg*1.25);
+    applyDamage(hit.target,dmg,player,false,hit.point,true);
+    fpsHitBurstV44(false,false,dmg);impactSpark(hit.point,'melee');
+    const shove=playerLookDirV44().setY(0).normalize().multiplyScalar(player.charId==='liam'?2.45:1.45);
+    moveActorHorizontal(hit.target,shove.x,shove.z);
+    // Tiny forward commitment makes a connected swing feel physical without becoming a teleport/lunge exploit.
+    moveActorHorizontal(player,shove.x*.10,shove.z*.10);
+    playTone(82,.07,.065,'square');
+  }else{
+    const origin=camera.position.clone(),dir=playerLookDirV44();raycaster.set(origin,dir);raycaster.far=range;
+    const wall=raycaster.intersectObjects(worldMeshes,false)[0];if(wall){impactSpark(wall.point,'melee');playTone(105,.045,.025,'square');}
+  }
+};
+
+// Draw / holster feel and an actual first-person slash arc.
+const legacyPositionFPSRigV46=positionFPSRigV44;
+positionFPSRigV44=function(dt,t,instant=false){
+  legacyPositionFPSRigV46(dt,t,instant);if(!fpsRigV44||!player)return;
+  const swapAge=(t-weaponSwapAtV46)/190;
+  if(swapAge>=0&&swapAge<1){const q=1-Math.pow(1-clamp(swapAge,0,1),3);fpsRigV44.position.y-=.34*(1-q);fpsRigV44.position.x+=.18*(1-q);fpsRigV44.rotation.z+=.42*(1-q);}
+  if(player.slot!==2)return;
+  fpsAimHeldV44=false;aiming=false;if(fpsScopeV44)fpsScopeV44.classList.remove('active');
+  const drawAge=(t-meleeDrawAtV46)/240;
+  if(drawAge>=0&&drawAge<1){const q=1-Math.pow(1-clamp(drawAge,0,1),3);fpsRigV44.position.y-=.42*(1-q);fpsRigV44.position.x+=.24*(1-q);fpsRigV44.rotation.z+=.75*(1-q);}
+  const age=(t-meleeSwingAtV46)/430;
+  if(age>=0&&age<1){
+    const arc=Math.sin(age*Math.PI),snap=Math.sin(clamp(age/.62,0,1)*Math.PI);
+    fpsRigV44.position.x-=arc*.34;fpsRigV44.position.z+=arc*.27;fpsRigV44.position.y+=snap*.06;
+    fpsRigV44.rotation.y+=arc*1.18;fpsRigV44.rotation.z-=arc*.82;fpsRigV44.rotation.x-=snap*.18;
+    if(fpsRightHandV44)fpsRightHandV44.rotation.z-=arc*.52;
+  }
+};
+
+// Digit 3 is the dedicated melee draw key. 1 / 2 continue to select firearms.
+addEventListener('keydown',e=>{
+  if(e.code!=='Digit3')return;e.preventDefault();e.stopImmediatePropagation();if(!e.repeat)drawMeleeV46();
+},true);
+
+// Shooter-style wheel cycling: gun 1 -> gun 2 -> melee, skipping empty gun slots.
+addEventListener('wheel',e=>{
+  if(document.pointerLockElement!==canvas||!player||player.dead||state.spectating)return;
+  e.preventDefault();
+  const available=[];if(player.weapons[0])available.push(0);if(player.weapons[1])available.push(1);available.push(2);
+  const idx=Math.max(0,available.indexOf(player.slot)),next=(idx+(e.deltaY>0?1:-1)+available.length)%available.length;switchSlot(available[next]);
+},{passive:false});
+
+const legacyStartMatchV46=startMatch;
+startMatch=function(){legacyStartMatchV46();if(player){lastGunSlotV46=0;player.slot=2;meleeDrawAtV46=weaponSwapAtV46=now();rebuildHeldGun(player);rebuildFPSViewmodelV44(true);updateLoadoutVisual(player);syncMeleeHUDV46();}};
+const legacyEnterHubV46=enterHubV42;
+enterHubV42=function(){legacyEnterHubV46();if(player){lastGunSlotV46=0;player.slot=2;meleeDrawAtV46=weaponSwapAtV46=now();rebuildHeldGun(player);rebuildFPSViewmodelV44(true);updateLoadoutVisual(player);syncMeleeHUDV46();}};
+
+ensureMeleeSlotV46();
+window.__bbWarfareMeleeV46={version:46,dedicatedSlot:3,drawRequired:true,damage:MELEE_DAMAGE_V46};
