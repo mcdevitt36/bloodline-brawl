@@ -7,8 +7,9 @@
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
 <title>Bloodline Brawl — Warfare First Person</title>
-<link rel="stylesheet" href="warfare-v40.css?build=45">
-<link rel="stylesheet" href="warfare-v44.css?build=45">
+<link rel="stylesheet" href="warfare-v40.css?build=46">
+<link rel="stylesheet" href="warfare-v44.css?build=46">
+<link rel="stylesheet" href="warfare-v46.css?build=46">
 </head>
 <body>
 <div id="warfareApp">
@@ -18,8 +19,8 @@
     <div class="boot-panel">
       <div class="eyebrow">BLOODLINE BRAWL</div>
       <h1>WARFARE</h1>
-      <div id="warfareBuildBadge" class="build-badge">V40 • LOADING FIRST-PERSON BUILD 45</div>
-      <p>First-person Warfare: choose your fighter, enter the 3D hub, then deploy through a battlefield gate. Aim down sights, use weapon optics, and fight through the 20-second grace phase into a five-minute one-life round.</p>
+      <div id="warfareBuildBadge" class="build-badge">V40 • LOADING MELEE BUILD 46</div>
+      <p>First-person Warfare: choose your fighter, enter the 3D hub, then deploy through a battlefield gate. Guns live in slots 1 and 2; press 3 to pull out your fighter's dedicated melee weapon for hard-hitting close combat.</p>
       <div class="menu-section-title">CHOOSE FIGHTER</div>
       <div id="roster" class="roster"></div>
       <div class="menu-section-title">BATTLEFIELDS ARE INSIDE THE HUB</div>
@@ -36,7 +37,7 @@
     <div class="hud-top">
       <div class="hud-card"><strong id="hudName">LIAM</strong><span id="modeLabel">WARFARE</span></div>
       <div class="hud-card hud-center"><span id="matchTimer" class="timer">5:00</span><span id="aliveText" class="alive">8 ALIVE</span></div>
-      <div class="hud-card right"><strong id="weaponName">UNARMED</strong><span id="ammoText">MELEE READY</span></div>
+      <div class="hud-card right"><strong id="weaponName">MELEE</strong><span id="ammoText">CLOSE RANGE</span></div>
     </div>
     <div class="crosshair"></div>
     <div id="hitMarker" class="hit-marker">×</div>
@@ -48,7 +49,7 @@
       <div class="meter-row"><span>HEALTH</span><div class="meter"><div id="healthFill" class="health-fill"></div></div><b id="healthText">100</b></div>
       <div class="meter-row"><span>SPECIAL Q</span><div class="meter"><div id="specialFill" class="special-fill"></div></div><b></b></div>
       <div class="meter-row"><span>ULTRA F</span><div class="meter"><div id="ultraFill" class="ultra-fill"></div></div><b></b></div>
-      <div class="weapon-slots"><div id="slotOne" class="weapon-slot active">1 EMPTY</div><div id="slotTwo" class="weapon-slot">2 EMPTY</div></div>
+      <div class="weapon-slots"><div id="slotOne" class="weapon-slot">1 EMPTY</div><div id="slotTwo" class="weapon-slot">2 EMPTY</div></div>
       <div class="stats-strip"><span>ELIMS <b id="statsKills">0</b></span><span>DAMAGE <b id="statsDamage">0</b></span></div>
     </div>
   </div>
@@ -71,8 +72,8 @@
     </div>
   </section>
 
-  <div class="controls-card"><span><b>WASD / ARROWS</b> Move</span><span><b>SHIFT</b> Sprint</span><span><b>SPACE</b> Jump</span><span><b>C</b> Slide</span><span><b>X / CTRL</b> Crouch</span><span><b>MOUSE</b> Look</span><span><b>LEFT CLICK / K</b> Fire / Melee</span><span><b>RIGHT CLICK / J</b> Aim Down Sights</span><span><b>R</b> Reload</span><span><b>1 / 2</b> Weapons</span><span><b>E</b> Interact / Deploy</span><span><b>Q / F</b> Abilities</span></div>
+  <div class="controls-card"><span><b>WASD / ARROWS</b> Move</span><span><b>SHIFT</b> Sprint</span><span><b>SPACE</b> Jump</span><span><b>C</b> Slide</span><span><b>X / CTRL</b> Crouch</span><span><b>MOUSE</b> Look</span><span><b>LEFT CLICK / K</b> Fire / Swing</span><span><b>RIGHT CLICK / J</b> Aim Down Sights</span><span><b>R</b> Reload</span><span><b>1 / 2</b> Guns</span><span><b>3</b> Pull Out Melee</span><span><b>WHEEL</b> Cycle Loadout</span><span><b>E</b> Interact / Deploy</span><span><b>Q / F</b> Abilities</span></div>
 </div>
-<script type="module" src="warfare-v40-loader.js?build=45"></script>
+<script type="module" src="warfare-v40-loader.js?build=46"></script>
 </body>
 </html>
