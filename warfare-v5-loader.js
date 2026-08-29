@@ -29,8 +29,8 @@ import './warfare-v4.js?v=2';
 import './warfare-comprehensive-polish-v30.js?v=1';
 /* Guard for first-frame grace, ability locking, family-loot prompts and
    player visibility on the rooftop map. */
-import './warfare-v30-hardening-v31.js?v=2';
-/* V32 is the final live combat authority. It neutralizes V31's accidental
-   999-second invulnerability and fixes weapon holding, tracer origins,
-   Classic melee visibility, hit numbers, countdown reliability and unsticking. */
+import './warfare-v30-hardening-v31.js?v=3';
+/* V32 is the final live combat authority. It removes lingering invulnerability
+   and fixes weapon holding, tracer origins, Classic melee visibility,
+   hit numbers, countdown reliability and unsticking. */
 import './warfare-combat-hardfix-v32.js?v=1';
