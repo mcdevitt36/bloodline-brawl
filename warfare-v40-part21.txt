@@ -1,0 +1,15 @@
+onst p=target.mesh.position.clone().add(new THREE.Vector3(rand(-.2,.2),2.6,0));p.project(camera);const el=document.createElement('div');el.className='damage-number'+(headshot?' headshot':'');el.textContent=Math.round(amount);el.style.left=`${(p.x*.5+.5)*innerWidth}px`;el.style.top=`${(-p.y*.5+.5)*innerHeight}px`;document.body.appendChild(el);setTimeout(()=>el.remove(),700);}
+function flashIncomingDamage(attacker,amount){damageFlash.classList.remove('active');void damageFlash.offsetWidth;damageFlash.classList.add('active');setTimeout(()=>damageFlash.classList.remove('active'),140);const to=attacker.mesh.position.clone().sub(player.mesh.position);const angle=Math.atan2(to.x,to.z)-cameraYaw;damageDir.style.transform=`translate(-50%,-50%) rotate(${angle}rad)`;damageDir.textContent=`-${Math.round(amount)}`;damageDir.classList.remove('active');void damageDir.offsetWidth;damageDir.classList.add('active');setTimeout(()=>damageDir.classList.remove('active'),550);}
+function addFeed(text){const d=document.createElement('div');d.className='feed-item';d.textContent=text;feed.prepend(d);while(feed.children.length>4)feed.lastElementChild.remove();setTimeout(()=>{d.classList.add('fade');setTimeout(()=>d.remove(),350);},4300);}
+
+function ensureAudio(){if(!audioCtx)audioCtx=new (window.AudioContext||window.webkitAudioContext)();if(audioCtx.state==='suspended')audioCtx.resume();return audioCtx;}
+function playTone(freq,dur=.08,vol=.05,type='square'){try{const c=ensureAudio(),o=c.createOscillator(),g=c.createGain();o.type=type;o.frequency.setValueAtTime(freq,c.currentTime);g.gain.setValueAtTime(vol,c.currentTime);g.gain.exponentialRampToValueAtTime(.001,c.currentTime+dur);o.connect(g);g.connect(c.destination);o.start();o.stop(c.currentTime+dur);}catch(_){}}
+function playGunSound(type,scale=1){const cfg={pistol:[170,.07,.06,'square'],smg:[210,.045,.045,'square'],rifle:[145,.07,.065,'sawtooth'],shotgun:[85,.11,.09,'sawtooth'],lmg:[105,.075,.07,'square'],sniper:[72,.14,.10,'sawtooth']}[type]||[150,.07,.05,'square'];playTone(cfg[0],cfg[1],cfg[2]*scale,cfg[3]);}
+
+function loop(ts){requestAnimationFrame(loop);if(!renderer||!scene)return;const dt=Math.min(.033,(ts-lastFrame)/1000||.016);lastFrame=ts;const t=now();
+  updateGraceAndTimer(t);updateHuman(dt,t);updateBots(dt,t);updateAnimations(dt,t);updatePickups(t);updateEffects(t);updateInteractionPrompt();updateCamera(dt);updateHUD();renderer.render(scene,camera);
+}
+
+// Input
+playButton.addEventListener('click',startMatch);
+rematchButton.addEventListener('click',startMatch);spectateButton.addEventListener('click',startSpectate);returnWarfareButton.addEventListener('click',returnToWarfare);homeButton.addEventListener('click',()=>lo
