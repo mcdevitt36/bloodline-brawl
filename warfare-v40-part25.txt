@@ -1,0 +1,292 @@
+/* =============================================================
+   WARFARE V40 — FIRST PERSON SHOOTER OVERHAUL V44
+   - true first-person camera and viewmodel
+   - camera/crosshair authoritative player hitscan
+   - K fire/melee only, J ADS only
+   - weapon-specific sights/scopes + ADS FOV
+   - recoil, sway, movement spread, reload motion
+   - first-person hands visibly hold equipped guns
+   - smoother / less robotic bot movement and posing
+   - richer hit markers and floating damage feedback
+   ============================================================= */
+
+let fpsRigV44=null;
+let fpsGunV44=null;
+let fpsWeaponTypeV44='';
+let fpsMuzzleV44=null;
+let fpsLeftHandV44=null;
+let fpsRightHandV44=null;
+let fpsScopeV44=null;
+let fpsScopeDotV44=null;
+let fpsCrosshairV44=document.querySelector('.crosshair');
+let fpsAimHeldV44=false;
+let fpsFireHeldV44=false;
+let fpsKickV44=0;
+let fpsSideKickV44=0;
+let fpsRecoilPitchV44=0;
+let fpsRecoilYawV44=0;
+let fpsSpreadVisualV44=0;
+let fpsLastMouseXV44=0;
+let fpsLastMouseYV44=0;
+let fpsHitFxRootV44=null;
+const botSteerV44=new WeakMap();
+const botPoseV44=new WeakMap();
+
+window.__bbWarfareFPSV44={version:44,firstPerson:true,shootKey:'K',aimKey:'J'};
+
+function makeFPSMaterialV44(color,rough=.48,metal=.08){
+  const m=std(color,rough,metal);m.depthTest=false;m.depthWrite=false;return m;
+}
+function fpMeshV44(geo,mat,parent,pos=[0,0,0],rot=[0,0,0]){
+  const m=new THREE.Mesh(geo,mat);m.position.set(...pos);m.rotation.set(...rot);m.renderOrder=10000;m.frustumCulled=false;parent.add(m);return m;
+}
+function markViewmodelV44(root){
+  root.traverse(o=>{if(!o.isMesh)return;o.renderOrder=10000;o.frustumCulled=false;const mats=Array.isArray(o.material)?o.material:[o.material];for(const m of mats){if(!m)continue;m.depthTest=false;m.depthWrite=false;}});
+}
+
+function ensureFPSOverlaysV44(){
+  if(!fpsScopeV44){
+    const scope=document.createElement('div');scope.id='fpsScopeV44';scope.innerHTML='<div class="fps-scope-ring"><div class="fps-scope-h"></div><div class="fps-scope-v"></div><div class="fps-scope-dot"></div></div><div class="fps-scope-label">MARKSMAN OPTIC • HOLD J</div>';
+    document.body.appendChild(scope);fpsScopeV44=scope;fpsScopeDotV44=scope.querySelector('.fps-scope-dot');
+  }
+  if(!fpsHitFxRootV44){const r=document.createElement('div');r.id='fpsHitFxV44';document.body.appendChild(r);fpsHitFxRootV44=r;}
+}
+
+function clearFPSRigV44(){
+  if(fpsRigV44?.parent)fpsRigV44.parent.remove(fpsRigV44);
+  fpsRigV44=null;fpsGunV44=null;fpsMuzzleV44=null;fpsLeftHandV44=null;fpsRightHandV44=null;fpsWeaponTypeV44='';
+}
+function createFPSArmV44(side,parent,shirt,skin){
+  const g=new THREE.Group();parent.add(g);
+  const sleeve=fpMeshV44(new THREE.CylinderGeometry(.105,.13,.48,12),makeFPSMaterialV44(shirt,.62,.01),g,[0,0,0],[Math.PI/2,0,0]);
+  const fore=fpMeshV44(new THREE.CylinderGeometry(.085,.105,.46,12),makeFPSMaterialV44(skin,.68,.005),g,[0,0,-.35],[Math.PI/2,0,0]);
+  const hand=fpMeshV44(new THREE.SphereGeometry(.115,12,9),makeFPSMaterialV44(skin,.65,.005),g,[0,0,-.61]);hand.scale.set(.82,.8,1.05);
+  g.userData={sleeve,fore,hand,side};return g;
+}
+function decorateSightV44(type,gun){
+  const dark=makeFPSMaterialV44(0x151b21,.34,.38),glass=makeFPSMaterialV44(0x6fdfff,.18,.25);glass.transparent=true;glass.opacity=.42;
+  if(type==='sniper'){
+    const body=fpMeshV44(new THREE.CylinderGeometry(.13,.13,.7,16),dark,gun,[0,.20,-.03],[Math.PI/2,0,0]);
+    fpMeshV44(new THREE.TorusGeometry(.14,.022,8,24),makeFPSMaterialV44(0x343e48,.32,.4),gun,[0,.20,-.38],[0,0,0]);
+    fpMeshV44(new THREE.CircleGeometry(.105,20),glass,gun,[0,.20,-.392],[0,0,0]);body.name='FPS_SCOPE';
+  }else if(type==='rifle'||type==='smg'||type==='lmg'){
+    fpMeshV44(new THREE.BoxGeometry(.28,.05,.34),dark,gun,[0,.17,-.08]);
+    fpMeshV44(new THREE.TorusGeometry(.105,.018,8,24),makeFPSMaterialV44(0x2c3740,.34,.35),gun,[0,.26,-.15]);
+    const lens=fpMeshV44(new THREE.CircleGeometry(.075,18),glass,gun,[0,.26,-.17]);lens.material.opacity=.28;
+    fpMeshV44(new THREE.SphereGeometry(.012,8,6),makeFPSMaterialV44(0xff4949,.25,.0),gun,[0,.26,-.185]);
+  }else if(type==='shotgun'){
+    fpMeshV44(new THREE.BoxGeometry(.05,.06,.1),makeFPSMaterialV44(0xffd36a,.3,.25),gun,[0,.17,-.55]);
+  }else if(type==='pistol'){
+    fpMeshV44(new THREE.BoxGeometry(.04,.075,.05),dark,gun,[0,.18,-.28]);
+    fpMeshV44(new THREE.BoxGeometry(.13,.04,.04),dark,gun,[0,.16,.26]);
+  }
+}
+function rebuildFPSViewmodelV44(force=false){
+  if(!camera||!player)return;
+  const w=currentWeapon(player),type=w?.type||'melee';
+  if(!force&&fpsRigV44&&fpsWeaponTypeV44===type)return;
+  clearFPSRigV44();ensureFPSOverlaysV44();
+  if(camera.parent!==scene)scene.add(camera);
+  const cfg=CHARACTERS[player.charId];
+  const rig=new THREE.Group();rig.name='FPS_VIEWMODEL_V44';camera.add(rig);fpsRigV44=rig;fpsWeaponTypeV44=type;
+  fpsLeftHandV44=createFPSArmV44(-1,rig,cfg.shirt,cfg.skin);fpsRightHandV44=createFPSArmV44(1,rig,cfg.shirt,cfg.skin);
+  if(w){
+    const gun=buildGunModel(w.type,w.def.color);gun.scale.setScalar(w.type==='pistol'?.84:w.type==='sniper'?.86:.82);gun.rotation.set(0,0,0);rig.add(gun);decorateSightV44(w.type,gun);markViewmodelV44(gun);fpsGunV44=gun;fpsMuzzleV44=gun.userData.muzzle;
+  }else{
+    const prop=buildMeleeProp(player.charId);prop.scale.setScalar(.9);rig.add(prop);markViewmodelV44(prop);fpsGunV44=prop;
+  }
+  markViewmodelV44(rig);positionFPSRigV44(0,now(),true);
+}
+function viewmodelProfileV44(type){
+  const ads={pistol:[.00,-.285,-.80],smg:[.00,-.235,-.86],rifle:[.00,-.225,-.90],shotgun:[.00,-.245,-.95],lmg:[.00,-.24,-.94],sniper:[.00,-.205,-.88]};
+  const hip={pistol:[.42,-.42,-.78],smg:[.48,-.43,-.88],rifle:[.50,-.42,-.92],shotgun:[.52,-.45,-.98],lmg:[.50,-.44,-.98],sniper:[.48,-.40,-.94]};
+  return{hip:hip[type]||[.48,-.43,-.9],ads:ads[type]||[0,-.23,-.9]};
+}
+function positionFPSRigV44(dt,t,instant=false){
+  if(!fpsRigV44||!player)return;
+  const w=currentWeapon(player),type=w?.type||'melee';
+  const prof=viewmodelProfileV44(type);
+  const ads=fpsAimHeldV44&&!!w;
+  const base=ads?prof.ads:prof.hip;
+  const speed=Math.hypot(player.velocity.x,player.velocity.z);
+  const moving=clamp(speed/11.5,0,1);
+  const bob=state.phase==='hub'||state.phase==='fight'||state.phase==='grace'?moving:0;
+  const bx=Math.sin(t*.009)*.018*bob,by=Math.abs(Math.cos(t*.009))*-.015*bob;
+  const swayX=clamp(fpsLastMouseXV44*.00042,-.045,.045),swayY=clamp(fpsLastMouseYV44*.00032,-.035,.035);
+  const reloadDrop=player.reloading?.16:0;
+  const kick=fpsKickV44;
+  const targetPos=new THREE.Vector3(base[0]+bx+swayX+fpsSideKickV44,base[1]+by-reloadDrop,base[2]+kick);
+  if(instant)fpsRigV44.position.copy(targetPos);else fpsRigV44.position.lerp(targetPos,1-Math.exp(-18*Math.max(.001,dt)));
+  fpsRigV44.rotation.x=THREE.MathUtils.damp(fpsRigV44.rotation.x,(-cameraPitch*.045)+(ads?0:swayY)-kick*.16,16,Math.max(.001,dt));
+  fpsRigV44.rotation.y=THREE.MathUtils.damp(fpsRigV44.rotation.y,ads?0:-swayX*.45,16,Math.max(.001,dt));
+  fpsRigV44.rotation.z=THREE.MathUtils.damp(fpsRigV44.rotation.z,(ads?0:-.018)+Math.sin(t*.006)*.006*bob,15,Math.max(.001,dt));
+  if(fpsGunV44&&w)fpsGunV44.position.set(0,0,0);
+  if(w){
+    const long=w.type==='sniper'||w.type==='shotgun';
+    fpsRightHandV44.position.set(ads?.16:.04,-.06,.19);fpsRightHandV44.rotation.set(-.28,0,-.08);
+    fpsLeftHandV44.position.set(ads?-.12:-.18,-.03,long?-.34:-.28);fpsLeftHandV44.rotation.set(-.35,0,.12);
+  }else{
+    fpsRightHandV44.position.set(.30,-.18,-.45);fpsRightHandV44.rotation.set(-.55,0,-.25);fpsLeftHandV44.position.set(-.28,-.24,-.38);fpsLeftHandV44.rotation.set(-.35,0,.18);
+    fpsGunV44.position.set(.28,-.16,-.62);fpsGunV44.rotation.set(-.8,0,-.4);
+  }
+  fpsKickV44=THREE.MathUtils.damp(fpsKickV44,0,14,Math.max(.001,dt));fpsSideKickV44=THREE.MathUtils.damp(fpsSideKickV44,0,12,Math.max(.001,dt));
+  fpsLastMouseXV44*=.70;fpsLastMouseYV44*=.70;
+  const sniper=ads&&w?.type==='sniper';if(fpsScopeV44)fpsScopeV44.classList.toggle('active',sniper);
+  if(fpsCrosshairV44){fpsCrosshairV44.classList.toggle('ads',ads);fpsCrosshairV44.classList.toggle('scoped',sniper);fpsCrosshairV44.style.setProperty('--spread',`${Math.round(6+fpsSpreadVisualV44*70)}px`);}
+}
+
+function playerEyeV44(){
+  const h=player?.crouching?1.72:2.30;return player.mesh.position.clone().add(new THREE.Vector3(0,h,0));
+}
+function playerLookDirV44(){
+  return new THREE.Vector3(-Math.sin(cameraYaw)*Math.cos(cameraPitch),Math.sin(cameraPitch),-Math.cos(cameraYaw)*Math.cos(cameraPitch)).normalize();
+}
+
+const legacyCameraV44=updateCamera;
+updateCamera=function(dt){
+  if(state.spectating)return legacyCameraV44(dt);
+  if(!player||!camera)return;
+  if(camera.parent!==scene)scene.add(camera);
+  const eye=playerEyeV44();camera.position.lerp(eye,1-Math.exp(-30*dt));
+  const dir=playerLookDirV44();camera.lookAt(camera.position.clone().add(dir));
+  player.heading=cameraYaw;player.mesh.rotation.y=cameraYaw;
+  const w=currentWeapon(player),ads=fpsAimHeldV44&&!!w;
+  let targetFov=74;if(ads)targetFov=w.type==='sniper'?34:w.type==='rifle'?54:w.type==='smg'?58:w.type==='pistol'?60:56;
+  if(!ads&&(keys.has('ShiftLeft')||keys.has('ShiftRight')))targetFov=78;
+  camera.fov=THREE.MathUtils.damp(camera.fov,targetFov,ads?16:10,dt);camera.updateProjectionMatrix();
+  rebuildFPSViewmodelV44();positionFPSRigV44(dt,now());
+  if(player.mesh?.userData?.rig){player.mesh.userData.rig.visual.visible=false;player.mesh.userData.rig.ring.visible=false;}
+};
+
+function getFPSMuzzleWorldV44(){
+  if(fpsMuzzleV44){const p=new THREE.Vector3();fpsMuzzleV44.getWorldPosition(p);return p;}
+  return camera.position.clone().add(playerLookDirV44().multiplyScalar(.5));
+}
+function playerShotSpreadV44(def){
+  const speed=Math.hypot(player.velocity.x,player.velocity.z);let mul=fpsAimHeldV44?.38:1;
+  if(speed>8)mul*=1.55;else if(speed>3)mul*=1.22;if(!player.onGround)mul*=1.75;if(player.crouching)mul*=.78;
+  return def.spread*mul;
+}
+function performFPSHitscanV44(origin,dir,def,visualOrigin){
+  raycaster.set(origin,dir);raycaster.far=def.range;
+  const worldHit=raycaster.intersectObjects(worldMeshes,false)[0];const worldDist=worldHit?.distance??def.range;
+  let best=null,bestDist=worldDist,headshot=false;
+  for(const a of actors){if(a===player||a.dead)continue;
+    const body=a.mesh.position.clone().add(new THREE.Vector3(0,1.25,0));const bd=raySphereDistance(origin,dir,body,.66);if(bd!==null&&bd<bestDist){best=a;bestDist=bd;headshot=false;}
+    const head=a.mesh.position.clone().add(new THREE.Vector3(0,2.45,0));const hd=raySphereDistance(origin,dir,head,.36);if(hd!==null&&hd<bestDist){best=a;bestDist=hd;headshot=true;}
+  }
+  const end=origin.clone().addScaledVector(dir,bestDist);tracer(visualOrigin||origin,end,0xfff5b4);
+  if(best){const dmg=Math.max(1,Math.round(def.damage*(headshot?def.head:1)*(now()<player.damageBuffUntil?1.25:1)));applyDamage(best,dmg,player,headshot,end);fpsHitBurstV44(headshot,false,dmg);}
+  else if(worldHit){impactSpark(end,worldHit.object.material?.metalness>.2?'metal':'world');}
+}
+
+const legacyFireWeaponV44=fireWeapon;
+fireWeapon=function(a){
+  if(a!==player)return legacyFireWeaponV44(a);
+  const t=now(),w=currentWeapon(player);if(!w)return;if(player.reloading||t-player.lastShot<w.def.fireRate)return;if(w.mag<=0){reload(player);return;}
+  const def=w.def;player.lastShot=t;w.mag--;player.recoil=Math.min(1,player.recoil+def.recoil);updateLoadoutVisual(player);playGunSound(w.type);
+  const origin=camera.position.clone(),baseDir=playerLookDirV44(),spread=playerShotSpreadV44(def),visualOrigin=getFPSMuzzleWorldV44();
+  const shots=def.pellets||1;
+  for(let i=0;i<shots;i++){const d=baseDir.clone();d.x+=rand(-spread,spread);d.y+=rand(-spread,spread);d.z+=rand(-spread,spread);d.normalize();performFPSHitscanV44(origin,d,def,visualOrigin);}
+  muzzleFlash(player,visualOrigin,def.color);
+  const recoilScale=w.type==='sniper'?1.35:w.type==='shotgun'?1.2:w.type==='pistol'?.8:1;
+  cameraPitch=clamp(cameraPitch+def.recoil*.075*recoilScale,-.62,.48);cameraYaw+=rand(-1,1)*def.recoil*.018;
+  fpsKickV44=Math.min(.22,fpsKickV44+def.recoil*.34*recoilScale);fpsSideKickV44=rand(-.018,.018)*recoilScale;fpsRecoilPitchV44+=def.recoil;fpsSpreadVisualV44=Math.min(.12,fpsSpreadVisualV44+spread*1.7);
+  if(w.mag<=0)setTimeout(()=>{if(currentWeapon(player)===w)reload(player);},120);
+};
+
+const legacyReloadV44=reload;
+reload=function(a=player){legacyReloadV44(a);if(a===player)playTone(315,.055,.035,'triangle');};
+const legacyFinishReloadV44=finishReload;
+finishReload=function(a){legacyFinishReloadV44(a);if(a===player){rebuildFPSViewmodelV44(true);playTone(510,.045,.03,'square');}};
+const legacyEquipWeaponV44=equipWeapon;
+equipWeapon=function(a,type,rare=false){legacyEquipWeaponV44(a,type,rare);if(a===player)rebuildFPSViewmodelV44(true);};
+const legacySwitchSlotV44=switchSlot;
+switchSlot=function(i){legacySwitchSlotV44(i);rebuildFPSViewmodelV44(true);};
+
+addEventListener('keydown',e=>{
+  if(e.code!=='KeyJ'&&e.code!=='KeyK')return;
+  e.preventDefault();e.stopImmediatePropagation();
+  if(e.code==='KeyJ'){fpsAimHeldV44=true;aiming=true;return;}
+  fpsFireHeldV44=true;if(!e.repeat)attack(player);
+},true);
+addEventListener('keyup',e=>{
+  if(e.code!=='KeyJ'&&e.code!=='KeyK')return;
+  e.preventDefault();e.stopImmediatePropagation();
+  if(e.code==='KeyJ'){fpsAimHeldV44=false;aiming=false;}
+  else fpsFireHeldV44=false;
+},true);
+
+addEventListener('mousemove',e=>{
+  if(document.pointerLockElement!==canvas||state.spectating)return;
+  e.preventDefault();e.stopImmediatePropagation();
+  const w=currentWeapon(player),ads=fpsAimHeldV44&&!!w;const sens=ads?(w?.type==='sniper'?.00072:.00105):.00172;
+  cameraYaw-=e.movementX*sens;cameraPitch=clamp(cameraPitch-e.movementY*sens*.82,-.62,.48);fpsLastMouseXV44=e.movementX;fpsLastMouseYV44=e.movementY;
+},true);
+
+canvas.addEventListener('mousedown',e=>{
+  if(document.pointerLockElement!==canvas)return;
+  if(e.button===0){e.preventDefault();e.stopImmediatePropagation();fpsFireHeldV44=true;attack(player);}
+  if(e.button===2){e.preventDefault();e.stopImmediatePropagation();fpsAimHeldV44=true;aiming=true;}
+},true);
+addEventListener('mouseup',e=>{
+  if(e.button===0)fpsFireHeldV44=false;
+  if(e.button===2){fpsAimHeldV44=false;aiming=false;}
+},true);
+
+const legacyHumanV44=updateHuman;
+updateHuman=function(dt,t){
+  const oldMouse=mouseDown;mouseDown=false;legacyHumanV44(dt,t);mouseDown=oldMouse;
+  fpsSpreadVisualV44=THREE.MathUtils.damp(fpsSpreadVisualV44,0,7,dt);
+  const w=currentWeapon(player);if(fpsFireHeldV44&&w?.def?.auto&&!player.dead&&!state.spectating)attack(player);
+};
+
+moveBotToward=function(bot,dir,dt,speed){
+  if(!dir.lengthSq())return;
+  let s=botSteerV44.get(bot);const t=now();
+  if(!s){s={dir:dir.clone().normalize(),until:0,phase:Math.random()*6.28,speedBias:rand(.92,1.06)};botSteerV44.set(bot,s);}
+  if(t>s.until){const n=dir.clone().normalize();const side=new THREE.Vector3(-n.z,0,n.x).multiplyScalar(rand(-.11,.11));s.dir.lerp(n.add(side).normalize(),.58).normalize();s.until=t+rand(280,620);s.speedBias=rand(.90,1.07);}
+  const pace=(.96+Math.sin(t*.0017+s.phase)*.035)*s.speedBias;const desired=s.dir.clone().multiplyScalar(speed*pace);
+  bot.velocity.x=THREE.MathUtils.damp(bot.velocity.x,desired.x,4.8,dt);bot.velocity.z=THREE.MathUtils.damp(bot.velocity.z,desired.z,4.8,dt);
+  moveActorHorizontal(bot,bot.velocity.x*dt,bot.velocity.z*dt);
+};
+
+const legacyAnimationsV44=updateAnimations;
+updateAnimations=function(dt,t){
+  legacyAnimationsV44(dt,t);
+  for(const a of actors){
+    if(a.dead)continue;const rig=a.mesh.userData.rig;if(!rig)continue;
+    if(a===player){if(rig.visual)rig.visual.visible=false;if(rig.ring)rig.ring.visible=false;continue;}
+    let s=botPoseV44.get(a);if(!s){s={lean:0,head:0,phase:Math.random()*10};botPoseV44.set(a,s);}
+    const speed=Math.hypot(a.velocity.x,a.velocity.z),forward=actorForward(a),right=new THREE.Vector3(-forward.z,0,forward.x);const lateral=new THREE.Vector3(a.velocity.x,0,a.velocity.z).dot(right);
+    s.lean=THREE.MathUtils.damp(s.lean,clamp(-lateral*.025,-.11,.11),5,dt);rig.visual.rotation.z+=s.lean;
+    rig.visual.rotation.x+=speed>7?.045:0;
+    if(a.target&&!a.target.dead){const to=a.target.mesh.position.clone().sub(a.mesh.position);const worldYaw=Math.atan2(-to.x,-to.z),delta=normalizeAngleV44(worldYaw-a.mesh.rotation.y);s.head=THREE.MathUtils.damp(s.head,clamp(delta,-.42,.42),4.2,dt);rig.headGroup.rotation.y+=s.head*.35;}
+    if(!currentWeapon(a)&&speed<.4){rig.leftArm.shoulder.rotation.z+=Math.sin(t*.0015+s.phase)*.025;rig.rightArm.shoulder.rotation.z-=Math.sin(t*.0015+s.phase)*.025;}
+  }
+};
+function normalizeAngleV44(a){while(a>Math.PI)a-=Math.PI*2;while(a<-Math.PI)a+=Math.PI*2;return a;}
+
+showDamageNumber=function(target,amount,headshot){
+  const p=target.mesh.position.clone().add(new THREE.Vector3(rand(-.28,.28),headshot?2.75:2.35,rand(-.08,.08)));p.project(camera);
+  const el=document.createElement('div');el.className=`damage-number v44${headshot?' headshot':''}`;el.innerHTML=`<b>${Math.round(amount)}</b>${headshot?'<span>HEADSHOT</span>':''}`;el.style.left=`${(p.x*.5+.5)*innerWidth}px`;el.style.top=`${(-p.y*.5+.5)*innerHeight}px`;document.body.appendChild(el);setTimeout(()=>el.remove(),820);
+};
+function fpsHitBurstV44(headshot=false,kill=false,amount=0){
+  ensureFPSOverlaysV44();
+  const ring=document.createElement('div');ring.className=`fps-hit-ring${headshot?' head':''}${kill?' kill':''}`;fpsHitFxRootV44.appendChild(ring);setTimeout(()=>ring.remove(),260);
+  for(let i=0;i<(headshot?7:4);i++){const s=document.createElement('i');s.className='fps-hit-shard';const a=(Math.PI*2*i)/(headshot?7:4)+rand(-.25,.25),r=headshot?30:22;s.style.setProperty('--x',`${Math.cos(a)*r}px`);s.style.setProperty('--y',`${Math.sin(a)*r}px`);fpsHitFxRootV44.appendChild(s);setTimeout(()=>s.remove(),300);}
+}
+const legacyEliminateV44=eliminate;
+eliminate=function(target,attacker){const wasAlive=!target.dead;legacyEliminateV44(target,attacker);if(wasAlive&&attacker===player)fpsHitBurstV44(false,true,0);};
+const legacyImpactSparkV44=impactSpark;
+impactSpark=function(pos,kind){legacyImpactSparkV44(pos,kind);if(kind==='metal'||kind==='melee')legacyImpactSparkV44(pos,kind);};
+
+const legacyStartMatchV44=startMatch;
+startMatch=function(){fpsAimHeldV44=false;fpsFireHeldV44=false;aiming=false;clearFPSRigV44();legacyStartMatchV44();rebuildFPSViewmodelV44(true);};
+const legacyEnterHubV44=enterHubV42;
+enterHubV42=function(){fpsAimHeldV44=false;fpsFireHeldV44=false;aiming=false;clearFPSRigV44();legacyEnterHubV44();rebuildFPSViewmodelV44(true);};
+const legacyStartSpectateV44=startSpectate;
+startSpectate=function(){fpsAimHeldV44=false;fpsFireHeldV44=false;aiming=false;if(fpsScopeV44)fpsScopeV44.classList.remove('active');clearFPSRigV44();legacyStartSpectateV44();};
+
+addEventListener('blur',()=>{fpsAimHeldV44=false;fpsFireHeldV44=false;aiming=false;});
+ensureFPSOverlaysV44();
