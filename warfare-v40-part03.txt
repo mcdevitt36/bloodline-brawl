@@ -1,0 +1,55 @@
+ce.now();
+
+function initMenu(){
+  roster.innerHTML='';
+  Object.entries(CHARACTERS).forEach(([id,c])=>{
+    const b=document.createElement('button');
+    b.className='fighter-choice'+(id===state.selectedCharacter?' selected':'');
+    b.dataset.id=id;
+    b.innerHTML=`<span class="fighter-avatar" style="--shirt:#${c.shirt.toString(16).padStart(6,'0')};--skin:#${c.skin.toString(16).padStart(6,'0')};--hair:#${c.hair.toString(16).padStart(6,'0')}"><i></i></span><span><strong>${c.name}</strong><small>${c.melee}</small></span>`;
+    b.onclick=()=>{state.selectedCharacter=id; roster.querySelectorAll('.fighter-choice').forEach(x=>x.classList.toggle('selected',x===b));};
+    roster.appendChild(b);
+  });
+  mapChoices.querySelectorAll('[data-map]').forEach(b=>{
+    b.classList.toggle('selected',b.dataset.map===state.selectedMap);
+    b.onclick=()=>{state.selectedMap=b.dataset.map; mapChoices.querySelectorAll('[data-map]').forEach(x=>x.classList.toggle('selected',x===b));};
+  });
+}
+
+function initRenderer(){
+  if(renderer)return;
+  renderer=new THREE.WebGLRenderer({canvas,antialias:true,powerPreference:'high-performance'});
+  renderer.setPixelRatio(Math.min(devicePixelRatio,1.8));
+  renderer.shadowMap.enabled=true;
+  renderer.shadowMap.type=THREE.PCFSoftShadowMap;
+  renderer.outputColorSpace=THREE.SRGBColorSpace;
+  renderer.toneMapping=THREE.ACESFilmicToneMapping;
+  renderer.toneMappingExposure=1.08;
+  camera=new THREE.PerspectiveCamera(68,innerWidth/innerHeight,.08,400);
+  clock=new THREE.Clock();
+  resize();
+  addEventListener('resize',resize);
+  requestAnimationFrame(loop);
+}
+
+function resize(){
+  if(!renderer)return;
+  renderer.setSize(innerWidth,innerHeight,false);
+  camera.aspect=innerWidth/innerHeight;
+  camera.updateProjectionMatrix();
+}
+
+function std(color,rough=.65,metal=.03,emissive=0){
+  return new THREE.MeshStandardMaterial({color,roughness:rough,metalness:metal,emissive,emissiveIntensity:emissive?.35:0});
+}
+function addBox(parent,x,y,z,w,h,d,color,{collide=false,shoot=true,rough=.7,metal=.03,name=''}={}){
+  const m=new THREE.Mesh(new THREE.BoxGeometry(w,h,d),std(color,rough,metal));
+  m.position.set(x,y,z);m.castShadow=true;m.receiveShadow=true;m.name=name;parent.add(m);
+  if(collide)obstacles.push({mesh:m,minX:x-w/2,maxX:x+w/2,minZ:z-d/2,maxZ:z+d/2});
+  if(shoot)worldMeshes.push(m);
+  return m;
+}
+function addCylinder(parent,x,y,z,rt,rb,h,color,{collide=false,shoot=true,rough=.62,metal=.05,segments=16}={}){
+  const m=new THREE.Mesh(new THREE.CylinderGeometry(rt,rb,h,segments),std(color,rough,metal));
+  m.position.set(x,y,z);m.castShadow=true;m.receiveShadow=true;parent.add(m);
+  if(collide){const r=Math.max(rt,rb);obstacles.push({mesh:m,minX:x-r,maxX:
