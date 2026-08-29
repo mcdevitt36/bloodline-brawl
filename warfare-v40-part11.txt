@@ -1,0 +1,37 @@
+bot.mesh.position.x,-bot.mesh.position.z)+rand(-.5,.5);}
+  updateLoadoutVisual(player);updateHUD();
+  countdown.classList.remove('hidden');countdown.classList.remove('fight');
+  countdownLabel.textContent='GET READY';countdownNumber.textContent='20';countdownNote.textContent='MOVE • LOOT • SPREAD OUT • COMBAT LOCKED';
+  feed.innerHTML='';addFeed('20-second grace period — loot up.');
+  try{canvas.requestPointerLock?.();}catch(_){ }
+}
+
+function shuffle(a){for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;}
+
+function returnToWarfare(){
+  state.phase='menu';state.spectating=false;document.exitPointerLock?.();hud.classList.add('hidden');eliminated.classList.add('hidden');resultScreen.classList.add('hidden');countdown.classList.add('hidden');spectateBanner.classList.add('hidden');boot.classList.remove('hidden');
+}
+
+function updateGraceAndTimer(t){
+  if(state.phase==='grace'){
+    const left=state.graceEnd-t;
+    if(left<=0){state.phase='fight';state.fightFlashUntil=t+1000;countdown.classList.remove('hidden');countdown.classList.add('fight');countdownLabel.textContent='WARFARE';countdownNumber.textContent='FIGHT!';countdownNote.textContent='WEAPONS • MELEE • ABILITIES LIVE';addFeed('FIGHT! Combat is live.');setTimeout(()=>{if(state.phase!=='grace')countdown.classList.add('hidden');},950);}
+    else{
+      const s=Math.ceil(left/1000);if(s!==state.lastCountdownSecond){state.lastCountdownSecond=s;countdownNumber.textContent=String(s);if(s<=3)countdown.classList.add('urgent');else countdown.classList.remove('urgent');}
+      matchTimer.textContent='5:00';
+    }
+  }else if(state.phase==='fight'||state.phase==='spectate'){
+    const rem=Math.max(0,state.roundEnd-t),sec=Math.ceil(rem/1000);matchTimer.textContent=`${Math.floor(sec/60)}:${String(sec%60).padStart(2,'0')}`;
+    const alive=actors.filter(a=>!a.dead).length;if(rem<=0||alive<=1)finishMatch();
+  }
+}
+
+function updateHuman(dt,t){
+  if(!player||player.dead||state.spectating)return;
+  const forward=(keys.has('KeyW')||keys.has('ArrowUp')?1:0)-(keys.has('KeyS')||keys.has('ArrowDown')?1:0);
+  const side=(keys.has('KeyD')||keys.has('ArrowRight')?1:0)-(keys.has('KeyA')||keys.has('ArrowLeft')?1:0);
+  const crouch=keys.has('KeyX')||keys.has('ControlLeft')||keys.has('ControlRight');player.crouching=crouch;
+  const sprint=keys.has('ShiftLeft')||keys.has('ShiftRight');
+  const move=new THREE.Vector3();
+  if(forward||side){const f=new THREE.Vector3(-Math.sin(cameraYaw),0,-Math.cos(cameraYaw));const r=new THREE.Vector3(Math.cos(cameraYaw),0,-Math.sin(cameraYaw));move.addScaledVector(f,forward).addScaledVector(r,side).normalize();}
+  let maxSpeed=crouch?4.2:sprint?11.5:
