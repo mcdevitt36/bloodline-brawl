@@ -27,6 +27,79 @@
     }
 
     /* -----------------------------------------------------
+       16-SLOT ROSTER FIX
+       Base roster is 14 fighters + RANDOM = 15 cards, which fits 5x3.
+       Unlocking Nick creates 16 cards. The old hard-coded 5x3 grid made
+       an implicit fourth row and crushed the first three rows. On desktop,
+       deliberately switch to a clean 8x2 layout. Mobile already has 4x4.
+    ----------------------------------------------------- */
+    @media (min-width: 761px) {
+      .bb-select-overhauled.bb-nick-expanded-roster .fighter-select {
+        grid-template-columns: repeat(8,minmax(0,1fr)) !important;
+        grid-template-rows: repeat(2,minmax(0,1fr)) !important;
+        gap: 7px !important;
+      }
+
+      .bb-select-overhauled.bb-nick-expanded-roster .card-model-holder {
+        min-height: 74px !important;
+        max-height: 150px !important;
+      }
+
+      .bb-select-overhauled.bb-nick-expanded-roster .card-model-holder .pixel-person:not(.bb-toddler),
+      .bb-select-overhauled.bb-nick-expanded-roster .card-model-holder .nick-model {
+        transform: scale(.56) !important;
+        transform-origin: bottom center !important;
+      }
+
+      .bb-select-overhauled.bb-nick-expanded-roster .card-model-holder .martin-model {
+        transform: scale(.78) !important;
+        transform-origin: bottom center !important;
+      }
+
+      .bb-select-overhauled.bb-nick-expanded-roster .card-model-holder .alice-model,
+      .bb-select-overhauled.bb-nick-expanded-roster .card-model-holder .leo-model {
+        transform: scale(.72) !important;
+        transform-origin: bottom center !important;
+      }
+
+      .bb-select-overhauled.bb-nick-expanded-roster .card-model-holder .barrett-model {
+        transform: scale(.80) !important;
+        transform-origin: bottom center !important;
+      }
+
+      .bb-select-overhauled.bb-nick-expanded-roster .bb-random-mark {
+        width: 62px !important;
+        height: 62px !important;
+        font-size: 45px !important;
+      }
+    }
+
+    @media (max-height: 800px) and (min-width: 761px) {
+      .bb-select-overhauled.bb-nick-expanded-roster .card-model-holder {
+        min-height: 62px !important;
+        max-height: 118px !important;
+      }
+
+      .bb-select-overhauled.bb-nick-expanded-roster .card-model-holder .pixel-person:not(.bb-toddler),
+      .bb-select-overhauled.bb-nick-expanded-roster .card-model-holder .nick-model {
+        transform: scale(.48) !important;
+      }
+
+      .bb-select-overhauled.bb-nick-expanded-roster .card-model-holder .martin-model {
+        transform: scale(.68) !important;
+      }
+
+      .bb-select-overhauled.bb-nick-expanded-roster .card-model-holder .alice-model,
+      .bb-select-overhauled.bb-nick-expanded-roster .card-model-holder .leo-model {
+        transform: scale(.63) !important;
+      }
+
+      .bb-select-overhauled.bb-nick-expanded-roster .card-model-holder .barrett-model {
+        transform: scale(.70) !important;
+      }
+    }
+
+    /* -----------------------------------------------------
        NICK BAT POLISH
        The original bat was a nearly uniform rectangle, which read as
        a stick. Build a recognizable baseball-bat silhouette instead:
@@ -142,12 +215,21 @@
     }
 
     @media (max-height: 800px) and (min-width: 761px) {
-      .bb-select-overhauled .card-model-holder .nick-model {
+      .bb-select-overhauled:not(.bb-nick-expanded-roster) .card-model-holder .nick-model {
         transform: scale(.38) !important;
       }
     }
   `;
   document.head.appendChild(style);
+
+  function syncExpandedRoster() {
+    const screen = document.getElementById("selectScreen");
+    if (!screen) return;
+
+    const nickCard = screen.querySelector('.fighter-card[data-character="nick"]');
+    const unlocked = !!nickCard && !!window.BBNickFighter?.isUnlocked?.();
+    screen.classList.toggle("bb-nick-expanded-roster", unlocked);
+  }
 
   function renderNickDetail() {
     if (!window.BBNickFighter?.isUnlocked?.()) return;
@@ -177,6 +259,8 @@
   }
 
   function bindNickCard() {
+    syncExpandedRoster();
+
     const card = document.querySelector('.fighter-card[data-character="nick"]');
     if (!card || card.dataset.bbNickDetailBridge === "1") return;
     card.dataset.bbNickDetailBridge = "1";
@@ -188,11 +272,17 @@
 
   document.addEventListener("bb:nick-unlocked", () => {
     setTimeout(() => {
+      syncExpandedRoster();
       bindNickCard();
       renderNickDetail();
     }, 0);
   });
 
   /* Existing unlocks need the bridge immediately on page load. */
-  setTimeout(bindNickCard, 0);
+  setTimeout(() => {
+    syncExpandedRoster();
+    bindNickCard();
+  }, 0);
+
+  setTimeout(syncExpandedRoster, 300);
 })();
