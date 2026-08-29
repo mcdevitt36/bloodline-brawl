@@ -1,0 +1,25 @@
+anderBot(bot,dt,t);continue;}
+    const to=tmpV.copy(target.mesh.position).sub(bot.mesh.position);to.y=0;const dist=to.length();const def=currentWeapon(bot)?.def;
+    let desired=new THREE.Vector3();
+    const forward=to.clone().normalize(),side=new THREE.Vector3(-forward.z,0,forward.x).multiplyScalar(bot.strafe);
+    if(def){const preferred=def===WEAPONS.shotgun?8:def===WEAPONS.sniper?30:18;if(dist>preferred+5)desired.add(forward);else if(dist<preferred-5)desired.addScaledVector(forward,-.8);desired.addScaledVector(side,.55+Math.sin(t*.001+bot.thinkAt)*.18);}else desired.copy(forward);
+    if(desired.lengthSq()<.01)desired.copy(side);moveBotToward(bot,desired,dt,7.4+(def===WEAPONS.shotgun?1.2:0));
+    bot.heading=Math.atan2(-to.x,-to.z);bot.mesh.rotation.y=THREE.MathUtils.damp(bot.mesh.rotation.y,bot.heading,8,dt);
+    if(state.phase==='fight'&&t>=bot.reactionReadyAt){
+      if(dist<CHARACTERS[bot.charId].meleeRange+0.35&&(!def||Math.random()<.08))meleeAttack(bot);
+      else if(def&&dist<def.range&&hasLineOfSight(bot,target))botShoot(bot,target,dist);
+    }
+    if(t-bot.stuckAt>1000){const moved=bot.mesh.position.distanceTo(bot.stuckPos);if(moved<.65){bot.strafe*=-1;bot.heading+=rand(-1.2,1.2);moveActorHorizontal(bot,Math.sin(bot.heading)*1.2,Math.cos(bot.heading)*1.2);}bot.stuckAt=t;bot.stuckPos.copy(bot.mesh.position);}
+  }
+}
+
+function moveBotToward(bot,dir,dt,speed){if(dir.lengthSq())dir.normalize();bot.velocity.x=THREE.MathUtils.damp(bot.velocity.x,dir.x*speed,7.5,dt);bot.velocity.z=THREE.MathUtils.damp(bot.velocity.z,dir.z*speed,7.5,dt);moveActorHorizontal(bot,bot.velocity.x*dt,bot.velocity.z*dt);}
+function wanderBot(bot,dt,t){if(t>bot.thinkAt){bot.thinkAt=t+rand(900,1800);bot.heading+=rand(-1.3,1.3);}moveBotToward(bot,new THREE.Vector3(-Math.sin(bot.heading),0,-Math.cos(bot.heading)),dt,5.5);bot.mesh.rotation.y=bot.heading;}
+function nearestEnemy(bot){let best=null,bd=Infinity;for(const a of actors){if(a===bot||a.dead)continue;const d=bot.mesh.position.distanceToSquared(a.mesh.position);if(d<bd){bd=d;best=a;}}return best;}
+function nearestAvailablePickup(pos,type){let best=null,bd=Infinity;for(const p of pickups){if(p.taken||p.type!==type)continue;const d=pos.distanceToSquared(p.group.position);if(d<bd){bd=d;best=p;}}return best;}
+
+function currentWeapon(a){return a.weapons[a.slot]||null;}
+function makeWeaponInstance(type,rare=false){const def=WEAPONS[type];return{type,def,mag:def.mag,reserve:def.reserve+(rare?Math.round(def.reserve*.4):0),rare};}
+function equipWeapon(a,type,rare=false){
+  const inst=makeWeaponInstance(type,rare);if(a.weapons.length<2){a.weapons.push(inst);a.slot=a.weapons.length-1;}else{a.weapons[a.slot]=inst;}
+  rebuildHeldGu
