@@ -1,0 +1,57 @@
+
+/* =============================================================
+   BLOODLINE BRAWL — WARFARE V40
+   Standalone shooter rebuild. This file intentionally does NOT
+   depend on the legacy V4–V36 override stack.
+   ============================================================= */
+
+const $ = id => document.getElementById(id);
+const canvas = $('gameCanvas');
+const boot = $('bootScreen');
+const playButton = $('playWarfare');
+const roster = $('roster');
+const mapChoices = $('mapChoices');
+const hud = $('hud');
+const modeLabel = $('modeLabel');
+const hudName = $('hudName');
+const matchTimer = $('matchTimer');
+const aliveText = $('aliveText');
+const weaponName = $('weaponName');
+const ammoText = $('ammoText');
+const healthFill = $('healthFill');
+const healthText = $('healthText');
+const specialFill = $('specialFill');
+const ultraFill = $('ultraFill');
+const interactionPrompt = $('interactionPrompt');
+const feed = $('feed');
+const hitMarker = $('hitMarker');
+const damageFlash = $('damageFlash');
+const damageDir = $('damageDir');
+const countdown = $('countdown');
+const countdownNumber = $('countdownNumber');
+const countdownLabel = $('countdownLabel');
+const countdownNote = $('countdownNote');
+const statsKills = $('statsKills');
+const statsDamage = $('statsDamage');
+const spectateBanner = $('spectateBanner');
+const eliminated = $('eliminatedScreen');
+const eliminatedStats = $('eliminatedStats');
+const rematchButton = $('rematchButton');
+const spectateButton = $('spectateButton');
+const returnWarfareButton = $('returnWarfareButton');
+const homeButton = $('homeButton');
+const resultScreen = $('resultScreen');
+const resultTitle = $('resultTitle');
+const resultTable = $('resultTable');
+const resultRematch = $('resultRematch');
+const resultReturn = $('resultReturn');
+const resultHome = $('resultHome');
+const weaponSlotOne = $('slotOne');
+const weaponSlotTwo = $('slotTwo');
+
+const CHARACTERS = {
+  sean: { name:'SEAN', shirt:0x3e7d3b, shirt2:0x315f31, pants:0x64472f, skin:0xf0c7a5, hair:0x17120e, build:1.06, melee:'ICE CREAM CONE', meleeDamage:24, meleeRange:2.45 },
+  shannan: { name:'SHANNAN', shirt:0x597c9b, shirt2:0x45647e, pants:0x3d4652, skin:0xf1c8aa, hair:0x7b4c2c, build:.95, melee:'SYRINGE', meleeDamage:21, meleeRange:2.65 },
+  erin: { name:'ERIN', shirt:0xf1f1ee, shirt2:0xdcdedb, pants:0x3971a8, skin:0xf2c9aa, hair:0xe1bc55, build:.93, melee:'HAIRBRUSH', meleeDamage:22, meleeRange:2.5 },
+  liam: { name:'LIAM', shirt:0x111317, shirt2:0x222831, pants:0x315b93, skin:0xefc4a2, hair:0x51331f, build:1.04, melee:'SHOULDER CHECK', meleeDamage:28, meleeRange:2.85 },
+  connor: { name:'CONNOR', shirt:0x8e2727, shirt2:0x6f1f1f, pants:0x777b82, skin:0xefc6a5, hair:0x583a25, 
