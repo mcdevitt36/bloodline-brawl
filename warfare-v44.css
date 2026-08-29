@@ -1,0 +1,25 @@
+/* BLOODLINE BRAWL — WARFARE FIRST-PERSON UI V44 */
+.crosshair{--spread:8px;width:2px;height:2px;border-radius:50%;background:#fff;box-shadow:0 0 7px #fff;transition:opacity .08s,transform .08s}
+.crosshair:before,.crosshair:after{content:"";position:absolute;background:#fff;box-shadow:0 0 5px #000,0 0 7px #fff}
+.crosshair:before{width:2px;height:7px;left:0;top:calc(-1 * var(--spread) - 7px);box-shadow:0 calc(var(--spread) * 2 + 14px) 0 #fff,0 0 7px #fff}
+.crosshair:after{width:7px;height:2px;top:0;left:calc(-1 * var(--spread) - 7px);box-shadow:calc(var(--spread) * 2 + 14px) 0 0 #fff,0 0 7px #fff}
+.crosshair.ads{--spread:3px;transform:translate(-50%,-50%) scale(.82)}
+.crosshair.scoped{opacity:0}
+#fpsScopeV44{position:fixed;inset:0;z-index:46;display:none;pointer-events:none;background:radial-gradient(circle at 50% 50%,transparent 0 25%,rgba(0,0,0,.12) 25.4%,rgba(0,0,0,.98) 47%);place-items:center}
+#fpsScopeV44.active{display:grid}
+.fps-scope-ring{position:absolute;left:50%;top:50%;width:min(52vw,560px);height:min(52vw,560px);transform:translate(-50%,-50%);border:3px solid rgba(15,20,24,.94);border-radius:50%;box-shadow:0 0 0 2px rgba(255,255,255,.12),inset 0 0 80px rgba(20,80,110,.10)}
+.fps-scope-h,.fps-scope-v{position:absolute;left:50%;top:50%;background:rgba(16,20,22,.9);transform:translate(-50%,-50%)}
+.fps-scope-h{width:100%;height:1px}.fps-scope-v{width:1px;height:100%}.fps-scope-dot{position:absolute;left:50%;top:50%;width:5px;height:5px;transform:translate(-50%,-50%);border-radius:50%;background:#ff5d5d;box-shadow:0 0 8px #ff3434}
+.fps-scope-label{position:absolute;left:50%;bottom:8.5vh;transform:translateX(-50%);padding:6px 10px;border-radius:999px;background:#03070bbf;color:#c8d5df;font:900 9px/1 Arial,sans-serif;letter-spacing:.16em}
+#fpsHitFxV44{position:fixed;left:50%;top:50%;z-index:57;width:1px;height:1px;pointer-events:none}
+.fps-hit-ring{position:absolute;left:0;top:0;width:28px;height:28px;transform:translate(-50%,-50%) scale(.45);border:2px solid #fff;border-radius:50%;opacity:0;animation:fpsHitRingV44 .25s ease-out forwards;box-shadow:0 0 10px #fff8}
+.fps-hit-ring.head{width:34px;height:34px;border-color:#ffad61;box-shadow:0 0 15px #ff7c37}.fps-hit-ring.kill{width:42px;height:42px;border-color:#ffe05f;box-shadow:0 0 18px #ffcf40}
+.fps-hit-shard{position:absolute;left:0;top:0;width:3px;height:10px;border-radius:999px;background:#fff;transform:translate(-50%,-50%);animation:fpsShardV44 .28s ease-out forwards;box-shadow:0 0 7px #fff}
+.damage-number.v44{display:grid;justify-items:center;gap:2px;min-width:46px;animation:damageV44 .82s cubic-bezier(.16,.8,.22,1) forwards;text-shadow:0 3px 0 #10151a,0 0 14px #000}
+.damage-number.v44 b{font:1000 29px/1 Impact,"Arial Black",sans-serif;color:#ffe66f;-webkit-text-stroke:1px #171c20}.damage-number.v44 span{padding:3px 6px;border-radius:999px;background:#5f1d14;color:#ffd3b3;font:1000 7px/1 Arial,sans-serif;letter-spacing:.14em}.damage-number.v44.headshot b{font-size:38px;color:#ff9b55;transform:scale(1.04)}
+.hit-marker.active{color:#fff;text-shadow:0 0 5px #fff,0 0 14px #84d9ff}.hit-marker.kill{color:#ffe65e!important;text-shadow:0 0 7px #fff,0 0 20px #ffbc42!important}
+.controls-card:before{content:"FIRST PERSON";padding:2px 6px;border-radius:999px;background:#286cc9;color:#dff2ff;font-weight:1000;letter-spacing:.12em}
+@keyframes fpsHitRingV44{0%{opacity:1;transform:translate(-50%,-50%) scale(.35)}55%{opacity:1;transform:translate(-50%,-50%) scale(1.05)}100%{opacity:0;transform:translate(-50%,-50%) scale(1.45)}}
+@keyframes fpsShardV44{0%{opacity:1;transform:translate(-50%,-50%) scale(.8)}100%{opacity:0;transform:translate(calc(-50% + var(--x)),calc(-50% + var(--y))) scale(.2)}}
+@keyframes damageV44{0%{opacity:0;transform:translate(-50%,-40%) scale(.55)}14%{opacity:1;transform:translate(-50%,-72%) scale(1.18)}64%{opacity:1;transform:translate(-50%,-115%) scale(1)}100%{opacity:0;transform:translate(-50%,-165%) scale(.86)}}
+@media(max-width:760px){.fps-scope-ring{width:78vw;height:78vw}#fpsScopeV44{background:radial-gradient(circle at 50% 50%,transparent 0 35vw,rgba(0,0,0,.98) 45vw)}}
