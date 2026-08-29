@@ -52,45 +52,59 @@
       max-height:none!important;
     }
 
+    /* Final authority for the title controls: pin the whole group to the
+       true viewport center so older grid/launcher rules cannot pull it left. */
     #titleScreen.bb-title-menu-restored .bb-title-controls{
-      grid-row:4!important;
-      width:min(760px,94vw)!important;
+      position:fixed!important;
+      left:50%!important;
+      right:auto!important;
+      bottom:16px!important;
+      top:auto!important;
+      transform:translateX(-50%)!important;
+      z-index:95!important;
+      width:min(980px,calc(100vw - 48px))!important;
       display:flex!important;
       flex-direction:column!important;
       align-items:center!important;
       justify-content:center!important;
       gap:7px!important;
-      margin:0 auto!important;
+      margin:0!important;
       padding:0!important;
     }
 
     #titleScreen.bb-title-menu-restored .mode-title{
       position:static!important;
+      inset:auto!important;
       margin:0!important;
       color:#fff!important;
       font-size:10px!important;
       font-weight:1000!important;
       letter-spacing:4px!important;
+      text-align:center!important;
       text-shadow:2px 2px #111!important;
     }
 
     #titleScreen.bb-title-menu-restored .mode-buttons{
       position:static!important;
+      inset:auto!important;
       width:100%!important;
       display:flex!important;
       align-items:stretch!important;
       justify-content:center!important;
       flex-wrap:nowrap!important;
-      gap:8px!important;
+      gap:10px!important;
       margin:0!important;
+      padding:0!important;
+      transform:none!important;
     }
 
     #titleScreen.bb-title-menu-restored .mode-buttons .mode-button{
       position:relative!important;
+      inset:auto!important;
       order:1;
       flex:1 1 0!important;
       min-width:0!important;
-      max-width:180px!important;
+      max-width:230px!important;
       min-height:54px!important;
       padding:8px 12px!important;
       margin:0!important;
@@ -138,10 +152,11 @@
 
     #titleScreen.bb-title-menu-restored #startButton{
       position:static!important;
+      inset:auto!important;
       width:220px!important;
       min-width:220px!important;
       min-height:43px!important;
-      margin:0!important;
+      margin:0 auto!important;
       padding:8px 30px!important;
       border-radius:7px!important;
       font-size:18px!important;
@@ -155,8 +170,6 @@
       display:none!important;
     }
 
-    /* V11 used to create these large cards. Never allow a stale copy to
-       remain visible if a browser restores DOM state during navigation. */
     #titleScreen.bb-title-menu-restored .bb-mode-launcher,
     #titleScreen.bb-title-menu-restored .bb-mode-card{
       display:none!important;
@@ -169,6 +182,7 @@
         padding-bottom:8px!important;
       }
       #titleScreen.bb-title-menu-restored .title-versus-panel{transform:translateY(0)!important}
+      #titleScreen.bb-title-menu-restored .bb-title-controls{bottom:8px!important}
       #titleScreen.bb-title-menu-restored .mode-buttons .mode-button{min-height:48px!important;padding-top:6px!important;padding-bottom:6px!important}
       #titleScreen.bb-title-menu-restored #startButton{min-height:39px!important;padding-top:6px!important;padding-bottom:6px!important}
     }
@@ -176,7 +190,16 @@
     @media(max-width:720px){
       #titleScreen.bb-title-menu-restored .title-content{overflow:auto!important;grid-template-rows:auto auto auto auto!important}
       #titleScreen.bb-title-menu-restored .title-versus-panel{grid-row:3!important;transform:none!important;min-height:210px!important}
-      #titleScreen.bb-title-menu-restored .bb-title-controls{grid-row:4!important;width:96vw!important;padding-bottom:10px!important}
+      #titleScreen.bb-title-menu-restored .bb-title-controls{
+        position:static!important;
+        left:auto!important;
+        bottom:auto!important;
+        transform:none!important;
+        grid-row:4!important;
+        width:96vw!important;
+        padding-bottom:10px!important;
+        margin:0 auto!important;
+      }
       #titleScreen.bb-title-menu-restored .mode-buttons{display:grid!important;grid-template-columns:1fr 1fr!important}
       #titleScreen.bb-title-menu-restored .mode-buttons .mode-button{max-width:none!important}
     }
@@ -207,11 +230,9 @@
     modeWrap.appendChild(warfare);
   }
 
-  /* Keep original classic mode behavior untouched. */
   one.type = 'button';
   two.type = 'button';
   if (versus) versus.style.gridRow = '3';
 
-  /* Remove any card launcher produced by a prior in-page execution. */
   content.querySelectorAll('.bb-mode-launcher').forEach(node => node.remove());
 })();
