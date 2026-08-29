@@ -29,4 +29,4 @@ import './warfare-v4.js?v=2';
 import './warfare-comprehensive-polish-v30.js?v=1';
 /* Final guard for first-frame grace, ability locking, family-loot prompts and
    player visibility on the rooftop map. */
-import './warfare-v30-hardening-v31.js?v=1';
+import './warfare-v30-hardening-v31.js?v=2';
