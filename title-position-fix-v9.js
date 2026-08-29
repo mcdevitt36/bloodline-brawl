@@ -150,6 +150,6 @@
   document.body.appendChild(martinChallengeModernize);
 
   const modeLauncher = document.createElement("script");
-  modeLauncher.src = "mode-launcher-v11.js?v=4";
+  modeLauncher.src = "mode-launcher-v11.js?v=5";
   document.body.appendChild(modeLauncher);
 })();
