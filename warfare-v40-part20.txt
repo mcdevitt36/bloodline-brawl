@@ -1,0 +1,20 @@
+Content=state.kills;statsDamage.textContent=Math.round(state.damage);if(!player.dead)updateLoadoutVisual(player);
+}
+
+function updateCamera(dt){
+  const subject=state.spectating?spectateTarget():player;if(!subject)return;
+  const target=subject.mesh.position.clone().add(new THREE.Vector3(0,subject.crouching?1.5:1.9,0));
+  if(state.spectating){const f=actorForward(subject);cameraYaw=Math.atan2(-f.x,-f.z);}
+  const dist=state.spectating?6.8:(aiming?3.7:5.9);const shoulder=state.spectating?0:aiming?.85:.5;
+  const back=new THREE.Vector3(Math.sin(cameraYaw)*dist,1.35-Math.sin(cameraPitch)*2.1,Math.cos(cameraYaw)*dist);const right=new THREE.Vector3(Math.cos(cameraYaw),0,-Math.sin(cameraYaw)).multiplyScalar(shoulder);let desired=target.clone().add(back).add(right);
+  const dir=desired.clone().sub(target),len=dir.length();dir.normalize();raycaster.set(target,dir);raycaster.far=len;const hit=raycaster.intersectObjects(worldMeshes,false)[0];if(hit&&hit.distance<len)desired=target.clone().addScaledVector(dir,Math.max(.65,hit.distance-.28));
+  camera.position.lerp(desired,1-Math.exp(-10*dt));camera.lookAt(target.clone().add(new THREE.Vector3(0,Math.tan(cameraPitch)*2.2,0)));
+  const targetFov=state.spectating?70:(aiming?57:((keys.has('ShiftLeft')||keys.has('ShiftRight'))?76:68));camera.fov=THREE.MathUtils.damp(camera.fov,targetFov,8,dt);camera.updateProjectionMatrix();
+}
+
+function tracer(start,end,color){const geo=new THREE.BufferGeometry().setFromPoints([start,end]);const mat=new THREE.LineBasicMaterial({color,transparent:true,opacity:.95});const line=new THREE.Line(geo,mat);scene.add(line);effects.push({object:line,removeAt:now()+70,dispose:true});}
+function muzzleFlash(a,pos,color){const s=new THREE.Mesh(new THREE.SphereGeometry(.11,8,6),new THREE.MeshBasicMaterial({color:0xfff1b3}));s.position.copy(pos);scene.add(s);const l=new THREE.PointLight(color||0xffd387,2.8,5,2);l.position.copy(pos);scene.add(l);effects.push({object:s,removeAt:now()+45,dispose:true},{object:l,removeAt:now()+55,dispose:false});}
+function impactSpark(pos,kind){const c=kind==='metal'?0xffdf9c:kind==='melee'?0xff8866:0xc8d3da;for(let i=0;i<5;i++){const s=new THREE.Mesh(new THREE.SphereGeometry(.025,6,4),new THREE.MeshBasicMaterial({color:c}));s.position.copy(pos).add(new THREE.Vector3(rand(-.08,.08),rand(-.08,.08),rand(-.08,.08)));scene.add(s);effects.push({object:s,removeAt:now()+100+Math.random()*70,dispose:true});}}
+function updateEffects(t){for(let i=effects.length-1;i>=0;i--){const e=effects[i];if(t>=e.removeAt){scene.remove(e.object);if(e.dispose){e.object.geometry?.dispose?.();e.object.material?.dispose?.();}effects.splice(i,1);}}}
+
+function showDamageNumber(target,amount,headshot){c
