@@ -1,0 +1,33 @@
+n(a);if(a===player)updateLoadoutVisual(a);
+}
+function rebuildHeldGun(a){const rig=a.mesh.userData.rig;if(!rig)return;rig.gunAnchor.clear();const w=currentWeapon(a);if(!w)return;const model=buildGunModel(w.type,w.def.color);model.scale.setScalar(.78);model.position.set(.08,0,0);rig.gunAnchor.add(model);rig.gunModel=model;}
+function updateLoadoutVisual(a){
+  const slots=[weaponSlotOne,weaponSlotTwo];slots.forEach((el,i)=>{const w=a.weapons[i];el.classList.toggle('active',i===a.slot);el.textContent=w?`${i+1}  ${w.def.name}`:`${i+1}  EMPTY`;el.dataset.rarity=w?.rare?'RARE':'';});
+  const w=currentWeapon(a);weaponName.textContent=w?w.def.name:CHARACTERS[a.charId].melee;ammoText.textContent=w?`${w.mag} / ${w.reserve}`:'MELEE READY';
+}
+
+function takePickup(a,p){if(p.taken)return;p.taken=true;scene.remove(p.group);if(p.type==='weapon')equipWeapon(a,p.weaponType,p.rare);else if(p.type==='heal'){a.health=Math.min(a.maxHealth,a.health+30);}else if(p.type==='ammo'){for(const w of a.weapons)w.reserve+=Math.ceil(w.def.mag*.6);}if(a===player){playTone(620,.06,.07,'triangle');updateHUD();}}
+
+function interact(){
+  if(!player||player.dead||state.spectating)return;
+  let best=null,bd=2.6;
+  for(const p of pickups){if(p.taken)continue;const d=player.mesh.position.distanceTo(p.group.position);if(d<bd){bd=d;best={type:'pickup',obj:p};}}
+  for(const c of containers){if(c.opened)continue;const d=player.mesh.position.distanceTo(c.group.position);if(d<bd){bd=d;best={type:'container',obj:c};}}
+  if(!best)return;
+  if(best.type==='pickup')takePickup(player,best.obj);else openContainer(player,best.obj);
+}
+function openContainer(a,c){if(c.opened)return;c.opened=true;c.lid.rotation.x=-1.1;c.lid.position.y+=.18;playTone(420,.08,.08,'triangle');setTimeout(()=>playTone(690,.08,.06,'sine'),80);
+  const base=c.group.position.clone();const cfg=c.cfg;
+  if(cfg.reward==='heal'){createLoosePickup('heal',base.clone().add(new THREE.Vector3(0,1.05,0)));}
+  else if(cfg.reward==='ammo'){createLoosePickup('ammo',base.clone().add(new THREE.Vector3(-.75,1.05,0)));createWeaponPickup(choice(['rifle','lmg','shotgun']),base.clone().add(new THREE.Vector3(.85,1.0,0)),true);}
+  else if(cfg.reward==='precision'){createWeaponPickup(choice(['rifle','sniper']),base.clone().add(new THREE.Vector3(0,1.0,0)),true);}
+  else {createWeaponPickup(choice(Object.keys(WEAPONS)),base.clone().add(new THREE.Vector3(0,1.0,0)),true);}
+  if(a===player)addFeed(`${cfg.name} opened.`);
+}
+
+function attack(a=player){
+  if(!a||a.dead||state.spectating)return;
+  if(state.phase!=='fight')return lockedCombatFeedback();
+  const w=currentWeapon(a);if(w)fireWeapon(a);else meleeAttack(a);
+}
+function lockedCombatFeedback(){if(state.phase!=
