@@ -5,7 +5,7 @@ anderBot(bot,dt,t);continue;}
     if(def){const preferred=def===WEAPONS.shotgun?8:def===WEAPONS.sniper?30:18;if(dist>preferred+5)desired.add(forward);else if(dist<preferred-5)desired.addScaledVector(forward,-.8);desired.addScaledVector(side,.55+Math.sin(t*.001+bot.thinkAt)*.18);}else desired.copy(forward);
     if(desired.lengthSq()<.01)desired.copy(side);moveBotToward(bot,desired,dt,7.4+(def===WEAPONS.shotgun?1.2:0));
     bot.heading=Math.atan2(-to.x,-to.z);bot.mesh.rotation.y=THREE.MathUtils.damp(bot.mesh.rotation.y,bot.heading,8,dt);
-    if(state.phase==='fight'&&t>=bot.reactionReadyAt){
+    if((state.phase==='fight'||state.phase==='spectate')&&t>=bot.reactionReadyAt){
       if(dist<CHARACTERS[bot.charId].meleeRange+0.35&&(!def||Math.random()<.08))meleeAttack(bot);
       else if(def&&dist<def.range&&hasLineOfSight(bot,target))botShoot(bot,target,dist);
     }
