@@ -33,3 +33,7 @@ import './warfare-character-body-v33.js?v=1';
    dressing, camera collision, animation/weapon finishing, audio hierarchy and
    legacy visual conflict suppression. */
 import './warfare-master-overhaul-v34.js?v=1';
+/* V35 is intentionally last and owns only the match opening. It guarantees
+   an actual 20-second move/loot/no-combat grace period and releases all
+   protection exactly at FIGHT, regardless of legacy countdown behavior. */
+import './warfare-countdown-authority-v35.js?v=1';
