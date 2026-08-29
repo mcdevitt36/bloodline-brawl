@@ -1,0 +1,36 @@
+teLoosePickup(kind,pos){
+  const g=new THREE.Group();g.position.copy(pos);scene.add(g);const c=kind==='heal'?0x5de38d:0xffd36a;
+  const m=addBox(g,0,0,0,.65,.45,.65,c,{shoot:false,rough:.55});m.rotation.y=.35;
+  pickups.push({group:g,type:kind,taken:false,baseY:pos.y,phase:Math.random()*6.28});
+}
+function createFamilyContainer(cfg,pos){
+  const g=new THREE.Group();g.position.copy(pos);scene.add(g);g.userData.container=true;
+  const base=addBox(g,0,.35,0,1.4,.7,1,cfg.color,{shoot:true,rough:.68});
+  const lid=addBox(g,0,.76,-.03,1.42,.18,1.02,THREE.MathUtils.lerp(cfg.color,0xffffff,.18),{shoot:true,rough:.62});
+  addBox(g,0,.42,.54,.55,.1,.08,0x1f252a,{shoot:false,metal:.4});
+  containers.push({group:g,lid,cfg,opened:false,phase:Math.random()*6.28});
+}
+
+function buildGunModel(type,color){
+  const g=new THREE.Group();g.name='VISIBLE_GUN';const dark=0x1d2329,metal=0x2f3942;
+  const box=(x,y,z,w,h,d,c=color,r=.48,m=.2)=>{const o=new THREE.Mesh(new THREE.BoxGeometry(w,h,d),std(c,r,m));o.position.set(x,y,z);o.castShadow=true;g.add(o);return o;};
+  const cyl=(x,y,z,r,h,c=metal)=>{const o=new THREE.Mesh(new THREE.CylinderGeometry(r,r,h,12),std(c,.38,.45));o.position.set(x,y,z);o.rotation.x=Math.PI/2;o.castShadow=true;g.add(o);return o;};
+  let length=1.35;
+  if(type==='pistol'){
+    box(0,0,0,.26,.25,.72,color);box(0,-.22,.12,.18,.42,.24,dark);cyl(0,.02,-.48,.055,.38);length=.9;
+  }else if(type==='shotgun'){
+    box(0,0,.05,.32,.3,1.05,color);box(0,-.12,.2,.2,.26,.32,dark);cyl(0,.02,-.72,.075,.58);box(0,-.02,-.34,.34,.2,.38,0x805a38,.65,.04);box(0,.02,.78,.28,.28,.48,dark);length=1.65;
+  }else if(type==='sniper'){
+    box(0,0,0,.3,.28,1.05,color);cyl(0,.02,-.85,.055,.72);box(0,.18,-.05,.15,.14,.65,dark,.4,.3);box(0,-.17,.18,.18,.36,.26,dark);box(0,.03,.82,.28,.3,.55,dark);length=1.9;
+  }else if(type==='lmg'){
+    box(0,0,0,.38,.34,1.0,color);cyl(0,.03,-.75,.07,.55);box(0,-.27,.08,.3,.42,.38,dark);box(0,.03,.8,.34,.32,.5,dark);length=1.7;
+  }else{
+    box(0,0,0,.32,.29,1.0,color);cyl(0,.02,-.72,.06,.5);box(0,-.22,.07,.18,.38,.3,dark);box(0,.01,.76,.3,.29,.45,dark);if(type==='rifle')box(0,.18,-.02,.12,.1,.42,dark,.42,.3);length=1.6;
+  }
+  const muzzle=new THREE.Object3D();muzzle.position.set(0,.02,-length/2-.12);g.add(muzzle);g.userData.muzzle=muzzle;g.userData.weaponType=type;return g;
+}
+
+function buildMeleeProp(charId){
+  const cfg=CHARACTERS[charId],g=new THREE.Group();g.name='MELEE_PROP';
+  const box=(x,y,z,w,h,d,c)=>{const o=new THREE.Mesh(new THREE.BoxGeometry(w,h,d),std(c,.7,.02));o.position.set(x,y,z);o.castShadow=true;g.add(o);return o;};
+  const cyl=(x,y,z,r,h,c)=>{const o=new THREE.Mesh(new THREE.CylinderGeometry(r,r,h,12),std(c,.65,.03));o.position.s
