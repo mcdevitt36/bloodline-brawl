@@ -1,77 +1,73 @@
 import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.180.0/build/three.module.js';
 
 /* BLOODLINE BRAWL — WARFARE GAMEPLAY + AUDIO V20
-   Event-driven polish layer using actor state already exposed by Warfare.
-   Adds distinct synthesized SFX for all seven firearms, reloads, gun pickup,
-   ammo pickup, empty click, swap, hit/damage/elimination cues, plus shell/smoke
-   and clearer reload/low-ammo HUD feedback. No external audio assets required. */
-
+   Refined event-driven mix:
+   - distinct gun signatures without harsh stacking
+   - dynamic compression + quieter spatial bot gunfire
+   - character-specific melee swing/impact sounds
+   - cleaner reload, swap, pickup, empty, hurt and elimination cues
+   - shell/smoke feedback + reload/low-ammo HUD support
+*/
 const previousRender=THREE.WebGLRenderer.prototype.render;
-const states=new WeakMap();
-const actorState=new WeakMap();
-let activeScene=null,activeCamera=null,audioCtx=null,master=null,noiseBuffer=null;
+const actorState=new WeakMap(),lastGunSfx=new WeakMap();
+let activeScene=null,activeCamera=null,audioCtx=null,master=null,compressor=null,noiseBuffer=null;
+let recentBotShots=[],recentMelee=[];
 const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
 const MAG={pistol:12,smg:30,rifle:30,shotgun:6,lmg:60,sniper:4,launcher:1};
 const RELOAD_MS={pistol:900,smg:1150,rifle:1250,shotgun:1350,lmg:1900,sniper:1650,launcher:1800};
-
-function isMatch(scene){const h=scene?.background?.isColor?scene.background.getHex():0;return h===0x020711||h===0x091226;}
+function isMatch(scene){const h=scene?.background?.isColor?scene.background.getHex():0;return h===0x020711||h===0x080d20||h===0x091226||h===0x111d44;}
 function actors(scene){const out=[];scene?.traverse(o=>{const a=o.userData?.actor;if(a&&!out.includes(a))out.push(a);});return out;}
-function human(scene){return actors(scene).find(a=>!a.isBot)||null;}
+function human(list){return list.find(a=>!a.isBot)||null;}
 
 function ensureAudio(){
- if(audioCtx)return audioCtx;
- const C=window.AudioContext||window.webkitAudioContext;if(!C)return null;
- audioCtx=new C();master=audioCtx.createGain();master.gain.value=.62;master.connect(audioCtx.destination);
- const len=Math.floor(audioCtx.sampleRate*.7),buf=audioCtx.createBuffer(1,len,audioCtx.sampleRate),d=buf.getChannelData(0);for(let i=0;i<len;i++)d[i]=Math.random()*2-1;noiseBuffer=buf;return audioCtx;
+ if(audioCtx)return audioCtx;const C=window.AudioContext||window.webkitAudioContext;if(!C)return null;
+ audioCtx=new C();master=audioCtx.createGain();master.gain.value=.48;compressor=audioCtx.createDynamicsCompressor();compressor.threshold.value=-20;compressor.knee.value=18;compressor.ratio.value=5;compressor.attack.value=.006;compressor.release.value=.18;master.connect(compressor);compressor.connect(audioCtx.destination);
+ const len=Math.floor(audioCtx.sampleRate*.8),b=audioCtx.createBuffer(1,len,audioCtx.sampleRate),d=b.getChannelData(0);for(let i=0;i<len;i++)d[i]=Math.random()*2-1;noiseBuffer=b;return audioCtx;
 }
 function wake(){const c=ensureAudio();if(c?.state==='suspended')c.resume();}
 addEventListener('pointerdown',wake,{passive:true});addEventListener('keydown',wake,{passive:true});
+function spatial(actor,base=.45){if(!activeCamera||!actor?.mesh)return{gain:base,pan:0};const rel=actor.mesh.position.clone().sub(activeCamera.position).applyQuaternion(activeCamera.quaternion.clone().invert()),dist=rel.length();return{gain:base*clamp(1-dist/88,.08,1),pan:clamp(rel.x/20,-.85,.85)};}
+function bus(gain=.4,pan=0){const c=ensureAudio();if(!c)return null;const g=c.createGain();g.gain.value=gain;let tail=g;if(c.createStereoPanner){const p=c.createStereoPanner();p.pan.value=pan;g.connect(p);tail=p;}tail.connect(master);return g;}
+function osc(type,f,d,g=.12,pan=0,slide=1,delay=0){const c=ensureAudio();if(!c)return;const t=c.currentTime+delay,o=c.createOscillator(),a=bus(g,pan);o.type=type;o.frequency.setValueAtTime(Math.max(24,f),t);o.frequency.exponentialRampToValueAtTime(Math.max(24,f*slide),t+d);a.gain.setValueAtTime(g,t);a.gain.exponentialRampToValueAtTime(.001,t+d);o.connect(a);o.start(t);o.stop(t+d+.02);}
+function noise(d=.08,g=.12,pan=0,cut=3200,delay=0,highpass=0){const c=ensureAudio();if(!c||!noiseBuffer)return;const t=c.currentTime+delay,s=c.createBufferSource(),lp=c.createBiquadFilter(),a=bus(g,pan);s.buffer=noiseBuffer;lp.type='lowpass';lp.frequency.value=cut;s.connect(lp);let tail=lp;if(highpass){const hp=c.createBiquadFilter();hp.type='highpass';hp.frequency.value=highpass;lp.connect(hp);tail=hp;}tail.connect(a);a.gain.setValueAtTime(g,t);a.gain.exponentialRampToValueAtTime(.001,t+d);s.start(t);s.stop(t+d+.02);}
+function click(g=.06,pan=0,pitch=900,delay=0){osc('square',pitch,.03,g,pan,.7,delay);noise(.018,g*.45,pan,5200,delay,700);}
 
-function spatial(actor,base=.5){if(!activeCamera||!actor?.mesh)return {gain:base,pan:0};const rel=actor.mesh.position.clone().sub(activeCamera.position).applyQuaternion(activeCamera.quaternion.clone().invert()),dist=rel.length();return {gain:base*clamp(1-dist/95,.12,1),pan:clamp(rel.x/22,-.9,.9)};}
-function bus(gain=.5,pan=0){const c=ensureAudio();if(!c)return null;const g=c.createGain();g.gain.value=gain;let tail=g;if(c.createStereoPanner){const p=c.createStereoPanner();p.pan.value=pan;g.connect(p);tail=p;}tail.connect(master);return g;}
-function osc(type,freq,dur,gain=.2,pan=0,slide=1,delay=0){const c=ensureAudio();if(!c)return;const t=c.currentTime+delay,o=c.createOscillator(),g=bus(gain,pan);o.type=type;o.frequency.setValueAtTime(freq,t);o.frequency.exponentialRampToValueAtTime(Math.max(25,freq*slide),t+dur);g.gain.setValueAtTime(gain,t);g.gain.exponentialRampToValueAtTime(.001,t+dur);o.connect(g);o.start(t);o.stop(t+dur+.02);}
-function noise(dur=.12,gain=.25,pan=0,low=3000,delay=0){const c=ensureAudio();if(!c||!noiseBuffer)return;const t=c.currentTime+delay,s=c.createBufferSource(),f=c.createBiquadFilter(),g=bus(gain,pan);s.buffer=noiseBuffer;f.type='lowpass';f.frequency.value=low;g.gain.setValueAtTime(gain,t);g.gain.exponentialRampToValueAtTime(.001,t+dur);s.connect(f);f.connect(g);s.start(t);s.stop(t+dur+.02);}
-function click(g=.08,pan=0,pitch=1050,delay=0){osc('square',pitch,.035,g,pan,.72,delay);noise(.022,g*.6,pan,5000,delay);}
-
+function canPlayGun(actor,type){const now=performance.now(),last=lastGunSfx.get(actor)||0;if(now-last<35)return false;lastGunSfx.set(actor,now);if(actor?.isBot){recentBotShots=recentBotShots.filter(t=>now-t<90);if(recentBotShots.length>=4)return false;recentBotShots.push(now);}return true;}
 function gunSound(type,actor){
- const s=spatial(actor,actor?.isBot?.34:.58),g=s.gain,p=s.pan;
- if(type==='pistol'){noise(.085,g*.62,p,5200);osc('triangle',170,.11,g*.55,p,.45);click(g*.22,p,1450,.006);}
- else if(type==='smg'){noise(.052,g*.54,p,6100);osc('square',145,.065,g*.42,p,.58);click(g*.28,p,1750,.004);}
- else if(type==='rifle'){noise(.09,g*.72,p,4900);osc('triangle',112,.13,g*.68,p,.42);osc('square',760,.035,g*.16,p,.75,.005);}
- else if(type==='shotgun'){noise(.19,g*.92,p,3000);osc('sine',72,.26,g*.92,p,.32);noise(.08,g*.38,p,700,.025);}
- else if(type==='lmg'){noise(.105,g*.78,p,3900);osc('square',82,.14,g*.75,p,.4);click(g*.3,p,720,.01);}
- else if(type==='sniper'){noise(.12,g,p,6200);osc('sine',64,.34,g,p,.28);osc('triangle',980,.075,g*.28,p,.44,.006);noise(.26,g*.22,p,1500,.055);}
- else if(type==='launcher'){noise(.15,g*.72,p,1500);osc('sine',58,.38,g,p,.24);osc('triangle',115,.18,g*.55,p,.38,.018);}
+ if(!canPlayGun(actor,type))return;const {gain:g,pan:p}=spatial(actor,actor?.isBot?.24:.55);
+ if(type==='pistol'){noise(.065,g*.55,p,6000,0,800);osc('triangle',185,.095,g*.48,p,.44);click(g*.18,p,1550,.004);}
+ else if(type==='smg'){noise(.038,g*.45,p,7200,0,1200);osc('square',155,.052,g*.33,p,.6);click(g*.2,p,1900,.003);}
+ else if(type==='rifle'){noise(.078,g*.62,p,5200,0,650);osc('triangle',118,.115,g*.58,p,.42);osc('square',840,.026,g*.11,p,.72,.004);}
+ else if(type==='shotgun'){noise(.16,g*.82,p,3000);osc('sine',68,.23,g*.82,p,.3);noise(.07,g*.24,p,850,.018);}
+ else if(type==='lmg'){noise(.09,g*.66,p,4000);osc('square',86,.12,g*.62,p,.42);osc('triangle',210,.055,g*.18,p,.68,.006);}
+ else if(type==='sniper'){noise(.095,g*.88,p,6500);osc('sine',58,.3,g*.88,p,.27);osc('triangle',1120,.055,g*.23,p,.42,.004);noise(.22,g*.16,p,1350,.045);}
+ else if(type==='launcher'){noise(.13,g*.58,p,1400);osc('sine',52,.34,g*.86,p,.23);osc('triangle',110,.16,g*.42,p,.36,.014);}
 }
-function reloadSound(type,actor,finish=false){const {gain:g,pan:p}=spatial(actor,actor?.isBot?.18:.34);if(finish){click(g,p,type==='shotgun'?820:1250);osc('triangle',type==='launcher'?95:220,.08,g*.42,p,1.25,.035);return;}click(g*.75,p,640);if(type==='shotgun'){click(g*.72,p,950,.18);click(g*.72,p,1020,.38);click(g*.85,p,720,.62);}else if(type==='lmg'){noise(.055,g*.5,p,1600,.08);click(g*.75,p,430,.22);click(g,p,760,.54);}else if(type==='sniper'){click(g*.75,p,520,.08);noise(.045,g*.45,p,2100,.18);click(g,p,930,.46);}else if(type==='launcher'){noise(.07,g*.5,p,900,.06);click(g*.85,p,360,.28);click(g,p,610,.62);}else{click(g*.72,p,920,.14);noise(.035,g*.32,p,2300,.24);click(g*.95,p,1180,.46);}}
-function pickupGunSound(){osc('triangle',420,.08,.16,0,1.35);osc('triangle',620,.09,.17,0,1.26,.07);osc('sine',880,.14,.16,0,1.08,.14);}
-function pickupAmmoSound(){click(.13,0,850);click(.12,0,1120,.055);osc('triangle',310,.08,.1,0,1.18,.025);}
-function swapSound(){noise(.035,.08,0,1800);click(.09,0,740,.025);}
-function emptySound(){click(.11,0,390);click(.07,0,300,.06);}
-function hitSound(){osc('sine',760,.045,.075,0,.72);click(.05,0,1350);}
-function hurtSound(){osc('sine',115,.12,.12,0,.58);noise(.06,.07,0,750);}
-function elimSound(){osc('triangle',350,.08,.12,0,1.4);osc('triangle',520,.1,.14,0,1.35,.07);osc('sine',760,.17,.12,0,1.18,.15);}
+function reloadSound(type,actor,finish=false){const {gain:g,pan:p}=spatial(actor,actor?.isBot?.11:.26);if(finish){click(g,p,type==='shotgun'?800:1220);osc('triangle',type==='launcher'?90:205,.07,g*.34,p,1.2,.028);return;}click(g*.7,p,610);if(type==='shotgun'){click(g*.6,p,940,.16);click(g*.6,p,1010,.34);click(g*.78,p,690,.56);}else if(type==='lmg'){noise(.05,g*.42,p,1500,.07);click(g*.62,p,420,.2);click(g*.8,p,720,.5);}else if(type==='sniper'){click(g*.66,p,500,.07);noise(.04,g*.34,p,1900,.16);click(g*.8,p,900,.42);}else if(type==='launcher'){noise(.06,g*.4,p,850,.05);click(g*.72,p,340,.24);click(g*.8,p,570,.56);}else{click(g*.58,p,880,.12);noise(.03,g*.24,p,2200,.21);click(g*.76,p,1120,.4);}}
+function pickupGunSound(r='basic'){const mul=r==='legendary'?1.12:r==='rare'?1.05:1;osc('triangle',420,.07,.11,0,1.3);osc('triangle',620*mul,.08,.12,0,1.22,.06);osc('sine',880*mul,.12,.1,0,1.06,.12);}
+function pickupAmmoSound(){click(.09,0,820);click(.08,0,1080,.05);osc('triangle',300,.07,.07,0,1.16,.02);}
+function swapSound(){noise(.03,.05,0,1700);click(.06,0,720,.02);}
+function emptySound(){click(.085,0,365);click(.05,0,290,.05);}
+function hurtSound(){osc('sine',108,.1,.075,0,.58);noise(.05,.045,0,680);}
+function elimSound(){osc('triangle',340,.07,.08,0,1.35);osc('triangle',510,.085,.09,0,1.3,.06);osc('sine',740,.14,.08,0,1.12,.13);}
+function meleeSwingSound(id,actor){const {gain:g,pan:p}=spatial(actor,actor?.isBot?.09:.18);if(id==='sean'){noise(.09,g*.65,p,1500);osc('triangle',155,.1,g*.36,p,.55);}else if(id==='shannan'){noise(.035,g*.35,p,5200,0,1500);osc('sine',920,.05,g*.26,p,.72);}else if(id==='erin'){noise(.055,g*.42,p,3300);osc('triangle',470,.065,g*.22,p,.7);}else if(id==='liam'){noise(.07,g*.48,p,900);osc('sine',92,.11,g*.42,p,.62);}else if(id==='connor'){noise(.06,g*.38,p,2800);osc('triangle',380,.08,g*.2,p,.66);}else if(id==='kelly'){noise(.1,g*.62,p,1250);osc('square',125,.1,g*.3,p,.5);}}
+function meleeImpactSound(id,actor){const {gain:g,pan:p}=spatial(actor,actor?.isBot?.12:.24);if(id==='shannan'){click(g*.65,p,1180);noise(.035,g*.25,p,4300);}else if(id==='sean'){noise(.09,g*.65,p,950);osc('sine',115,.09,g*.45,p,.55);}else if(id==='kelly'){noise(.11,g*.72,p,800);osc('sine',74,.13,g*.55,p,.48);}else if(id==='liam'){noise(.1,g*.7,p,650);osc('sine',68,.14,g*.58,p,.45);}else if(id==='connor'){noise(.06,g*.45,p,2400);osc('triangle',260,.07,g*.28,p,.62);}else{noise(.065,g*.5,p,1800);osc('triangle',210,.08,g*.3,p,.58);}}
 
-function casing(scene,actor,type){if(!scene||!actor?.mesh||type==='launcher')return;const c=new THREE.Mesh(new THREE.CylinderGeometry(.018,.018,.09,6),new THREE.MeshStandardMaterial({color:0xcaa24a,metalness:.72,roughness:.32}));c.rotation.z=Math.PI/2;c.position.copy(actor.mesh.position).add(new THREE.Vector3(.28,1.65,.06));scene.add(c);const v=new THREE.Vector3((Math.random()-.25)*2,1.5+Math.random(),(Math.random()-.5)*2),start=performance.now();(function tick(){const dt=.016;v.y-=7.5*dt;c.position.addScaledVector(v,dt);c.rotation.x+=.25;c.rotation.z+=.33;const age=performance.now()-start;if(age<650&&c.position.y>0)requestAnimationFrame(tick);else{c.removeFromParent();c.geometry.dispose();c.material.dispose();}})();}
-function smoke(scene,actor,type){if(!scene||!actor?.mesh)return;const q=new THREE.Mesh(new THREE.SphereGeometry(type==='shotgun'? .13:.08,7,5),new THREE.MeshBasicMaterial({color:0xbcc3c8,transparent:true,opacity:.28,depthWrite:false}));q.position.copy(actor.mesh.position).add(new THREE.Vector3(0,1.72,.3));scene.add(q);const start=performance.now();(function tick(){const t=(performance.now()-start)/360;q.position.y+=.004;q.scale.setScalar(1+t*3);q.material.opacity=.28*(1-t);if(t<1)requestAnimationFrame(tick);else{q.removeFromParent();q.geometry.dispose();q.material.dispose();}})();}
+function casing(scene,actor,type){if(!scene||!actor?.mesh||type==='launcher')return;const c=new THREE.Mesh(new THREE.CylinderGeometry(.018,.018,.09,6),new THREE.MeshStandardMaterial({color:0xcaa24a,metalness:.72,roughness:.32}));c.rotation.z=Math.PI/2;c.position.copy(actor.mesh.position).add(new THREE.Vector3(.28,1.65,.06));scene.add(c);const v=new THREE.Vector3((Math.random()-.25)*1.8,1.4+Math.random(),(Math.random()-.5)*1.6),start=performance.now();(function tick(){const dt=.016;v.y-=7.5*dt;c.position.addScaledVector(v,dt);c.rotation.x+=.25;c.rotation.z+=.33;if(performance.now()-start<580&&c.position.y>0)requestAnimationFrame(tick);else{c.removeFromParent();c.geometry.dispose();c.material.dispose();}})();}
+function smoke(scene,actor,type){if(!scene||!actor?.mesh)return;const q=new THREE.Mesh(new THREE.SphereGeometry(type==='shotgun'?.12:.075,7,5),new THREE.MeshBasicMaterial({color:0xbcc3c8,transparent:true,opacity:.22,depthWrite:false}));q.position.copy(actor.mesh.position).add(new THREE.Vector3(0,1.72,.3));scene.add(q);const start=performance.now();(function tick(){const t=(performance.now()-start)/320;q.position.y+=.003;q.scale.setScalar(1+t*2.6);q.material.opacity=.22*(1-t);if(t<1)requestAnimationFrame(tick);else{q.removeFromParent();q.geometry.dispose();q.material.dispose();}})();}
+function reloadBar(show,duration=900){let el=document.getElementById('bbReloadBar');if(!el){el=document.createElement('div');el.id='bbReloadBar';Object.assign(el.style,{position:'fixed',left:'50%',bottom:'18%',width:'180px',height:'6px',transform:'translateX(-50%)',borderRadius:'999px',background:'rgba(255,255,255,.15)',overflow:'hidden',zIndex:'30',display:'none',pointerEvents:'none'});const f=document.createElement('div');f.id='bbReloadFill';Object.assign(f.style,{height:'100%',width:'0%',background:'#f3d37a'});el.appendChild(f);document.body.appendChild(el);}if(!show){el.style.display='none';return;}el.style.display='block';const f=el.firstChild;f.style.transition='none';f.style.width='0%';requestAnimationFrame(()=>{f.style.transition=`width ${duration}ms linear`;f.style.width='100%';});}
+function hudPolish(p){const ammo=document.getElementById('ammoText');if(!ammo||!p)return;const w=p.weapons?.[p.slot];if(!w){ammo.style.color='';ammo.style.textShadow='';return;}const ratio=w.ammo/(MAG[w.type]||1);if(w.ammo===0){ammo.style.color='#ff6b6b';ammo.style.textShadow='0 0 10px rgba(255,70,70,.5)';}else if(ratio<=.25){ammo.style.color='#ffd166';ammo.style.textShadow='0 0 8px rgba(255,209,102,.35)';}else{ammo.style.color='';ammo.style.textShadow='';}}
+function snap(a){return{slot:a.slot||0,health:a.health??100,dead:!!a.dead,lastMelee:a.lastMelee||0,weapons:(a.weapons||[]).map(w=>({type:w.type,ammo:w.ammo??0,reserve:w.reserve??0,rarity:w.rarity||'basic'}))};}
+function compareActor(scene,a,p,list,nowMs){const prev=actorState.get(a),cur=snap(a);if(!prev){actorState.set(a,cur);return;}const oldW=prev.weapons[prev.slot],newW=cur.weapons[cur.slot];if(a===p&&prev.slot!==cur.slot&&newW)swapSound();if(cur.lastMelee&&cur.lastMelee!==prev.lastMelee){meleeSwingSound(a.charId,a);recentMelee.push({a,time:nowMs});}
+ const max=Math.max(prev.weapons.length,cur.weapons.length);for(let i=0;i<max;i++){const o=prev.weapons[i],n=cur.weapons[i];if(!n)continue;if(!o||o.type!==n.type){if(a===p)pickupGunSound(n.rarity);continue;}if(n.ammo<o.ammo){gunSound(n.type,a);casing(scene,a,n.type);smoke(scene,a,n.type);if(a===p&&n.ammo===0&&n.reserve>0)setTimeout(()=>{reloadSound(n.type,a,false);reloadBar(true,RELOAD_MS[n.type]||1000);},165);}if(n.ammo>o.ammo&&n.reserve<o.reserve){reloadSound(n.type,a,true);if(a===p)reloadBar(false);}else if(n.reserve>o.reserve&&n.ammo===o.ammo&&a===p)pickupAmmoSound();if(a===p&&o.type===n.type&&o.rarity!==n.rarity)pickupGunSound(n.rarity);}
+ if(cur.health<prev.health){recentMelee=recentMelee.filter(x=>nowMs-x.time<220);const hit=recentMelee.find(x=>x.a!==a&&!x.a.dead&&x.a.mesh.position.distanceTo(a.mesh.position)<3.5);if(hit)meleeImpactSound(hit.a.charId,hit.a);if(a===p)hurtSound();}
+ if(a===p&&cur.dead&&!prev.dead){elimSound();reloadBar(false);}actorState.set(a,cur);}
 
-function hudPolish(p){const ammo=document.getElementById('ammoText'),name=document.getElementById('weaponName');if(!ammo||!name||!p)return;const w=p.weapons?.[p.slot];if(!w){ammo.style.color='';name.style.textShadow='';return;}const mag=MAG[w.type]||1,ratio=w.ammo/mag;ammo.style.transition='color .12s, text-shadow .12s';if(w.ammo===0){ammo.style.color='#ff6b6b';ammo.style.textShadow='0 0 10px rgba(255,70,70,.6)';}else if(ratio<=.25){ammo.style.color='#ffd166';ammo.style.textShadow='0 0 9px rgba(255,209,102,.45)';}else{ammo.style.color='';ammo.style.textShadow='';}}
-function reloadBar(show,type,duration=900){let el=document.getElementById('bbReloadBar');if(!el){el=document.createElement('div');el.id='bbReloadBar';Object.assign(el.style,{position:'fixed',left:'50%',bottom:'18%',width:'180px',height:'6px',transform:'translateX(-50%)',borderRadius:'999px',background:'rgba(255,255,255,.15)',overflow:'hidden',zIndex:'30',display:'none',pointerEvents:'none'});const fill=document.createElement('div');fill.id='bbReloadFill';Object.assign(fill.style,{height:'100%',width:'0%',background:'#f3d37a'});el.appendChild(fill);document.body.appendChild(el);}if(!show){el.style.display='none';return;}el.style.display='block';const f=el.firstChild;f.style.transition='none';f.style.width='0%';requestAnimationFrame(()=>{f.style.transition=`width ${duration}ms linear`;f.style.width='100%';});}
+document.addEventListener('keydown',e=>{if(e.repeat||!activeScene||!isMatch(activeScene))return;const list=actors(activeScene),p=human(list),w=p?.weapons?.[p.slot];if(!p||p.dead)return;if(e.code==='KeyR'&&w&&w.ammo<(MAG[w.type]||w.ammo+1)&&w.reserve>0){reloadSound(w.type,p,false);reloadBar(true,RELOAD_MS[w.type]||1000);}if(e.code==='KeyJ'&&w&&w.ammo<=0)emptySound();},true);
+document.addEventListener('mousedown',e=>{if(e.button!==0||!activeScene||!isMatch(activeScene))return;const list=actors(activeScene),p=human(list),w=p?.weapons?.[p.slot];if(w&&w.ammo<=0)emptySound();},true);
 
-function snapshot(a){return {slot:a.slot||0,health:a.health??100,dead:!!a.dead,weapons:(a.weapons||[]).map(w=>({type:w.type,ammo:w.ammo??0,reserve:w.reserve??0,rarity:w.rarity||'basic'}))};}
-function compareActor(scene,a,p){const prev=actorState.get(a),now=snapshot(a);if(!prev){actorState.set(a,now);return;}
- const oldW=prev.weapons[prev.slot],newW=now.weapons[now.slot];
- if(a===p&&prev.slot!==now.slot&&newW)swapSound();
- const max=Math.max(prev.weapons.length,now.weapons.length);for(let i=0;i<max;i++){const o=prev.weapons[i],n=now.weapons[i];if(!n)continue;if(!o||o.type!==n.type){if(a===p)pickupGunSound();continue;}if(n.ammo<o.ammo){gunSound(n.type,a);casing(scene,a,n.type);smoke(scene,a,n.type);if(a===p&&n.ammo===0&&n.reserve>0){setTimeout(()=>{reloadSound(n.type,a,false);reloadBar(true,n.type,RELOAD_MS[n.type]||1000);},170);}}if(n.ammo>o.ammo&&n.reserve<o.reserve){reloadSound(n.type,a,true);if(a===p)reloadBar(false,n.type);}else if(n.reserve>o.reserve&&n.ammo===o.ammo){if(a===p)pickupAmmoSound();}}
- if(a===p&&now.health<prev.health)hurtSound();
- if(a===p&&now.dead&&!prev.dead){elimSound();reloadBar(false);}
- actorState.set(a,now);
-}
+document.addEventListener('bb:loot-open',e=>{wake();const kind=e.detail?.kind;if(kind==='toy'){osc('triangle',280,.09,.11,0,1.45);click(.09,0,820,.05);osc('sine',720,.16,.09,0,1.22,.1);}else{click(.07,0,520);noise(.055,.05,0,1500,.03);osc('triangle',260,.08,.06,0,1.18,.07);}});
+document.addEventListener('bb:loot-take',e=>pickupGunSound(e.detail?.rarity||'basic'));
 
-// Manual reload / empty-mag feedback happens immediately; completion is detected from state.
-document.addEventListener('keydown',e=>{if(e.repeat||!activeScene||!isMatch(activeScene))return;const p=human(activeScene);if(!p||p.dead)return;const w=p.weapons?.[p.slot];if(e.code==='KeyR'&&w&&w.ammo<(MAG[w.type]||w.ammo+1)&&w.reserve>0){reloadSound(w.type,p,false);reloadBar(true,w.type,RELOAD_MS[w.type]||1000);}if((e.code==='KeyJ')&&w&&w.ammo<=0)emptySound();},true);
-document.addEventListener('mousedown',e=>{if(e.button!==0||!activeScene||!isMatch(activeScene))return;const p=human(activeScene),w=p?.weapons?.[p.slot];if(w&&w.ammo<=0)emptySound();},true);
-
-THREE.WebGLRenderer.prototype.render=function(scene,camera){activeScene=scene;activeCamera=camera;let st=states.get(scene);if(!st){st={lastHealth:new WeakMap()};states.set(scene,st);}if(isMatch(scene)){const list=actors(scene),p=human(scene);for(const a of list)compareActor(scene,a,p);hudPolish(p);}return previousRender.call(this,scene,camera);};
-
-window.__bbGameplayAudioV20={version:20,guns:['pistol','smg','rifle','shotgun','lmg','sniper','launcher'],features:['distinct-gun-sfx','spatial-bot-gunfire','reload-start-finish','gun-pickup','ammo-pickup','empty-click','swap-cue','damage-elim-cues','casings','muzzle-smoke','low-ammo-hud','reload-progress']};
+THREE.WebGLRenderer.prototype.render=function(scene,camera){activeScene=scene;activeCamera=camera;if(isMatch(scene)){const list=actors(scene),p=human(list),now=performance.now();for(const a of list)compareActor(scene,a,p,list,now);recentMelee=recentMelee.filter(x=>now-x.time<240);hudPolish(p);}return previousRender.call(this,scene,camera);};
+window.__bbGameplayAudioV20={version:20,mix:'refined-compressed',guns:['pistol','smg','rifle','shotgun','lmg','sniper','launcher'],features:['distinct-gun-sfx','compressed-8-player-mix','spatial-bot-gunfire','character-melee-sfx','reload-start-finish','rarity-pickup','ammo-pickup','empty-click','swap-cue','damage-elim-cues','casings','muzzle-smoke','low-ammo-hud','reload-progress']};
