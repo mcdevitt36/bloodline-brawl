@@ -1,0 +1,135 @@
+
+
+/* =============================================================
+   WARFARE V40 — SHOOTER CONTROL / GUN STANCE REFINEMENT V43
+   - K shoots / melees; J aims
+   - true two-bone arm placement puts both hands on equipped gun
+   - raises weapon/muzzle from belly to shoulder/chest firing line
+   - persistent spectating exit controls
+   ============================================================= */
+
+let keyboardFireV43=false;
+let spectateActionsV43=null;
+
+function ensureSpectateActionsV43(){
+  if(spectateActionsV43?.isConnected)return spectateActionsV43;
+  const bar=document.createElement('div');
+  bar.id='spectateActionsV43';
+  bar.style.cssText='position:fixed;left:50%;bottom:28px;transform:translateX(-50%);z-index:80;display:none;align-items:center;gap:8px;padding:9px 10px;border:1px solid rgba(255,255,255,.16);border-radius:14px;background:rgba(5,10,17,.88);backdrop-filter:blur(10px);box-shadow:0 14px 36px rgba(0,0,0,.36);pointer-events:auto';
+  const label=document.createElement('span');
+  label.textContent='SPECTATING';
+  label.style.cssText='padding:0 7px;color:#c6d5e8;font:900 10px/1 Arial,sans-serif;letter-spacing:.14em';
+  const hub=document.createElement('button');
+  hub.textContent='RETURN TO HUB';
+  hub.style.cssText='border:0;border-radius:10px;padding:10px 13px;background:#286cc9;color:#fff;font:900 10px/1 Arial,sans-serif;letter-spacing:.06em;cursor:pointer';
+  hub.onclick=()=>{bar.style.display='none';enterHubV42();};
+  const home=document.createElement('button');
+  home.textContent='HOME';
+  home.style.cssText='border:1px solid rgba(255,255,255,.14);border-radius:10px;padding:10px 13px;background:#251217;color:#ffd7d7;font:900 10px/1 Arial,sans-serif;letter-spacing:.06em;cursor:pointer';
+  home.onclick=()=>{location.href='index.html';};
+  bar.append(label,hub,home);document.body.appendChild(bar);spectateActionsV43=bar;return bar;
+}
+
+function syncSpectateActionsV43(){
+  const bar=ensureSpectateActionsV43();
+  bar.style.display=state.spectating&&state.phase==='spectate'?'flex':'none';
+}
+
+const legacyHUDV43=updateHUD;
+updateHUD=function(){legacyHUDV43();syncSpectateActionsV43();};
+
+const DOWN_V43=new THREE.Vector3(0,-1,0);
+function poseArmToGripV43(arm,target,side){
+  if(!arm?.shoulder||!arm?.elbow)return;
+  const L1=.43,L2=.46;
+  const start=arm.shoulder.position.clone();
+  const delta=target.clone().sub(start);
+  const raw=Math.max(.001,delta.length());
+  const dist=clamp(raw,.12,L1+L2-.012);
+  const dir=delta.normalize();
+  const along=(L1*L1-L2*L2+dist*dist)/(2*dist);
+  const height=Math.sqrt(Math.max(0,L1*L1-along*along));
+  let bend=new THREE.Vector3(side*.9,-.16,.28);
+  bend.addScaledVector(dir,-bend.dot(dir));
+  if(bend.lengthSq()<.001)bend.set(side,0,0);
+  bend.normalize();
+  const elbowPoint=start.clone().addScaledVector(dir,along).addScaledVector(bend,height);
+  const upperDir=elbowPoint.clone().sub(start).normalize();
+  arm.shoulder.quaternion.setFromUnitVectors(DOWN_V43,upperDir);
+  const actualElbow=new THREE.Vector3(0,-L1,0).applyQuaternion(arm.shoulder.quaternion).add(start);
+  const foreWorld=target.clone().sub(actualElbow).normalize();
+  const invShoulder=arm.shoulder.quaternion.clone().invert();
+  const foreLocal=foreWorld.applyQuaternion(invShoulder).normalize();
+  arm.elbow.quaternion.setFromUnitVectors(DOWN_V43,foreLocal);
+}
+
+function gripProfileV43(type){
+  if(type==='pistol')return{right:new THREE.Vector3(.15,-.18,.10),left:new THREE.Vector3(-.03,-.15,.015)};
+  if(type==='shotgun')return{right:new THREE.Vector3(.15,-.15,.14),left:new THREE.Vector3(-.04,-.015,-.34)};
+  if(type==='sniper')return{right:new THREE.Vector3(.15,-.15,.15),left:new THREE.Vector3(-.04,.01,-.43)};
+  if(type==='lmg')return{right:new THREE.Vector3(.16,-.16,.13),left:new THREE.Vector3(-.05,-.035,-.31)};
+  return{right:new THREE.Vector3(.15,-.16,.12),left:new THREE.Vector3(-.05,-.02,-.36)};
+}
+
+const legacyAnimationsV43=updateAnimations;
+updateAnimations=function(dt,t){
+  legacyAnimationsV43(dt,t);
+  for(const a of actors){
+    if(a.dead)continue;
+    const w=currentWeapon(a),rig=a.mesh.userData.rig;
+    if(!w||!rig?.gunAnchor)continue;
+
+    // Put the gun on the shoulder/chest firing line rather than the abdomen.
+    rig.gunAnchor.position.set(.02,1.90,-.50);
+    let pitch=0;
+    if(a===player)pitch=cameraPitch*.76;
+    else if(a.target&&!a.target.dead){
+      const dy=(a.target.mesh.position.y+1.45)-(a.mesh.position.y+1.90);
+      const dx=a.target.mesh.position.x-a.mesh.position.x,dz=a.target.mesh.position.z-a.mesh.position.z;
+      pitch=Math.atan2(dy,Math.max(.01,Math.hypot(dx,dz)))*.82;
+    }
+    rig.gunAnchor.rotation.x=pitch-rigOffset(a.recoil,.09);
+    rig.gunAnchor.rotation.y=0;
+    rig.gunAnchor.rotation.z=0;
+    rig.gunAnchor.updateMatrix();
+
+    // Weapon-space grip locations become body-local targets for the real hands.
+    const grip=gripProfileV43(w.type);
+    const rightTarget=grip.right.clone().applyMatrix4(rig.gunAnchor.matrix);
+    const leftTarget=grip.left.clone().applyMatrix4(rig.gunAnchor.matrix);
+    poseArmToGripV43(rig.rightArm,rightTarget,1);
+    poseArmToGripV43(rig.leftArm,leftTarget,-1);
+  }
+};
+
+// Keyboard layout: K = fire/melee, J = aim. Mouse remains LMB fire / RMB aim.
+addEventListener('keydown',e=>{
+  if(e.code!=='KeyJ'&&e.code!=='KeyK')return;
+  e.preventDefault();e.stopImmediatePropagation();
+  if(e.code==='KeyJ'){
+    aiming=true;
+    return;
+  }
+  keyboardFireV43=true;
+  if(!e.repeat)attack(player);
+},true);
+
+addEventListener('keyup',e=>{
+  if(e.code!=='KeyJ'&&e.code!=='KeyK')return;
+  e.preventDefault();e.stopImmediatePropagation();
+  if(e.code==='KeyJ')aiming=false;
+  if(e.code==='KeyK')keyboardFireV43=false;
+},true);
+
+const legacyHumanV43=updateHuman;
+updateHuman=function(dt,t){
+  legacyHumanV43(dt,t);
+  if(keyboardFireV43&&player&&!player.dead&&!state.spectating){
+    const w=currentWeapon(player);
+    if(w?.def?.auto)attack(player);
+  }
+};
+
+addEventListener('blur',()=>{keyboardFireV43=false;});
+
+window.__bbWarfareShooterRefineV43={version:43,shootKey:'K',aimKey:'J',twoHandGunPose:true,spectateExit:true};
