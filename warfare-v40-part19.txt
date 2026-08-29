@@ -1,0 +1,23 @@
+eleeAnchor.visible=!armed;rig.gunAnchor.visible=armed;
+    if(armed){rig.leftArm.shoulder.rotation.x=-1.0-rigOffset(a.recoil,.12);rig.rightArm.shoulder.rotation.x=-1.12-rigOffset(a.recoil,.18);rig.leftArm.shoulder.rotation.z=-.38;rig.rightArm.shoulder.rotation.z=.28;rig.leftArm.elbow.rotation.x=-.75;rig.rightArm.elbow.rotation.x=-.58;rig.gunAnchor.rotation.x=-(a===player?cameraPitch:0)*.55-rigOffset(a.recoil,.13);rig.gunAnchor.rotation.y=0;rig.gunAnchor.position.x=.08;rig.gunAnchor.position.z=-.4;}
+    else if(meleeAge>=0&&meleeAge<1){const arc=Math.sin(meleeAge*Math.PI);rig.rightArm.shoulder.rotation.x=-.25-arc*1.7;rig.rightArm.shoulder.rotation.z=.05-arc*.42;rig.rightArm.elbow.rotation.x=-arc*.65;rig.meleeAnchor.rotation.x=-arc*1.25;rig.meleeAnchor.rotation.y=arc*.8;}
+    else {rig.leftArm.shoulder.rotation.x=-stride*.55;rig.rightArm.shoulder.rotation.x=stride*.55;rig.leftArm.shoulder.rotation.z=-.06;rig.rightArm.shoulder.rotation.z=.06;rig.leftArm.elbow.rotation.x=-.12;rig.rightArm.elbow.rotation.x=-.12;rig.meleeAnchor.rotation.x=0;rig.meleeAnchor.rotation.y=0;}
+    rig.headGroup.rotation.y=speed>.2?Math.sin(a.walkPhase*2.2)*.025:Math.sin(t*.0012+a.mesh.id)*.03;
+    if(t<a.hitReact)rig.visual.rotation.z=Math.sin((a.hitReact-t)*.08)*.035;else rig.visual.rotation.z=0;
+    a.recoil=THREE.MathUtils.damp(a.recoil,0,12,dt);
+  }
+}
+function rigOffset(v,m){return v*m;}
+
+function updatePickups(t){for(const p of pickups){if(p.taken)continue;p.group.rotation.y+=.012;p.group.position.y=p.baseY+Math.sin(t*.0022+p.phase)*.12;}for(const c of containers){if(c.opened)continue;c.group.position.y=.02+Math.sin(t*.0017+c.phase)*.025;}}
+
+function updateInteractionPrompt(){
+  if(!player||player.dead||state.spectating){interactionPrompt.classList.add('hidden');return;}
+  let best=null,bd=2.7;
+  for(const p of pickups){if(p.taken)continue;const d=player.mesh.position.distanceTo(p.group.position);if(d<bd){bd=d;best=p.type==='weapon'?`${WEAPONS[p.weaponType].name} • E TO PICK UP`:p.type==='heal'?'MED KIT • E TO USE':'AMMO • E TO PICK UP';}}
+  for(const c of containers){if(c.opened)continue;const d=player.mesh.position.distanceTo(c.group.position);if(d<bd){bd=d;best=`${c.cfg.name} • E TO OPEN`;}}
+  if(best){interactionPrompt.textContent=best;interactionPrompt.classList.remove('hidden');}else interactionPrompt.classList.add('hidden');
+}
+
+function updateHUD(){
+  if(!player)return;healthText.textContent=Math.max(0,Math.round(player.health));healthFill.style.width=`${clamp(player.health/player.maxHealth*100,0,100)}%`;specialFill.style.width=`${player.special}%`;ultraFill.style.width=`${player.ultra}%`;aliveText.textContent=`${actors.filter(a=>!a.dead).length} ALIVE`;statsKills.text
