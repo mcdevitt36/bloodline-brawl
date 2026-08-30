@@ -1,0 +1,94 @@
+/* =============================================================
+   WARFARE V40 — TACTICAL BOT OVERHAUL V48
+   Less robotic movement, bursts, hesitation and repositioning.
+   ============================================================= */
+
+const botBrainV48=new WeakMap();
+window.__bbWarfareBotsV48={version:48,tacticalMovement:true,burstLogic:true,humanizedAim:true};
+
+function brainV48(bot,t){
+  let b=botBrainV48.get(bot);
+  if(!b){b={mode:'seek',until:t+rand(450,900),strafe:Math.random()<.5?-1:1,burst:0,burstEnd:0,pauseUntil:0,peek:rand(.5,1.2),pace:rand(.90,1.08),crouchUntil:0,retargetAt:0,lastTarget:null};botBrainV48.set(bot,b);}
+  return b;
+}
+function chooseModeV48(bot,b,dist,def,t){
+  if(t<b.until)return;
+  const r=Math.random();
+  if(!def)b.mode='push';
+  else if(dist<5)b.mode=r<.55?'retreat':'strafe';
+  else if(def===WEAPONS.shotgun)b.mode=r<.58?'push':'strafe';
+  else if(def===WEAPONS.sniper)b.mode=r<.55?'retreat':r<.82?'hold':'strafe';
+  else b.mode=r<.28?'push':r<.45?'retreat':r<.82?'strafe':'hold';
+  b.strafe=Math.random()<.5?-1:1;b.pace=rand(.90,1.08);b.until=t+rand(620,1450);
+  if(Math.random()<.17)b.crouchUntil=t+rand(280,760);
+}
+function desiredBotMoveV48(bot,target,b,dist,def,t){
+  const to=target.mesh.position.clone().sub(bot.mesh.position).setY(0);if(to.lengthSq()<.001)return new THREE.Vector3();
+  const f=to.normalize(),side=new THREE.Vector3(-f.z,0,f.x).multiplyScalar(b.strafe);
+  let v=new THREE.Vector3();
+  if(b.mode==='push')v.addScaledVector(f,1).addScaledVector(side,.22);
+  else if(b.mode==='retreat')v.addScaledVector(f,-.85).addScaledVector(side,.35);
+  else if(b.mode==='strafe')v.addScaledVector(side,1).addScaledVector(f,Math.sin(t*.0014+bot.thinkAt)*.18);
+  else if(b.mode==='hold')v.addScaledVector(side,.24);
+  const wobble=Math.sin(t*.0023+(bot.thinkAt||0))*0.10;v.addScaledVector(side,wobble);
+  return v;
+}
+function botCanShootV48(bot,target,dist,def,b,t){
+  if(!def||dist>def.range||!hasLineOfSight(bot,target)||t<bot.reactionReadyAt||t<b.pauseUntil)return false;
+  if(b.burst<=0||t>b.burstEnd){
+    const max=def===WEAPONS.smg||def===WEAPONS.lmg?Math.floor(rand(3,7)):def===WEAPONS.rifle?Math.floor(rand(2,5)):1;
+    b.burst=max;b.burstEnd=t+rand(320,720);
+  }
+  return b.burst>0;
+}
+
+updateBots=function(dt,t){
+  if(state.phase!=='grace'&&state.phase!=='fight'&&state.phase!=='spectate')return;
+  for(const bot of actors){
+    if(!bot.isBot||bot.dead)continue;
+    const b=brainV48(bot,t);
+    if(bot.reloading&&t>=bot.reloadEnd)finishReload(bot);
+    const w=currentWeapon(bot),def=w?.def;
+
+    if(!w){
+      const pick=nearestAvailablePickup(bot.mesh.position,'weapon');
+      if(pick){const dir=pick.group.position.clone().sub(bot.mesh.position).setY(0),d=dir.length();if(d<1.7)takePickup(bot,pick);else moveBotToward(bot,dir,dt,8.0*b.pace);}
+      else wanderBot(bot,dt,t);
+      continue;
+    }
+
+    if(!bot.target||bot.target.dead||t>b.retargetAt){
+      const old=bot.target;bot.target=nearestEnemy(bot);b.retargetAt=t+rand(420,880);
+      if(bot.target!==old){bot.reactionReadyAt=t+rand(330,760);b.pauseUntil=t+rand(90,260);b.burst=0;}
+    }
+    const target=bot.target;if(!target){wanderBot(bot,dt,t);continue;}
+    const delta=target.mesh.position.clone().sub(bot.mesh.position),dist=delta.length();
+    chooseModeV48(bot,b,dist,def,t);
+    bot.crouching=t<b.crouchUntil;
+
+    const move=desiredBotMoveV48(bot,target,b,dist,def,t);
+    const base=def===WEAPONS.shotgun?8.3:def===WEAPONS.sniper?6.2:7.1;
+    moveBotToward(bot,move,dt,base*b.pace*(bot.crouching?.64:1));
+
+    // Smooth turning instead of snapping directly at the target every frame.
+    const desiredYaw=Math.atan2(-delta.x,-delta.z);
+    bot.heading=desiredYaw;
+    bot.mesh.rotation.y=THREE.MathUtils.damp(bot.mesh.rotation.y,desiredYaw,5.0+Math.random()*1.2,dt);
+
+    if((state.phase==='fight'||state.phase==='spectate')){
+      if(dist<(CHARACTERS[bot.charId]?.meleeRange||2.5)+.35&&Math.random()<.055){meleeAttack(bot);b.pauseUntil=t+rand(260,520);}
+      else if(botCanShootV48(bot,target,dist,def,b,t)){
+        const before=w.mag;botShoot(bot,target,dist);
+        if(w.mag<before){b.burst--;if(b.burst<=0){b.pauseUntil=t+rand(def.auto?330:500,def.auto?820:1050);if(Math.random()<.38)b.strafe*=-1;}}
+      }
+    }
+
+    // Human-looking anti-stuck correction with a turn rather than teleport-like nudges.
+    if(t-(bot.stuckAt||0)>900){
+      bot.stuckPos ||= bot.mesh.position.clone();
+      const moved=bot.mesh.position.distanceTo(bot.stuckPos);
+      if(moved<.42){b.strafe*=-1;b.mode='push';b.until=t+600;const side=new THREE.Vector3(Math.cos(bot.mesh.rotation.y),0,-Math.sin(bot.mesh.rotation.y));moveBotToward(bot,side.multiplyScalar(b.strafe),dt,8.4);}
+      bot.stuckAt=t;bot.stuckPos.copy(bot.mesh.position);
+    }
+  }
+};
