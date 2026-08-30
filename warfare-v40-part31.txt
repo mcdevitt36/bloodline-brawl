@@ -1,0 +1,79 @@
+/* =============================================================
+   WARFARE V40 — WORLD + ATMOSPHERE OVERHAUL V48
+   Map identity, particles, animated lighting and environmental life.
+   ============================================================= */
+
+let atmosphereV48=null;
+const atmosphereBitsV48=[];
+window.__bbWarfareWorldV48={version:48,cityAtmosphere:true,hauntedAtmosphere:true,hubAtmosphere:true};
+
+function disposeAtmosphereV48(){
+  if(atmosphereV48?.parent)atmosphereV48.parent.remove(atmosphereV48);
+  atmosphereV48=null;atmosphereBitsV48.length=0;
+}
+function glowMatV48(c,opacity=.9){const m=new THREE.MeshBasicMaterial({color:c,transparent:true,opacity,depthWrite:false});return m;}
+function addParticleFieldV48(group,count,spreadY,color,size=.055){
+  const geo=new THREE.BufferGeometry(),arr=new Float32Array(count*3);
+  for(let i=0;i<count;i++){arr[i*3]=rand(-56,56);arr[i*3+1]=rand(.3,spreadY);arr[i*3+2]=rand(-56,56);}
+  geo.setAttribute('position',new THREE.BufferAttribute(arr,3));
+  const mat=new THREE.PointsMaterial({color,size,transparent:true,opacity:.42,depthWrite:false,sizeAttenuation:true});
+  const p=new THREE.Points(geo,mat);group.add(p);atmosphereBitsV48.push({kind:'particles',obj:p,baseY:0,speed:rand(.012,.026)});return p;
+}
+function beaconV48(group,x,y,z,color){
+  const g=new THREE.Group();g.position.set(x,y,z);group.add(g);
+  const ring=new THREE.Mesh(new THREE.TorusGeometry(.36,.035,8,24),glowMatV48(color,.85));ring.rotation.x=Math.PI/2;g.add(ring);
+  const orb=new THREE.Mesh(new THREE.SphereGeometry(.09,10,8),glowMatV48(color,1));g.add(orb);
+  const light=new THREE.PointLight(color,1.4,8,2);g.add(light);atmosphereBitsV48.push({kind:'beacon',obj:g,phase:Math.random()*6.28});
+}
+function buildCityAtmosphereV48(group){
+  addParticleFieldV48(group,150,22,0xaad7ff,.035);
+  [[-38,8,-32,0x55aaff],[35,7,-28,0xff4fca],[-31,6,35,0x53e7ff],[39,9,30,0xffba5b]].forEach(v=>beaconV48(group,...v));
+  // Distant traffic/aircraft light streaks.
+  for(let i=0;i<7;i++){
+    const g=new THREE.Group();g.position.set(rand(-48,48),rand(10,20),rand(-48,48));
+    const a=new THREE.Mesh(new THREE.SphereGeometry(.045,6,4),glowMatV48(i%2?0xff5f5f:0xd9f2ff,1));
+    const b=a.clone();b.position.x=.32;g.add(a,b);group.add(g);atmosphereBitsV48.push({kind:'drone',obj:g,phase:rand(0,6.28),speed:rand(.4,.75)});
+  }
+  const rim=new THREE.DirectionalLight(0x76b9ff,1.05);rim.position.set(-20,32,-14);group.add(rim);
+  const warm=new THREE.HemisphereLight(0x8fc9ff,0x25180f,.62);group.add(warm);
+}
+function buildHauntedAtmosphereV48(group){
+  addParticleFieldV48(group,220,15,0xb7d8c5,.05);
+  for(let i=0;i<42;i++){
+    const s=new THREE.Mesh(new THREE.SphereGeometry(.025,5,4),glowMatV48(i%3===0?0x93ffa4:0xd8ffcc,.8));
+    s.position.set(rand(-48,48),rand(.5,7),rand(-48,48));group.add(s);atmosphereBitsV48.push({kind:'firefly',obj:s,phase:rand(0,6.28),speed:rand(.8,1.8)});
+  }
+  const moon=new THREE.DirectionalLight(0xaec8ff,1.18);moon.position.set(-24,36,-30);group.add(moon);
+  const fill=new THREE.HemisphereLight(0x55759a,0x101516,.50);group.add(fill);
+  [[-18,1.5,-18],[18,1.5,18],[-28,1.5,24],[29,1.5,-20]].forEach((p,i)=>beaconV48(group,...p,i%2?0xff9e57:0x72d8a1));
+}
+function buildHubAtmosphereV48(group){
+  addParticleFieldV48(group,95,13,0xe9f6ff,.04);
+  for(let i=0;i<6;i++)beaconV48(group,-20+i*8,1.2,rand(-20,20),i%2?0x55d8ff:0xffc56b);
+  const sun=new THREE.DirectionalLight(0xffe4bd,.85);sun.position.set(18,34,22);group.add(sun);
+}
+function createAtmosphereV48(kind){
+  if(!scene)return;disposeAtmosphereV48();const g=new THREE.Group();g.name='WARFARE_V48_ATMOSPHERE';scene.add(g);atmosphereV48=g;
+  if(kind==='city')buildCityAtmosphereV48(g);else if(kind==='haunted')buildHauntedAtmosphereV48(g);else buildHubAtmosphereV48(g);
+}
+
+const legacyStartWorldV48=startMatch;
+startMatch=function(){legacyStartWorldV48();createAtmosphereV48(state.selectedMap);};
+if(typeof enterHubV42==='function'){
+  const legacyHubWorldV48=enterHubV42;
+  enterHubV42=function(){legacyHubWorldV48();createAtmosphereV48('hub');};
+}
+const legacyReturnWorldV48=returnToWarfare;
+returnToWarfare=function(){disposeAtmosphereV48();legacyReturnWorldV48();};
+
+const legacyEffectsWorldV48=updateEffects;
+updateEffects=function(t){
+  legacyEffectsWorldV48(t);if(!atmosphereV48)return;
+  for(const b of atmosphereBitsV48){
+    if(!b.obj?.parent)continue;
+    if(b.kind==='beacon'){const pulse=.92+Math.sin(t*.003+b.phase)*.08;b.obj.scale.setScalar(pulse);b.obj.rotation.y+=.006;}
+    else if(b.kind==='drone'){b.obj.position.x+=b.speed*.016;if(b.obj.position.x>58)b.obj.position.x=-58;b.obj.position.y+=Math.sin(t*.001+b.phase)*.0015;}
+    else if(b.kind==='firefly'){b.obj.position.y+=Math.sin(t*.002*b.speed+b.phase)*.0025;b.obj.material.opacity=.48+Math.sin(t*.003*b.speed+b.phase)*.30;}
+    else if(b.kind==='particles'){b.obj.rotation.y+=b.speed*.0009;b.obj.position.y=Math.sin(t*.00018)*.12;}
+  }
+};
