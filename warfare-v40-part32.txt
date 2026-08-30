@@ -1,0 +1,76 @@
+/* =============================================================
+   WARFARE V40 — SHOOTER HUD + FEEDBACK OVERHAUL V48
+   Compass, stamina, reload, streaks, low-health and phase clarity.
+   ============================================================= */
+
+let hud48=null;
+let killStreakV48=0;
+let streakBannerUntilV48=0;
+let lastPlayerDeathStateV48=false;
+window.__bbWarfareHUDV48={version:48,compass:true,stamina:true,streaks:true,reloadUI:true};
+
+function ensureHUDV48(){
+  if(hud48?.root?.isConnected)return hud48;
+  const root=document.createElement('div');root.id='warfareHudV48';
+  root.innerHTML=`
+    <div class="v48-compass"><span class="v48-west">W</span><b class="v48-heading">N</b><span class="v48-east">E</span></div>
+    <div class="v48-phase">WARFARE</div>
+    <div class="v48-stamina"><span>SPRINT</span><div><i></i></div></div>
+    <div class="v48-reload">RELOADING <b>0.0</b></div>
+    <div class="v48-streak"></div>
+    <div class="v48-danger"></div>
+    <div class="v48-center-status"></div>`;
+  document.body.appendChild(root);
+  hud48={root,heading:root.querySelector('.v48-heading'),phase:root.querySelector('.v48-phase'),stamina:root.querySelector('.v48-stamina i'),reload:root.querySelector('.v48-reload'),reloadTime:root.querySelector('.v48-reload b'),streak:root.querySelector('.v48-streak'),danger:root.querySelector('.v48-danger'),status:root.querySelector('.v48-center-status')};
+  return hud48;
+}
+function headingV48(yaw){
+  let deg=(((-yaw*180/Math.PI)+180)%360+360)%360;
+  const dirs=['N','NE','E','SE','S','SW','W','NW'];return{deg,label:dirs[Math.round(deg/45)%8]};
+}
+function showCenterStatusV48(text,kind='info',ms=850){
+  const h=ensureHUDV48();h.status.textContent=text;h.status.className=`v48-center-status show ${kind}`;clearTimeout(h.status._timer);h.status._timer=setTimeout(()=>h.status.className='v48-center-status',ms);
+}
+function showStreakV48(){
+  const h=ensureHUDV48();if(killStreakV48<2)return;
+  const names={2:'DOUBLE ELIM',3:'TRIPLE ELIM',4:'RAMPAGE',5:'UNSTOPPABLE'};
+  h.streak.textContent=names[killStreakV48]||`${killStreakV48} ELIM STREAK`;
+  h.streak.classList.remove('show');void h.streak.offsetWidth;h.streak.classList.add('show');streakBannerUntilV48=now()+1800;
+  playTone(420+killStreakV48*55,.09,.045,'triangle');
+}
+
+const legacyDamageHUDV48=applyDamage;
+applyDamage=function(target,amount,attacker,headshot=false,hitPoint=null,melee=false){
+  const wasDead=!!target?.dead;const hp=target?.health??0;
+  legacyDamageHUDV48(target,amount,attacker,headshot,hitPoint,melee);
+  if(attacker===player&&target&&!wasDead&&target.dead){killStreakV48++;showStreakV48();showCenterStatusV48(headshot?'HEADSHOT ELIMINATION':'ELIMINATION','kill',1050);}
+  if(target===player&&player.health<hp){ensureHUDV48().danger.classList.remove('pulse');void ensureHUDV48().danger.offsetWidth;ensureHUDV48().danger.classList.add('pulse');}
+};
+
+const legacyHUD48=updateHUD;
+updateHUD=function(){
+  legacyHUD48();const h=ensureHUDV48();if(!player)return;
+  const hd=headingV48(cameraYaw);h.heading.textContent=`${hd.label}  ${String(Math.round(hd.deg)).padStart(3,'0')}°`;
+  h.stamina.style.width=`${clamp(typeof staminaV48==='number'?staminaV48:100,0,100)}%`;
+  h.phase.textContent=state.phase==='grace'?'GET READY':state.phase==='fight'?'COMBAT LIVE':state.phase==='spectate'?'SPECTATING':state.phase==='hub'?'WARFARE HUB':'WARFARE';
+  h.phase.dataset.phase=state.phase;
+  const danger=clamp((38-player.health)/38,0,1);h.danger.style.opacity=String(danger*.78);
+  if(player.reloading){const left=Math.max(0,(player.reloadEnd-now())/1000);h.reload.classList.add('show');h.reloadTime.textContent=left.toFixed(1);}
+  else h.reload.classList.remove('show');
+  if(now()>streakBannerUntilV48)h.streak.classList.remove('show');
+  if(player.dead&&!lastPlayerDeathStateV48)killStreakV48=0;lastPlayerDeathStateV48=!!player.dead;
+};
+
+const legacyReloadHUDV48=reload;
+reload=function(a){
+  const w=currentWeapon(a),before=!!a?.reloading;legacyReloadHUDV48(a);
+  if(a===player&&!before&&a.reloading&&w)showCenterStatusV48(`RELOADING ${w.def.name}`,'reload',700);
+};
+
+const legacySwitchHUDV48=switchSlot;
+switchSlot=function(i){legacySwitchHUDV48(i);if(player&&player.slot===i){const w=currentWeapon(player);showCenterStatusV48(w?w.def.name:(CHARACTERS[player.charId]?.melee||'MELEE'),'weapon',520);}};
+
+const legacyDrawHUDV48=drawMeleeV46;
+drawMeleeV46=function(){legacyDrawHUDV48();if(player?.slot===2)showCenterStatusV48(`${CHARACTERS[player.charId]?.melee||'MELEE'} READY`,'weapon',620);};
+
+ensureHUDV48();
