@@ -1,0 +1,66 @@
+/* =============================================================
+   WARFARE V40 — CROUCH AUTHORITY V49
+   Reliable hold crouch on X / Ctrl with real FPS stance feedback.
+   ============================================================= */
+
+let crouchHeldV49=false;
+let crouchBlendV49=0;
+window.__bbWarfareCrouchV49={version:49,keys:['X','CTRL'],hold:true};
+
+function crouchKeyV49(code){return code==='KeyX'||code==='ControlLeft'||code==='ControlRight';}
+addEventListener('keydown',e=>{
+  if(!crouchKeyV49(e.code))return;
+  crouchHeldV49=true;
+  // Prevent browser/system Ctrl behavior from stealing the gameplay input while playing.
+  if(document.pointerLockElement===canvas){e.preventDefault();e.stopPropagation();}
+},true);
+addEventListener('keyup',e=>{
+  if(!crouchKeyV49(e.code))return;
+  crouchHeldV49=false;
+  if(document.pointerLockElement===canvas){e.preventDefault();e.stopPropagation();}
+},true);
+addEventListener('blur',()=>{crouchHeldV49=false;});
+
+document.addEventListener('pointerlockchange',()=>{if(document.pointerLockElement!==canvas)crouchHeldV49=false;});
+
+const legacyHumanCrouchV49=updateHuman;
+updateHuman=function(dt,t){
+  legacyHumanCrouchV49(dt,t);
+  if(!player||player.dead||state.spectating)return;
+
+  // Direct input authority: do not depend on older key-set propagation.
+  const wants=crouchHeldV49;
+  player.crouching=wants;
+  crouchBlendV49=THREE.MathUtils.damp(crouchBlendV49,wants?1:0,18,dt);
+
+  if(wants){
+    // Real movement penalty even if an earlier movement layer tried to sprint this frame.
+    const max=4.25;
+    const speed=Math.hypot(player.velocity.x,player.velocity.z);
+    if(speed>max){const m=max/speed;player.velocity.x*=m;player.velocity.z*=m;}
+    // Crouching cancels tactical sprint/slide extension so the state is unmistakable.
+    if(typeof staminaV48!=='undefined')staminaV48=Math.min(100,staminaV48+dt*5);
+  }
+};
+
+// Make the stance visually obvious in first person in addition to the lower eye height
+// already used by playerEyeV44().
+const legacyFPSPosCrouchV49=positionFPSRigV44;
+positionFPSRigV44=function(dt,t,instant=false){
+  legacyFPSPosCrouchV49(dt,t,instant);
+  if(!fpsRigV44||!player)return;
+  const blend=crouchBlendV49;
+  fpsRigV44.position.y-=blend*.065;
+  fpsRigV44.position.z+=blend*.025;
+  fpsRigV44.rotation.x+=blend*.025;
+};
+
+// Final camera authority: enforce a clearly different standing/crouched eye level after
+// every earlier camera wrapper has run, so later recoil/FOV logic cannot erase crouch.
+const legacyCameraCrouchV49=updateCamera;
+updateCamera=function(dt){
+  legacyCameraCrouchV49(dt);
+  if(!player||!camera||state.spectating)return;
+  const targetY=player.mesh.position.y+(player.crouching?1.58:2.30);
+  camera.position.y=THREE.MathUtils.damp(camera.position.y,targetY,24,dt);
+};
