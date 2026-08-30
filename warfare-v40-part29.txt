@@ -1,0 +1,115 @@
+/* =============================================================
+   WARFARE V40 — COMBAT + MOVEMENT OVERHAUL V48
+   Cohesive first-person feel authority.
+   ============================================================= */
+
+// Stronger weapon identities. These mutate the standalone V40 definitions
+// rather than introducing a second weapon table.
+Object.assign(WEAPONS.pistol,{damage:22,fireRate:335,spread:.008,recoil:.115,reload:820});
+Object.assign(WEAPONS.smg,{damage:12,fireRate:112,spread:.022,recoil:.067,reload:980});
+Object.assign(WEAPONS.rifle,{damage:18,fireRate:190,spread:.011,recoil:.095,reload:1120});
+Object.assign(WEAPONS.shotgun,{damage:10,pellets:8,fireRate:820,spread:.072,recoil:.25,reload:1280});
+Object.assign(WEAPONS.lmg,{damage:15,fireRate:168,spread:.025,recoil:.13,reload:1680});
+Object.assign(WEAPONS.sniper,{damage:78,fireRate:1040,spread:.0014,recoil:.34,reload:1450});
+
+let staminaV48=100;
+let stepAtV48=0;
+let landingKickV48=0;
+let cameraKickV48=0;
+let cameraSideKickV48=0;
+let lastGroundV48=true;
+let jumpLockV48=0;
+let lowHealthBeatV48=0;
+let slideFovV48=0;
+
+window.__bbWarfareCombatV48={version:48,weaponTuning:true,stamina:true,movementFeel:true};
+
+function movementIntentV48(){
+  const f=(keys.has('KeyW')||keys.has('ArrowUp')?1:0)-(keys.has('KeyS')||keys.has('ArrowDown')?1:0);
+  const s=(keys.has('KeyD')||keys.has('ArrowRight')?1:0)-(keys.has('KeyA')||keys.has('ArrowLeft')?1:0);
+  return{f,s,moving:!!(f||s)};
+}
+function footstepV48(t,speed,crouch){
+  if(!player?.onGround||speed<2.4||crouch)return;
+  const interval=speed>10?275:speed>7?345:455;
+  if(t-stepAtV48<interval)return;stepAtV48=t;
+  const map=state.selectedMap;const base=map==='city'?82:map==='haunted'?68:75;
+  playTone(base+rand(-8,8),.025,.018,'triangle');
+}
+
+const legacyHumanV48=updateHuman;
+updateHuman=function(dt,t){
+  if(!player||player.dead||state.spectating)return legacyHumanV48(dt,t);
+  const intent=movementIntentV48();
+  const wantsSprint=(keys.has('ShiftLeft')||keys.has('ShiftRight'))&&intent.moving&&!player.crouching;
+  const tactical=wantsSprint&&intent.f>0&&staminaV48>1;
+  if(tactical)staminaV48=Math.max(0,staminaV48-dt*19);else staminaV48=Math.min(100,staminaV48+dt*(intent.moving?9:15));
+
+  // Let the core handle collision, jumping, crouch and vertical physics first.
+  legacyHumanV48(dt,t);
+
+  const speed=Math.hypot(player.velocity.x,player.velocity.z);
+  if(tactical&&staminaV48>0&&t>=player.slideUntil){
+    // A modest tactical-sprint boost with preserved direction/collision.
+    const mul=1+Math.min(.17,staminaV48/100*.17);
+    player.velocity.x*=mul;player.velocity.z*=mul;
+  }
+
+  // Landing compression and footstep cadence.
+  if(!lastGroundV48&&player.onGround){landingKickV48=Math.min(.12,Math.abs(player.yVel||0)*.012+.055);cameraKickV48+=.018;}
+  lastGroundV48=player.onGround;
+  footstepV48(t,speed,player.crouching);
+  slideFovV48=THREE.MathUtils.damp(slideFovV48,t<player.slideUntil?1:0,10,dt);
+
+  if(player.health<=32&&t-lowHealthBeatV48>780){lowHealthBeatV48=t;playTone(52,.09,.022,'sine');}
+};
+
+// Prevent jump-key hold from generating accidental repeated jumps.
+addEventListener('keydown',e=>{
+  if(e.code!=='Space'||e.repeat||!player||state.spectating)return;
+  const t=now();if(t<jumpLockV48){e.preventDefault();e.stopImmediatePropagation();return;}jumpLockV48=t+250;
+},true);
+
+const legacyFireV48=fireWeapon;
+fireWeapon=function(a){
+  if(a!==player)return legacyFireV48(a);
+  const w=currentWeapon(player);if(!w)return;
+  const before=w.mag,last=player.lastShot;
+  legacyFireV48(a);
+  if(w.mag<before||player.lastShot!==last){
+    const p={pistol:.014,smg:.008,rifle:.012,shotgun:.038,lmg:.015,sniper:.055}[w.type]||.012;
+    cameraKickV48+=p;cameraSideKickV48+=rand(-p*.42,p*.42);
+  }
+};
+
+const legacyDamageV48=applyDamage;
+applyDamage=function(target,amount,attacker,headshot=false,hitPoint=null,melee=false){
+  const hp=target?.health??0;
+  legacyDamageV48(target,amount,attacker,headshot,hitPoint,melee);
+  if(target===player&&player.health<hp){cameraKickV48+=.035;cameraSideKickV48+=rand(-.024,.024);}
+};
+
+const legacyCameraMoveV48=updateCamera;
+updateCamera=function(dt){
+  legacyCameraMoveV48(dt);
+  if(!camera||state.spectating)return;
+  cameraKickV48=THREE.MathUtils.damp(cameraKickV48,0,11,dt);
+  cameraSideKickV48=THREE.MathUtils.damp(cameraSideKickV48,0,12,dt);
+  landingKickV48=THREE.MathUtils.damp(landingKickV48,0,9,dt);
+  // Apply subtle view kick after the authoritative FPS camera has aimed.
+  camera.rotateX(cameraKickV48-landingKickV48);
+  camera.rotateY(cameraSideKickV48);
+  if(slideFovV48>.01&&!fpsAimHeldV44){camera.fov+=slideFovV48*3.5;camera.updateProjectionMatrix();}
+};
+
+// Give automatic weapons a tiny accuracy recovery window rather than permanent spray bloom.
+const legacySpreadV48=playerShotSpreadV44;
+playerShotSpreadV44=function(def){
+  let s=legacySpreadV48(def);
+  const w=currentWeapon(player);if(!w)return s;
+  const since=now()-player.lastShot;
+  const recovery=clamp(since/420,0,1);
+  if(w.type==='smg'||w.type==='lmg')s*=1.12-.12*recovery;
+  if(fpsAimHeldV44)s*=.86;
+  return s;
+};
